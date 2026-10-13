@@ -62,6 +62,7 @@ footer{background:#fbfcfe;color:#667085;padding:24px 16px}
 .uploaded-file-details small{font-size:12px;color:#667085;margin:0}
 .remove-file{border:1px solid #e4e7ec;background:#fff;border-radius:8px;color:#667085;font-size:21px;width:32px;height:32px;flex:0 0 32px;display:grid;place-items:center}
 .remove-file:hover{background:#fff1f2;color:#be123c}
+.multi-pdf{margin-top:20px;padding:16px;border:1px solid #dbe5f4;border-radius:13px;background:#fbfdff}.multi-pdf h3{margin:0 0 6px;font-size:15px}.multi-pdf p{margin:0 0 12px;color:#667085;font-size:12px;line-height:1.55}.multi-pdf-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.multi-pdf-pick{display:inline-flex;align-items:center;justify-content:center;padding:9px 12px;border:1px solid #c7d7f5;background:#eff6ff;color:#1d4ed8;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer}.multi-pdf-list{display:grid;gap:7px;margin-top:12px}.pdf-file-row{display:flex;align-items:center;gap:9px;padding:9px 10px;background:#fff;border:1px solid #e4e7ec;border-radius:9px;font-size:12px}.pdf-file-row .pdf-index{flex:0 0 24px;height:24px;border-radius:6px;background:#eaf2ff;color:#2456a6;display:grid;place-items:center;font-weight:800}.pdf-file-row .pdf-name{min-width:0;flex:1;overflow-wrap:anywhere;color:#344054}.pdf-file-row .pdf-size{color:#667085;white-space:nowrap}.pdf-file-row button{border:0;background:transparent;color:#b42318;font-size:18px;padding:0 3px}.pdf-status{font-size:12px;line-height:1.5;margin-top:9px;color:#536582;overflow-wrap:anywhere}
 .reselect-button{display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;border:1px solid #c7d7f5;color:#1d4ed8;background:#eff6ff;border-radius:8px;padding:8px 10px;font-size:12px;font-weight:700;cursor:pointer}
 .drop.upload-complete{border-style:solid;border-color:#b7e4c7;background:#f8fff9}
 .drop.upload-complete #dropIcon,.drop.upload-complete #dropTitle,.drop.upload-complete #dropOr,.drop.upload-complete #chooseLabel{display:none}
@@ -116,9 +117,16 @@ footer{background:#fbfcfe;color:#667085;padding:24px 16px}
         </div>
       </div>
       <button class="primary" id="compress" disabled>✦ &nbsp; Compress Image</button>
-      <button class="primary" id="convertPdf" disabled style="margin-top:10px;background:#fff;color:#2456a6;border:1px solid #cbdaf3;box-shadow:none">▤ &nbsp; Convert Image to PDF</button>
-      <div class="hint">Need a PDF? Select an image above and convert it to a downloadable PDF without uploading it to a server.</div>
-      <div class="hint">Privacy-first: image processing happens in your browser. Your image is not uploaded to a server.</div>
+      <div class="multi-pdf" id="multiPdfPanel">
+        <h3>Combine multiple images into one PDF</h3>
+        <p>Select several JPG, PNG or WebP images. Each image becomes a page in one downloadable PDF. Files stay on your device.</p>
+        <input id="pdfFiles" type="file" accept="image/jpeg,image/png,image/webp" multiple>
+        <div class="multi-pdf-actions"><label class="multi-pdf-pick" for="pdfFiles">＋ Choose images</label><span class="hint" style="margin:0">Up to 20 images · 10 MB each</span></div>
+        <div class="multi-pdf-list" id="pdfFileList" aria-live="polite"></div>
+        <div class="pdf-status" id="pdfStatus" role="status" aria-live="polite">No images selected yet.</div>
+        <button class="primary" id="convertPdf" disabled style="margin-top:12px">▤ &nbsp; Create one PDF</button>
+      </div>
+      <div class="hint">Privacy-first: image processing happens in your browser. Your images are not uploaded to a server.</div>
     </div>
     <aside class="preview">
       <h2>Preview</h2><p id="previewText">Your compressed image will appear here.</p>
@@ -143,21 +151,22 @@ footer{background:#fbfcfe;color:#667085;padding:24px 16px}
   <h2 style="font-size:20px">Frequently asked questions</h2>
   <details style="padding:12px 0;border-bottom:1px solid #e4ebf5"><summary>Will the image always reach my exact target size?</summary><p style="color:#5c6e8b;line-height:1.6">The tool tries to get the image at or below your target size. Some formats or images may need a reduction in dimensions, and a very small target can reduce quality noticeably.</p></details>
   <details style="padding:12px 0;border-bottom:1px solid #e4ebf5"><summary>Are my photos uploaded?</summary><p style="color:#5c6e8b;line-height:1.6">No. Image processing happens directly in your browser, so your selected image is not sent to our servers.</p></details>
-  <details style="padding:12px 0"><summary>Can I convert an image to PDF?</summary><p style="color:#5c6e8b;line-height:1.6">Yes. Select a JPG, PNG or WebP image and choose “Convert Image to PDF” to create and download a PDF directly in your browser.</p></details>
+  <details style="padding:12px 0"><summary>Can I combine multiple images into one PDF?</summary><p style="color:#5c6e8b;line-height:1.6">Yes. Choose up to 20 JPG, PNG or WebP images. Each image becomes a page in a single PDF file that you can download. You can remove individual images before creating the PDF.</p></details>
 </section>
-<section id="about" style="max-width:900px;margin:0 auto 38px;padding:28px 22px;background:#f7faff;border:1px solid #e4eaf3;border-radius:16px"><h2 style="margin:0 0 10px;font-size:22px">About sizeitnow</h2><p style="color:#5c6e8b;line-height:1.7;margin:0 0 14px">sizeitnow is a simple, free image utility to help you compress images to a target file size or convert an image into a PDF. Your files are processed in your browser.</p><h3 style="font-size:16px;margin:0 0 7px">Support &amp; assistance</h3><p style="color:#5c6e8b;line-height:1.7;margin:0">Need help or want to share feedback? Contact us by email: <strong id="supportEmailPending">Support email to be added</strong></p></section>
+<section id="about" style="max-width:900px;margin:0 auto 38px;padding:28px 22px;background:#f7faff;border:1px solid #e4eaf3;border-radius:16px"><h2 style="margin:0 0 10px;font-size:22px">About sizeitnow</h2><p style="color:#5c6e8b;line-height:1.7;margin:0 0 14px">sizeitnow is a simple, free image utility to help you compress images to a target file size or convert an image into a PDF. Your files are processed in your browser.</p><h3 style="font-size:16px;margin:0 0 7px">Support &amp; assistance</h3><p style="color:#5c6e8b;line-height:1.7;margin:0">Need help or want to share feedback? Email <a href="mailto:iamanshuthakur@gmail.com" style="color:#2456a6;font-weight:700;text-decoration:none">iamanshuthakur@gmail.com</a>.</p></section>
 <footer>Made with care by <strong>Anshu Rathaur</strong> · Thank you for visiting sizeitnow. Always free, with no ads.</footer>
 <script>
 const fileInput=document.getElementById('file'),drop=document.getElementById('drop'),compressBtn=document.getElementById('compress'),uploadStatus=document.getElementById('uploadStatus');
 const uploadedFileCard=document.getElementById('uploadedFileCard'),uploadedFileName=document.getElementById('uploadedFileName'),uploadedFileSize=document.getElementById('uploadedFileSize');
 const customInput=document.getElementById('custom'),previewImg=document.getElementById('previewImg'),pdfBtn=document.getElementById('convertPdf');
-let sourceFile=null,sourceImage=null,targetKB=50,format='image/jpeg',resultBlob=null,resultUrl=null;
+const pdfInput=document.getElementById('pdfFiles'),pdfFileList=document.getElementById('pdfFileList'),pdfStatus=document.getElementById('pdfStatus');
+let sourceFile=null,sourceImage=null,targetKB=50,format='image/jpeg',resultBlob=null,resultUrl=null,pdfImages=[];
 document.querySelectorAll('[data-kb]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-kb]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');targetKB=Number(btn.dataset.kb);customInput.value='';}));
 customInput.addEventListener('input',()=>{document.querySelectorAll('[data-kb]').forEach(b=>b.classList.remove('active'));if(customInput.value && Number(customInput.value)>0)targetKB=Number(customInput.value);});
 document.querySelectorAll('[data-format]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-format]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');format=btn.dataset.format;}));
 fileInput.addEventListener('change',e=>loadFile(e.target.files[0]));
 document.getElementById('removeFile').addEventListener('click',clearSelectedFile);
-function clearSelectedFile(){sourceFile=null;sourceImage=null;fileInput.value='';compressBtn.disabled=true;pdfBtn.disabled=true;drop.classList.remove('upload-complete');uploadedFileCard.style.display='none';uploadStatus.style.display='none';document.getElementById('originalSize').textContent='—';document.getElementById('compressedSize').textContent='—';document.getElementById('reduction').textContent='—';document.getElementById('previewText').textContent='Your compressed image will appear here.';document.getElementById('result').style.display='none';document.getElementById('download').style.display='none';previewImg.removeAttribute('src');previewImg.style.display='none';document.getElementById('placeholder').style.display='block';if(resultUrl){URL.revokeObjectURL(resultUrl);resultUrl=null;}}
+function clearSelectedFile(){sourceFile=null;sourceImage=null;fileInput.value='';compressBtn.disabled=true;drop.classList.remove('upload-complete');uploadedFileCard.style.display='none';uploadStatus.style.display='none';document.getElementById('originalSize').textContent='—';document.getElementById('compressedSize').textContent='—';document.getElementById('reduction').textContent='—';document.getElementById('previewText').textContent='Your compressed image will appear here.';document.getElementById('result').style.display='none';document.getElementById('download').style.display='none';previewImg.removeAttribute('src');previewImg.style.display='none';document.getElementById('placeholder').style.display='block';if(resultUrl){URL.revokeObjectURL(resultUrl);resultUrl=null;}}
 ['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('drag')}));
 ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('drag')}));
 drop.addEventListener('drop',e=>loadFile(e.dataTransfer.files[0]));
@@ -166,11 +175,11 @@ function loadFile(file){
  if(!file)return;
  if(!['image/jpeg','image/png','image/webp'].includes(file.type)){fileInput.value='';showUploadStatus('Unsupported file type. Please choose a JPG, PNG or WebP image.');return}
  if(file.size>10*1024*1024){fileInput.value='';showUploadStatus('This image is larger than 10 MB. Please choose a smaller file.');return}
- sourceFile=file;sourceImage=null;compressBtn.disabled=true;pdfBtn.disabled=true;
+ sourceFile=file;sourceImage=null;compressBtn.disabled=true;
  drop.classList.add('upload-complete');uploadedFileCard.style.display='flex';uploadedFileName.textContent=file.name;uploadedFileSize.textContent=fmt(file.size)+' · Ready to compress';
  showUploadStatus('✓ '+file.name+' is selected successfully. You can now choose a target size and click Compress Image.',true);
  const reader=new FileReader();
- reader.onload=()=>{sourceImage=new Image();sourceImage.onload=()=>{compressBtn.disabled=false;pdfBtn.disabled=false;uploadedFileSize.textContent=fmt(file.size)+' · '+sourceImage.width+' × '+sourceImage.height+' px';document.getElementById('originalSize').textContent=fmt(file.size);document.getElementById('previewText').textContent='Selected: '+file.name+' · '+sourceImage.width+' × '+sourceImage.height+' px';document.getElementById('result').style.display='none';document.getElementById('download').style.display='none';document.getElementById('compressedSize').textContent='—';document.getElementById('reduction').textContent='—';};sourceImage.onerror=()=>{sourceImage=null;showUploadStatus('Could not read this image. Please choose another file.');compressBtn.disabled=true;pdfBtn.disabled=true;};sourceImage.src=reader.result;};
+ reader.onload=()=>{sourceImage=new Image();sourceImage.onload=()=>{compressBtn.disabled=false;uploadedFileSize.textContent=fmt(file.size)+' · '+sourceImage.width+' × '+sourceImage.height+' px';document.getElementById('originalSize').textContent=fmt(file.size);document.getElementById('previewText').textContent='Selected: '+file.name+' · '+sourceImage.width+' × '+sourceImage.height+' px';document.getElementById('result').style.display='none';document.getElementById('download').style.display='none';document.getElementById('compressedSize').textContent='—';document.getElementById('reduction').textContent='—';};sourceImage.onerror=()=>{sourceImage=null;showUploadStatus('Could not read this image. Please choose another file.');compressBtn.disabled=true;};sourceImage.src=reader.result;};
  reader.onerror=()=>{sourceImage=null;showUploadStatus('Could not load this file. Please try again.');compressBtn.disabled=true;};
  reader.readAsDataURL(file);
 }
@@ -219,37 +228,83 @@ async function compress(){
  if(best.size<=maxBytes){result.textContent='Success — image is '+fmt(best.size)+', at least 1 KB below your '+wantedKB+' KB target.';result.style.background='#e9f9ef';result.style.color='#17663a';dl.href=resultUrl;dl.download='sizeitnow-compressed.'+({ 'image/jpeg':'jpg','image/png':'png','image/webp':'webp'}[format]);dl.style.display='block';}
  else{result.textContent='This image could not be reduced to '+(wantedKB-1)+' KB or less in the selected format. No download is offered above your size limit. Try JPG/WebP or a larger target.';result.style.background='#fff4df';result.style.color='#805300';dl.style.display='none';}
 }
+function renderPdfFileList(){
+ pdfFileList.replaceChildren();
+ pdfImages.forEach((item,index)=>{
+   const row=document.createElement('div');row.className='pdf-file-row';
+   const number=document.createElement('span');number.className='pdf-index';number.textContent=String(index+1);
+   const name=document.createElement('span');name.className='pdf-name';name.textContent=item.file.name;
+   const size=document.createElement('span');size.className='pdf-size';size.textContent=fmt(item.file.size);
+   const remove=document.createElement('button');remove.type='button';remove.textContent='×';remove.setAttribute('aria-label','Remove '+item.file.name);remove.title='Remove image';
+   remove.addEventListener('click',()=>{pdfImages.splice(index,1);renderPdfFileList();});
+   row.append(number,name,size,remove);pdfFileList.appendChild(row);
+ });
+ pdfBtn.disabled=pdfImages.length===0;
+ pdfStatus.textContent=pdfImages.length?pdfImages.length+' image'+(pdfImages.length===1?'':'s')+' ready. Each image will be a separate page in your PDF.':'No images selected yet.';
+}
+pdfInput.addEventListener('change',()=>{
+ const files=Array.from(pdfInput.files||[]);pdfInput.value='';
+ if(!files.length)return;
+ const valid=[];
+ for(const file of files){
+   if(!['image/jpeg','image/png','image/webp'].includes(file.type)){pdfStatus.textContent='Skipped '+file.name+': choose JPG, PNG or WebP images.';continue;}
+   if(file.size>10*1024*1024){pdfStatus.textContent='Skipped '+file.name+': each image must be 10 MB or smaller.';continue;}
+   if(pdfImages.some(item=>item.file.name===file.name&&item.file.size===file.size))continue;
+   valid.push(file);
+ }
+ if(pdfImages.length+valid.length>20){pdfStatus.textContent='You can combine up to 20 images in one PDF. Remove an image or select fewer files.';return;}
+ if(!valid.length){renderPdfFileList();return;}
+ pdfBtn.disabled=true;pdfStatus.textContent='Loading selected images…';
+ Promise.all(valid.map(file=>new Promise(resolve=>{
+   const reader=new FileReader();
+   reader.onload=()=>{const img=new Image();img.onload=()=>resolve({file,img});img.onerror=()=>resolve(null);img.src=reader.result;};
+   reader.onerror=()=>resolve(null);reader.readAsDataURL(file);
+ }))).then(loaded=>{
+   const good=loaded.filter(Boolean);pdfImages.push(...good);renderPdfFileList();
+   if(good.length!==valid.length)pdfStatus.textContent='Some images could not be read. The remaining images are ready.';
+ });
+});
 async function convertImageToPdf(){
- if(!sourceImage||!sourceFile){showUploadStatus('Choose an image first to convert it to PDF.');return;}
- pdfBtn.disabled=true;pdfBtn.textContent='Creating PDF…';
+ if(!pdfImages.length){pdfStatus.textContent='Choose one or more images first.';return;}
+ pdfBtn.disabled=true;pdfBtn.textContent='Creating PDF…';pdfStatus.textContent='Preparing '+pdfImages.length+' PDF pages…';
  try{
-   const canvas=document.createElement('canvas');
-   const maxDim=4000,scale=Math.min(1,maxDim/Math.max(sourceImage.naturalWidth,sourceImage.naturalHeight));
-   canvas.width=Math.max(1,Math.round(sourceImage.naturalWidth*scale));canvas.height=Math.max(1,Math.round(sourceImage.naturalHeight*scale));
-   const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(sourceImage,0,0,canvas.width,canvas.height);
-   const jpeg=await canvasBlob(canvas,'image/jpeg',0.92);
-   if(!jpeg)throw new Error('Could not prepare image data.');
-   const bytes=new Uint8Array(await jpeg.arrayBuffer());
-   const enc=new TextEncoder();
-   const chunks=[];let length=0;const offsets=[0];
-   const push=(part)=>{const b=typeof part==='string'?enc.encode(part):part;chunks.push(b);length+=b.length;};
+   const enc=new TextEncoder(),objects=[],pageObjectIds=[],imageData=[];
+   for(let i=0;i<pdfImages.length;i++){
+     const img=pdfImages[i].img,canvas=document.createElement('canvas');
+     const maxDim=3000,scale=Math.min(1,maxDim/Math.max(img.naturalWidth,img.naturalHeight));
+     canvas.width=Math.max(1,Math.round(img.naturalWidth*scale));canvas.height=Math.max(1,Math.round(img.naturalHeight*scale));
+     const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,0,0,canvas.width,canvas.height);
+     const jpeg=await canvasBlob(canvas,'image/jpeg',0.9);if(!jpeg)throw new Error('Image encoding failed.');
+     imageData.push({width:canvas.width,height:canvas.height,bytes:new Uint8Array(await jpeg.arrayBuffer())});
+   }
+   const pageCount=imageData.length;
+   imageData.forEach((data,i)=>{
+     const pageId=3+i*3,imageId=pageId+1,contentId=pageId+2;
+     pageObjectIds.push(pageId);
+     const content='q\n'+data.width+' 0 0 '+data.height+' 0 0 cm\n/Im0 Do\nQ\n';
+     objects.push({id:pageId,body:'<< /Type /Page /Parent 2 0 R /MediaBox [0 0 '+data.width+' '+data.height+'] /Resources << /XObject << /Im0 '+imageId+' 0 R >> >> /Contents '+contentId+' 0 R >>'});
+     objects.push({id:imageId,image:data});
+     objects.push({id:contentId,body:'<< /Length '+enc.encode(content).length+' >>\nstream\n'+content+'endstream'});
+   });
+   objects.unshift({id:2,body:'<< /Type /Pages /Kids ['+pageObjectIds.map(id=>id+' 0 R').join(' ')+'] /Count '+pageCount+' >>'});
+   objects.unshift({id:1,body:'<< /Type /Catalog /Pages 2 0 R >>'});
+   const chunks=[];let length=0;const offsets=[];
+   const push=part=>{const bytes=typeof part==='string'?enc.encode(part):part;chunks.push(bytes);length+=bytes.length;};
    push('%PDF-1.4\n%âãÏÓ\n');
-   const obj=(n,body)=>{offsets[n]=length;push(n+' 0 obj\n'+body+'\nendobj\n');};
-   obj(1,'<< /Type /Catalog /Pages 2 0 R >>');
-   obj(2,'<< /Type /Pages /Kids [3 0 R] /Count 1 >>');
-   obj(3,'<< /Type /Page /Parent 2 0 R /MediaBox [0 0 '+canvas.width+' '+canvas.height+'] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>');
-   offsets[4]=length;push('4 0 obj\n<< /Type /XObject /Subtype /Image /Width '+canvas.width+' /Height '+canvas.height+' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '+bytes.length+' >>\nstream\n');push(bytes);push('\nendstream\nendobj\n');
-   const content='q\n'+canvas.width+' 0 0 '+canvas.height+' 0 0 cm\n/Im0 Do\nQ\n';
-   obj(5,'<< /Length '+enc.encode(content).length+' >>\nstream\n'+content+'endstream');
-   const xref=length;push('xref\n0 6\n0000000000 65535 f \n');
-   for(let i=1;i<=5;i++)push(String(offsets[i]).padStart(10,'0')+' 00000 n \n');
-   push('trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n'+xref+'\n%%EOF');
+   for(const object of objects){
+     offsets[object.id]=length;
+     if(object.image){
+       const d=object.image;push(object.id+' 0 obj\n<< /Type /XObject /Subtype /Image /Width '+d.width+' /Height '+d.height+' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '+d.bytes.length+' >>\nstream\n');push(d.bytes);push('\nendstream\nendobj\n');
+     }else push(object.id+' 0 obj\n'+object.body+'\nendobj\n');
+   }
+   const size=objects.length+1,xref=length;push('xref\n0 '+size+'\n0000000000 65535 f \n');
+   for(let i=1;i<size;i++)push(String(offsets[i]).padStart(10,'0')+' 00000 n \n');
+   push('trailer\n<< /Size '+size+' /Root 1 0 R >>\nstartxref\n'+xref+'\n%%EOF');
    const pdf=new Blob(chunks,{type:'application/pdf'}),url=URL.createObjectURL(pdf),a=document.createElement('a');
-   a.href=url;a.download=(sourceFile.name.replace(/\.[^.]+$/,'')||'sizeitnow-image')+'.pdf';document.body.appendChild(a);a.click();a.remove();
-   setTimeout(()=>URL.revokeObjectURL(url),10000);
-   showUploadStatus('✓ PDF created and downloaded successfully: '+a.download,true);
- }catch(err){showUploadStatus('PDF conversion failed. Please try another image.');}
- finally{pdfBtn.disabled=!sourceImage;pdfBtn.innerHTML='▤ &nbsp; Convert Image to PDF';}
+   a.href=url;a.download='sizeitnow-'+pageCount+'-pages.pdf';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),10000);
+   pdfStatus.textContent='✓ Created and downloaded one PDF with '+pageCount+' page'+(pageCount===1?'':'s')+'.';
+ }catch(err){pdfStatus.textContent='PDF creation failed. Please try fewer or smaller images and try again.';}
+ finally{pdfBtn.disabled=pdfImages.length===0;pdfBtn.innerHTML='▤ &nbsp; Create one PDF';}
 }
 pdfBtn.addEventListener('click',convertImageToPdf);
 compressBtn.addEventListener('click',compress);
