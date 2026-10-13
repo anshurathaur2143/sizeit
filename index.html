@@ -195,6 +195,30 @@ button:not(:disabled),a,.brand{-webkit-tap-highlight-color:transparent}
 button:not(:disabled):hover,a.filebutton:hover,.reselect-button:hover,.multi-pdf-pick:hover,.download:hover,.ai-launcher:hover,.ai-send:hover,.ai-close:hover,.ai-quick button:hover,.remove-file:hover,.pdf-file-row button:hover,nav a:hover,.brand:hover{filter:brightness(.90) saturate(1.18)}
 button:not(:disabled):focus-visible,a:focus-visible,.brand:focus-visible{outline:3px solid rgba(99,91,255,.48);outline-offset:3px}
 button:not(:disabled):active,.brand:active{transform:scale(.975)}
+
+/* Immersive scroll: restrained glass, depth, and vibrant light rather than a flat page. */
+html{scroll-behavior:smooth;scroll-padding-top:88px}
+body{--scroll-glow:0;perspective:1200px}
+main{isolation:isolate;background:
+ radial-gradient(ellipse at calc(15% + var(--parallax-x,0px)) calc(5% + var(--parallax-y,0px)),rgba(167,139,250,.32),transparent 34%),
+ radial-gradient(ellipse at calc(88% - var(--parallax-x,0px)) calc(20% - var(--parallax-y,0px)),rgba(34,211,238,.22),transparent 30%),
+ linear-gradient(180deg,#f7f5ff 0%,#fbfaff 55%,#fff 100%);background-attachment:scroll}
+.hero-visual{transform-style:preserve-3d;transition:transform .18s ease-out}
+.hero-visual:after{content:"";position:absolute;inset:10% 6%;border:1px solid rgba(139,92,246,.15);border-radius:48%;transform:rotateX(67deg) rotateZ(-18deg) translateZ(-25px);box-shadow:0 0 50px rgba(99,91,255,.08),inset 0 0 35px rgba(34,211,238,.08);pointer-events:none}
+.hero-float-card{transform:translateZ(35px);transition:transform .25s ease,box-shadow .25s ease}
+.feature,.workspace,.multi-pdf,#faq,#about{transform-style:preserve-3d;backface-visibility:hidden}
+.scroll-reveal{opacity:0;transform:translateY(38px) rotateX(5deg) scale(.985);transform-origin:50% 0;transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+.scroll-reveal.is-visible{opacity:1;transform:translateY(0) rotateX(0) scale(1)}
+.feature.scroll-reveal:nth-child(2){transition-delay:.07s}.feature.scroll-reveal:nth-child(3){transition-delay:.14s}.feature.scroll-reveal:nth-child(4){transition-delay:.21s}
+.features{perspective:1000px}
+.feature:hover{transform:translateY(-7px) rotateX(2deg) rotateY(-1deg);box-shadow:0 25px 50px rgba(65,48,155,.12)}
+#faq,#about{position:relative;overflow:hidden;box-shadow:0 20px 55px rgba(65,48,155,.07);transition:transform .25s,box-shadow .25s}
+#faq:before,#about:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(120deg,rgba(167,139,250,.08),transparent 38%,rgba(34,211,238,.07));opacity:.85}
+#faq>* ,#about>*{position:relative}
+button:not(:disabled),.filebutton,.download,.multi-pdf-pick,.reselect-button{transition:transform .18s ease,filter .18s ease,box-shadow .18s ease,background .18s ease}
+button:not(:disabled):hover,.filebutton:hover,.download:hover,.multi-pdf-pick:hover,.reselect-button:hover{filter:brightness(.88) saturate(1.22);box-shadow:0 12px 28px rgba(99,91,255,.23)}
+@media(max-width:760px){.hero-visual:after{inset:12% 12%}.scroll-reveal{transform:translateY(22px) scale(.99)}}
+@media(prefers-reduced-motion:reduce){.scroll-reveal{opacity:1;transform:none;transition:none}.hero-visual,.hero-float-card,.feature{transition:none!important}}
 </style>
 </head>
 <body>
@@ -336,7 +360,7 @@ button:not(:disabled):active,.brand:active{transform:scale(.975)}
 </section>
 <section id="faq" style="max-width:900px;margin:0 auto 35px;padding:0 22px">
   <h2 style="font-size:20px">Frequently asked questions</h2>
-  <details style="padding:12px 0;border-bottom:1px solid #e4ebf5"><summary>Will the image always reach my exact target size?</summary><p style="color:#5c6e8b;line-height:1.6">The tool tries to get the image at or below your target size. Some formats or images may need a reduction in dimensions, and a very small target can reduce quality noticeably.</p></details>
+  <details style="padding:12px 0;border-bottom:1px solid #e4ebf5"><summary>Will the image always reach my exact target size?</summary><p style="color:#5c6e8b;line-height:1.6">The tool tries to get the image at or below your target size. PNG uses lossless encoding, but if the file is too large, its pixel dimensions may be reduced to meet your target. JPG and WebP can usually reach smaller sizes with fewer pixels lost, though some detail is discarded.</p></details>
   <details style="padding:12px 0;border-bottom:1px solid #e4ebf5"><summary>How do Low, Medium and High quality work?</summary><p style="color:#5c6e8b;line-height:1.6">Low prioritizes smaller files, Medium balances file size and clarity, and High preserves more image detail. Very small target sizes may not be achievable at high quality.</p></details>
   <details style="padding:12px 0;border-bottom:1px solid #e4ebf5"><summary>Can I choose a frame size?</summary><p style="color:#5c6e8b;line-height:1.6">Yes. Keep the original image size, choose a square or portrait frame, or enter custom width and height in pixels. Your image is fitted inside the frame without stretching.</p></details>
   <details style="padding:12px 0;border-bottom:1px solid #e4ebf5"><summary>Are my photos uploaded?</summary><p style="color:#5c6e8b;line-height:1.6">No. Image processing happens directly in your browser, so your selected image is not sent to our servers.</p></details>
@@ -413,7 +437,23 @@ async function compress(){
  let best=null,canvas=document.createElement('canvas');
  if(useFrame){w=frameW;h=frameH;}
  if(format==='image/png'){
-   best=await encodeAt(w,h);
+   // PNG encoding is lossless, but its file size may still exceed the target.
+   // If needed, reduce pixel dimensions while keeping PNG output lossless at that size.
+   const baseW=w,baseH=h;
+   best=await encodeAt(baseW,baseH);
+   if(best&&best.size>maxBytes){
+     let lo=.015,hi=1,fit=null,fitScale=0;
+     const smallest=await encodeAt(Math.max(1,Math.round(baseW*lo)),Math.max(1,Math.round(baseH*lo)));
+     if(smallest&&smallest.size<=maxBytes){
+       fit=smallest;fitScale=lo;
+       for(let i=0;i<11;i++){
+         const mid=(lo+hi)/2;
+         const candidate=await encodeAt(Math.max(1,Math.round(baseW*mid)),Math.max(1,Math.round(baseH*mid)));
+         if(candidate&&candidate.size<=maxBytes){lo=mid;fitScale=mid;fit=candidate;}else hi=mid;
+       }
+       best=fit;w=Math.max(1,Math.round(baseW*fitScale));h=Math.max(1,Math.round(baseH*fitScale));
+     }else best=null;
+   }
  }else if(useFrame){
    let lo=.45,hi=.96;
    for(let i=0;i<11;i++){
@@ -461,7 +501,7 @@ async function compress(){
  const result=document.getElementById('result');result.style.display='block';
  const dl=document.getElementById('download');
  if(best.size<=maxBytes){
-   result.textContent='Done — '+fmt(best.size)+' of '+wantedKB+' KB. SizeItNow prioritised image quality, then reduced dimensions only as needed.';
+   result.textContent='Done — '+fmt(best.size)+' of '+wantedKB+' KB. '+(format==='image/png'?'PNG keeps lossless encoding at the output dimensions; dimensions were reduced only if needed.':'SizeItNow prioritised image quality, then reduced dimensions only as needed.');
    result.style.background='#e9f9ef';result.style.color='#17663a';
    dl.href=resultUrl;dl.download='sizeitnow-compressed.'+({'image/jpeg':'jpg','image/png':'png','image/webp':'webp'}[format]);dl.style.display='block';
  }else{
@@ -658,6 +698,32 @@ function renderPdfPagesAsImages(){
     brand.addEventListener('click',goTop);
     brand.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();goTop();}});
   }
+})();
+// Gentle 3D reveal and parallax while scrolling, with reduced-motion support.
+(function(){
+ const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const revealTargets=document.querySelectorAll('.workspace,.features,.feature,#faq,#about,.multi-pdf');
+ if(reduced||!('IntersectionObserver' in window)){revealTargets.forEach(el=>el.classList.add('is-visible'));return;}
+ revealTargets.forEach(el=>el.classList.add('scroll-reveal'));
+ const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{
+   if(entry.isIntersecting){entry.target.classList.add('is-visible');observer.unobserve(entry.target);}
+ }),{threshold:.12,rootMargin:'0px 0px -5% 0px'});
+ revealTargets.forEach(el=>observer.observe(el));
+ let ticking=false;
+ window.addEventListener('scroll',()=>{
+   if(ticking)return;ticking=true;
+   requestAnimationFrame(()=>{
+     const y=window.scrollY||0;
+     document.documentElement.style.setProperty('--parallax-y',Math.round((y%900)*-.035)+'px');
+     document.documentElement.style.setProperty('--parallax-x',Math.round(Math.sin(y*.002)*12)+'px');
+     const visual=document.querySelector('.hero-visual');
+     if(visual&&y<window.innerHeight*1.4){
+       const p=Math.min(1,y/Math.max(1,window.innerHeight));
+       visual.style.transform='translate3d(0,'+(p*22)+'px,0) rotateX('+(p*3)+'deg) scale('+(1-p*.025)+')';
+     }
+     ticking=false;
+   });
+ },{passive:true});
 })();
 const canvas=document.getElementById('hero3d');
   const fallback=document.querySelector('.hero-orb-fallback');
