@@ -109,6 +109,29 @@ footer{background:#fbfcfe;color:#667085;padding:24px 16px}
         </div>
       </div>
       <div class="field">
+        <div class="fieldlabel">✦ &nbsp; Image Quality</div>
+        <div class="formats" id="qualityOptions">
+          <button type="button" class="chip" data-quality="low">Low · Smaller file</button>
+          <button type="button" class="chip active" data-quality="medium">Medium · Balanced</button>
+          <button type="button" class="chip" data-quality="high">High · Clearer image</button>
+        </div>
+        <div class="hint">Choose how much detail to preserve. High quality may not reach very small target sizes.</div>
+      </div>
+      <div class="field">
+        <div class="fieldlabel">▣ &nbsp; Frame Size</div>
+        <div class="formats" id="frameOptions">
+          <button type="button" class="chip active" data-frame="original">Original</button>
+          <button type="button" class="chip" data-frame="square">Square · 1:1</button>
+          <button type="button" class="chip" data-frame="portrait">Portrait · 4:5</button>
+          <button type="button" class="chip" data-frame="custom">Custom</button>
+        </div>
+        <div class="hint">Preset frames: Square 1080 × 1080 px or Portrait 1080 × 1350 px. The image fits inside the frame without stretching.</div>
+        <div id="customFrameFields" style="display:none;gap:10px;margin-top:10px;flex-wrap:wrap">
+          <label style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:#536582;flex:1;min-width:100px">Width (px)<input class="custom" id="frameWidth" type="number" min="1" max="6000" value="1080" aria-label="Custom frame width in pixels" style="width:100%"></label>
+          <label style="display:flex;flex-direction:column;gap:5px;font-size:12px;color:#536582;flex:1;min-width:100px">Height (px)<input class="custom" id="frameHeight" type="number" min="1" max="6000" value="1080" aria-label="Custom frame height in pixels" style="width:100%"></label>
+        </div>
+      </div>
+      <div class="field">
         <div class="fieldlabel">▧ &nbsp; Output Format</div>
         <div class="formats">
           <button class="chip active" data-format="image/jpeg">JPG</button>
@@ -150,6 +173,8 @@ footer{background:#fbfcfe;color:#667085;padding:24px 16px}
 <section id="faq" style="max-width:900px;margin:0 auto 35px;padding:0 22px">
   <h2 style="font-size:20px">Frequently asked questions</h2>
   <details style="padding:12px 0;border-bottom:1px solid #e4ebf5"><summary>Will the image always reach my exact target size?</summary><p style="color:#5c6e8b;line-height:1.6">The tool tries to get the image at or below your target size. Some formats or images may need a reduction in dimensions, and a very small target can reduce quality noticeably.</p></details>
+  <details style="padding:12px 0;border-bottom:1px solid #e4ebf5"><summary>How do Low, Medium and High quality work?</summary><p style="color:#5c6e8b;line-height:1.6">Low prioritizes smaller files, Medium balances file size and clarity, and High preserves more image detail. Very small target sizes may not be achievable at high quality.</p></details>
+  <details style="padding:12px 0;border-bottom:1px solid #e4ebf5"><summary>Can I choose a frame size?</summary><p style="color:#5c6e8b;line-height:1.6">Yes. Keep the original image size, choose a square or portrait frame, or enter custom width and height in pixels. Your image is fitted inside the frame without stretching.</p></details>
   <details style="padding:12px 0;border-bottom:1px solid #e4ebf5"><summary>Are my photos uploaded?</summary><p style="color:#5c6e8b;line-height:1.6">No. Image processing happens directly in your browser, so your selected image is not sent to our servers.</p></details>
   <details style="padding:12px 0"><summary>Can I combine multiple images into one PDF?</summary><p style="color:#5c6e8b;line-height:1.6">Yes. Choose up to 20 JPG, PNG or WebP images. Each image becomes a page in a single PDF file that you can download. You can remove individual images before creating the PDF.</p></details>
 </section>
@@ -160,10 +185,12 @@ const fileInput=document.getElementById('file'),drop=document.getElementById('dr
 const uploadedFileCard=document.getElementById('uploadedFileCard'),uploadedFileName=document.getElementById('uploadedFileName'),uploadedFileSize=document.getElementById('uploadedFileSize');
 const customInput=document.getElementById('custom'),previewImg=document.getElementById('previewImg'),pdfBtn=document.getElementById('convertPdf');
 const pdfInput=document.getElementById('pdfFiles'),pdfFileList=document.getElementById('pdfFileList'),pdfStatus=document.getElementById('pdfStatus');
-let sourceFile=null,sourceImage=null,targetKB=50,format='image/jpeg',resultBlob=null,resultUrl=null,pdfImages=[];
+let sourceFile=null,sourceImage=null,targetKB=50,format='image/jpeg',qualityMode='medium',frameMode='original',resultBlob=null,resultUrl=null,pdfImages=[];
 document.querySelectorAll('[data-kb]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-kb]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');targetKB=Number(btn.dataset.kb);customInput.value='';}));
 customInput.addEventListener('input',()=>{document.querySelectorAll('[data-kb]').forEach(b=>b.classList.remove('active'));if(customInput.value && Number(customInput.value)>0)targetKB=Number(customInput.value);});
 document.querySelectorAll('[data-format]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-format]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');format=btn.dataset.format;}));
+document.querySelectorAll('[data-quality]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-quality]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');qualityMode=btn.dataset.quality;}));
+document.querySelectorAll('[data-frame]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-frame]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');frameMode=btn.dataset.frame;document.getElementById('customFrameFields').style.display=frameMode==='custom'?'flex':'none';}));
 fileInput.addEventListener('change',e=>loadFile(e.target.files[0]));
 document.getElementById('removeFile').addEventListener('click',clearSelectedFile);
 function clearSelectedFile(){sourceFile=null;sourceImage=null;fileInput.value='';compressBtn.disabled=true;drop.classList.remove('upload-complete');uploadedFileCard.style.display='none';uploadStatus.style.display='none';document.getElementById('originalSize').textContent='—';document.getElementById('compressedSize').textContent='—';document.getElementById('reduction').textContent='—';document.getElementById('previewText').textContent='Your compressed image will appear here.';document.getElementById('result').style.display='none';document.getElementById('download').style.display='none';previewImg.removeAttribute('src');previewImg.style.display='none';document.getElementById('placeholder').style.display='block';if(resultUrl){URL.revokeObjectURL(resultUrl);resultUrl=null;}}
@@ -194,26 +221,45 @@ async function compress(){
  let w=sourceImage.naturalWidth,h=sourceImage.naturalHeight;
  // Preserve source detail by default. Only cap extremely large images to avoid browser memory issues.
  const maxDim=6000;if(Math.max(w,h)>maxDim){const s=maxDim/Math.max(w,h);w=Math.round(w*s);h=Math.round(h*s)}
+ let frameW=0,frameH=0;
+ if(frameMode==='square'){frameW=1080;frameH=1080;}
+ else if(frameMode==='portrait'){frameW=1080;frameH=1350;}
+ else if(frameMode==='custom'){
+   frameW=Number(document.getElementById('frameWidth').value);frameH=Number(document.getElementById('frameHeight').value);
+   if(!Number.isInteger(frameW)||!Number.isInteger(frameH)||frameW<1||frameH<1||frameW>6000||frameH>6000){alert('Enter custom frame width and height between 1 and 6000 pixels.');compressBtn.disabled=false;compressBtn.innerHTML='✦ &nbsp; Compress Image';return;}
+ }
+ const useFrame=frameW>0&&frameH>0;
+ const minQuality=qualityMode==='low'?.25:qualityMode==='high'?.65:.45;
+ const resizeFactor=qualityMode==='low'?.92:qualityMode==='high'?.97:.94;
+ function drawSource(targetCanvas,targetCtx,outW,outH){
+   targetCanvas.width=outW;targetCanvas.height=outH;targetCtx=targetCanvas.getContext('2d');
+   targetCtx.clearRect(0,0,outW,outH);
+   if(format==='image/jpeg'){targetCtx.fillStyle='#fff';targetCtx.fillRect(0,0,outW,outH);}
+   if(useFrame){
+     const scale=Math.min(outW/w,outH/h),drawW=Math.max(1,Math.round(w*scale)),drawH=Math.max(1,Math.round(h*scale));
+     targetCtx.drawImage(sourceImage,Math.round((outW-drawW)/2),Math.round((outH-drawH)/2),drawW,drawH);
+   }else targetCtx.drawImage(sourceImage,0,0,outW,outH);
+   return targetCtx;
+ }
  let best=null,canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');
+ if(useFrame){w=frameW;h=frameH;}
  if(format==='image/png'){
    // PNG is lossless: do not repeatedly shrink its dimensions just to force a tiny file size.
-   canvas.width=w;canvas.height=h;ctx.clearRect(0,0,w,h);ctx.drawImage(sourceImage,0,0,w,h);
+   drawSource(canvas,ctx,w,h);
    best=await canvasBlob(canvas,format);
  }else{
-   // Keep quality at or above 55%. If needed, reduce dimensions in small steps rather than
-   // applying severe quality loss or aggressive 18% size reductions.
-   for(let pass=0;pass<30;pass++){
-     canvas.width=w;canvas.height=h;ctx=canvas.getContext('2d');ctx.clearRect(0,0,w,h);
-     if(format==='image/jpeg'){ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h)}
-     ctx.drawImage(sourceImage,0,0,w,h);
-     let lo=.55,hi=.96,passBest=null;
+   // The quality choice sets minimum encoding quality and resize aggressiveness.
+   // Fixed frames keep their selected dimensions and tune encoding quality only.
+   for(let pass=0;pass<(useFrame?1:40);pass++){
+     drawSource(canvas,ctx,w,h);
+     let lo=minQuality,hi=.96,passBest=null;
      for(let i=0;i<10;i++){
        const q=(lo+hi)/2,blob=await canvasBlob(canvas,format,q);
        if(!blob)continue;
        if(blob.size<=maxBytes){passBest=blob;lo=q}else hi=q;
      }
      if(passBest){best=passBest;break}
-     w=Math.max(1,Math.round(w*.94));h=Math.max(1,Math.round(h*.94));
+     w=Math.max(1,Math.round(w*resizeFactor));h=Math.max(1,Math.round(h*resizeFactor));
      if(w===1&&h===1)break;
    }
  }
