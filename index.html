@@ -282,6 +282,49 @@ button:active,.primary:active,.secondary:active{transform:translateY(0) scale(.9
 @media(hover:none){button:hover,.primary:hover,.secondary:hover,.site-nav a:hover,.drop-zone:hover,.tool-card:hover{transform:none}}
 @media(prefers-reduced-motion:reduce){.hero-copy,.hero-visual,.workspace,.studio-glow,.studio-chip,.studio-spark{animation:none!important}button,.primary,.secondary,.site-nav a,.drop-zone,.tool-card{transition:none!important}}
 
+
+/* Premium preview panel — a small visual studio, not an empty stats box */
+.preview{position:relative;isolation:isolate;overflow:hidden;gap:0;padding:22px;background:linear-gradient(150deg,#fff 0%,#f8f7ff 55%,#f0f9ff 100%);border:1px solid #e6e3fb;border-radius:20px;box-shadow:inset 0 1px 0 rgba(255,255,255,.95),0 12px 30px rgba(71,58,160,.06)}
+.preview:before{content:"";position:absolute;z-index:-1;width:190px;height:190px;right:-92px;top:-96px;border-radius:50%;background:radial-gradient(circle,rgba(167,139,250,.19),transparent 70%);pointer-events:none}
+.preview-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px}
+.preview-kicker{display:block;margin-bottom:5px;color:#7772c9;font-size:9px;font-weight:850;letter-spacing:1.55px}
+.preview h2{font-size:20px;letter-spacing:-.65px;font-weight:800;margin:0;color:#201c46}
+.preview-status{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;border:1px solid #d8f2e2;background:rgba(240,253,244,.9);color:#15803d;padding:7px 10px;border-radius:999px;font-size:10px;font-weight:800}
+.preview-status i{width:6px;height:6px;background:#22c55e;border-radius:50%;box-shadow:0 0 0 3px rgba(34,197,94,.12)}
+.preview>p{font-size:12px;line-height:1.55;margin:0 0 15px;color:#73738f;overflow-wrap:anywhere}
+.imagebox{position:relative;height:190px;flex-shrink:0;display:grid;place-items:center;overflow:hidden;border:1px solid #e1def7;border-radius:15px;background-color:#f8f8ff;background-image:linear-gradient(45deg,#eeedf8 25%,transparent 25%),linear-gradient(-45deg,#eeedf8 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#eeedf8 75%),linear-gradient(-45deg,transparent 75%,#eeedf8 75%);background-size:18px 18px;background-position:0 0,0 9px,9px -9px,-9px 0;box-shadow:inset 0 1px 3px rgba(49,46,129,.035)}
+.imagebox:after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(255,255,255,.6)}
+.imagebox img{position:relative;z-index:1;width:100%;height:100%;object-fit:contain;padding:8px;display:none}
+.placeholder{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:16px;color:#504b87}
+.preview-empty-art{position:relative;width:100px;height:73px;overflow:hidden;border-radius:12px;border:1px solid rgba(124,111,219,.22);background:linear-gradient(145deg,#e0e7ff,#cffafe 62%,#f5d0fe);box-shadow:0 9px 20px rgba(99,91,255,.14);transform:rotate(-3deg);margin-bottom:3px}
+.preview-art-sun{position:absolute;width:19px;height:19px;border-radius:50%;right:17px;top:12px;background:#fbbf24;box-shadow:0 0 0 5px rgba(255,255,255,.22)}
+.preview-art-mountain{position:absolute;left:-8px;bottom:12px;width:83px;height:50px;background:linear-gradient(145deg,#818cf8,#6366f1);clip-path:polygon(0 100%,49% 0,100% 100%)}
+.preview-art-mountain:after{content:"";position:absolute;left:40px;top:13px;width:45px;height:38px;background:linear-gradient(140deg,#a78bfa,#7c3aed);clip-path:polygon(0 100%,48% 0,100% 100%)}
+.preview-art-water{position:absolute;bottom:0;left:0;right:0;height:18px;background:linear-gradient(90deg,#22d3ee,#60a5fa);clip-path:polygon(0 20%,25% 0,54% 28%,75% 8%,100% 22%,100% 100%,0 100%)}
+.placeholder strong{font-size:12px;color:#39336f;letter-spacing:-.1px}
+.preview-empty-hint{font-size:10px;color:#777795}
+.imagebox-label{position:absolute;z-index:2;left:10px;top:10px;padding:5px 7px;border:1px solid rgba(255,255,255,.82);border-radius:7px;background:rgba(255,255,255,.83);backdrop-filter:blur(8px);color:#5b54a3;font-size:8px;font-weight:900;letter-spacing:1px}
+.preview-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:10px 1px 15px;color:#777795;font-size:9px;font-weight:750;letter-spacing:.15px}
+.preview-foot>span:first-child{display:flex;align-items:center;gap:5px;color:#4f617c}
+.preview-lock{display:inline-grid;place-items:center;width:15px;height:15px;border-radius:50%;background:#dcfce7;color:#15803d;font-size:10px;font-style:normal}
+.stats{margin-top:0;display:grid;grid-template-columns:1fr;gap:7px}
+.stat{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 11px;margin:0;border:1px solid #eceaf8;border-radius:10px;background:rgba(255,255,255,.78);font-size:11px;transition:border-color .2s,transform .2s,box-shadow .2s}
+.stat span:first-child{display:flex;align-items:center;gap:7px;color:#656582;font-weight:650}
+.stat strong{font-size:12px;font-weight:850;color:#25204d;font-variant-numeric:tabular-nums}
+.stat-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#a5b4fc}
+.compressed-dot{background:#22c55e}.reduction-dot{background:#a855f7}
+.stat-reduction{background:linear-gradient(100deg,#f6f2ff,#fff);border-color:#e4defd}
+.stat-reduction strong{color:#6d28d9}
+.result{border:1px solid #b9ebcc;box-shadow:0 6px 18px rgba(22,163,74,.06)}
+.download{box-shadow:0 7px 18px rgba(22,163,106,.18);transition:transform .2s,box-shadow .2s}
+.download:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(22,163,106,.23)}
+.preview.has-image .imagebox{background-color:#f5f6fc}
+.preview.has-image .placeholder{display:none!important}
+.preview.has-image .imagebox-label{background:rgba(255,255,255,.9)}
+@media(max-width:760px){.preview{padding:18px}.imagebox{height:210px}.preview h2{font-size:19px}.stats{grid-template-columns:1fr 1fr}.stat{padding:10px 9px}.stat-reduction{grid-column:1/-1}}
+@media(max-width:420px){.preview-head{align-items:flex-start}.preview-status{padding:6px 8px}.imagebox{height:190px}.stats{grid-template-columns:1fr}.stat-reduction{grid-column:auto}.preview-foot{font-size:8px}}
+@media(prefers-reduced-motion:reduce){.stat,.download{transition:none!important}}
+
 </style>
 </head>
 <body>
@@ -371,12 +414,24 @@ button:active,.primary:active,.secondary:active{transform:translateY(0) scale(.9
       <div class="hint">Privacy-first: image processing happens in your browser. Your images are not uploaded to a server.</div>
     </div>
     <aside class="preview">
-      <h2>Preview</h2><p id="previewText">Your compressed image will appear here.</p>
-      <div class="imagebox"><div class="placeholder" id="placeholder">▧</div><img id="previewImg" alt="Compressed image preview"></div>
+      <div class="preview-head">
+        <div><span class="preview-kicker">YOUR WORKSPACE</span><h2>Image preview</h2></div>
+        <span class="preview-status" id="previewStatus"><i></i> Ready</span>
+      </div>
+      <p id="previewText">Upload an image to see it here. Your original stays on your device.</p>
+      <div class="imagebox" id="imagebox">
+        <div class="placeholder" id="placeholder">
+          <div class="preview-empty-art" aria-hidden="true"><span class="preview-art-sun"></span><span class="preview-art-mountain"></span><span class="preview-art-water"></span></div>
+          <strong>Your image goes here</strong><span class="preview-empty-hint">A clear preview, before and after</span>
+        </div>
+        <img id="previewImg" alt="Compressed image preview">
+        <span class="imagebox-label">LIVE PREVIEW</span>
+      </div>
+      <div class="preview-foot"><span><i class="preview-lock">✓</i> Private on this device</span><span>JPG · PNG · WEBP</span></div>
       <div class="stats">
-        <div class="stat"><span>Original Size</span><strong id="originalSize">—</strong></div>
-        <div class="stat"><span>Compressed Size</span><strong id="compressedSize">—</strong></div>
-        <div class="stat"><span>Reduction</span><strong id="reduction">—</strong></div>
+        <div class="stat stat-original"><span><i class="stat-dot original-dot"></i>Original size</span><strong id="originalSize">—</strong></div>
+        <div class="stat stat-compressed"><span><i class="stat-dot compressed-dot"></i>Compressed size</span><strong id="compressedSize">—</strong></div>
+        <div class="stat stat-reduction"><span><i class="stat-dot reduction-dot"></i>Size reduction</span><strong id="reduction">—</strong></div>
       </div>
       <div class="result" id="result"></div>
       <a class="download" id="download" download="sizeitnow-compressed.jpg">↓ &nbsp; Download Image</a>
@@ -413,7 +468,7 @@ document.querySelectorAll('[data-quality]').forEach(btn=>btn.addEventListener('c
 document.querySelectorAll('[data-frame]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-frame]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');frameMode=btn.dataset.frame;document.getElementById('customFrameFields').style.display=frameMode==='custom'?'flex':'none';}));
 fileInput.addEventListener('change',e=>loadFile(e.target.files[0]));
 document.getElementById('removeFile').addEventListener('click',clearSelectedFile);
-function clearSelectedFile(){sourceFile=null;sourceImage=null;fileInput.value='';compressBtn.disabled=true;drop.classList.remove('upload-complete');uploadedFileCard.style.display='none';uploadStatus.style.display='none';document.getElementById('originalSize').textContent='—';document.getElementById('compressedSize').textContent='—';document.getElementById('reduction').textContent='—';document.getElementById('previewText').textContent='Your compressed image will appear here.';document.getElementById('result').style.display='none';document.getElementById('download').style.display='none';previewImg.removeAttribute('src');previewImg.style.display='none';document.getElementById('placeholder').style.display='block';if(resultUrl){URL.revokeObjectURL(resultUrl);resultUrl=null;}}
+function clearSelectedFile(){document.getElementById('previewStatus').innerHTML='<i></i> Ready';document.querySelector('.preview').classList.remove('has-image');sourceFile=null;sourceImage=null;fileInput.value='';compressBtn.disabled=true;drop.classList.remove('upload-complete');uploadedFileCard.style.display='none';uploadStatus.style.display='none';document.getElementById('originalSize').textContent='—';document.getElementById('compressedSize').textContent='—';document.getElementById('reduction').textContent='—';document.getElementById('previewText').textContent='Your compressed image will appear here.';document.getElementById('result').style.display='none';document.getElementById('download').style.display='none';previewImg.removeAttribute('src');previewImg.style.display='none';document.getElementById('placeholder').style.display='block';if(resultUrl){URL.revokeObjectURL(resultUrl);resultUrl=null;}}
 ['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('drag')}));
 ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('drag')}));
 drop.addEventListener('drop',e=>loadFile(e.dataTransfer.files[0]));
@@ -422,11 +477,11 @@ function loadFile(file){
  if(!file)return;
  if(!['image/jpeg','image/png','image/webp'].includes(file.type)){fileInput.value='';showUploadStatus('Unsupported file type. Please choose a JPG, PNG or WebP image.');return}
  if(file.size>10*1024*1024){fileInput.value='';showUploadStatus('This image is larger than 10 MB. Please choose a smaller file.');return}
- sourceFile=file;sourceImage=null;compressBtn.disabled=true;
+ sourceFile=file;sourceImage=null;document.getElementById('previewStatus').innerHTML='<i></i> Loading';document.querySelector('.preview').classList.remove('has-image');compressBtn.disabled=true;
  drop.classList.add('upload-complete');uploadedFileCard.style.display='flex';uploadedFileName.textContent=file.name;uploadedFileSize.textContent=fmt(file.size)+' · Ready to compress';
  showUploadStatus('✓ '+file.name+' is selected successfully. You can now choose a target size and click Compress Image.',true);
  const reader=new FileReader();
- reader.onload=()=>{sourceImage=new Image();sourceImage.onload=()=>{compressBtn.disabled=false;uploadedFileSize.textContent=fmt(file.size)+' · '+sourceImage.width+' × '+sourceImage.height+' px';document.getElementById('originalSize').textContent=fmt(file.size);document.getElementById('previewText').textContent='Selected: '+file.name+' · '+sourceImage.width+' × '+sourceImage.height+' px';document.getElementById('result').style.display='none';document.getElementById('download').style.display='none';document.getElementById('compressedSize').textContent='—';document.getElementById('reduction').textContent='—';};sourceImage.onerror=()=>{sourceImage=null;showUploadStatus('Could not read this image. Please choose another file.');compressBtn.disabled=true;};sourceImage.src=reader.result;};
+ reader.onload=()=>{sourceImage=new Image();sourceImage.onload=()=>{compressBtn.disabled=false;uploadedFileSize.textContent=fmt(file.size)+' · '+sourceImage.width+' × '+sourceImage.height+' px';document.getElementById('originalSize').textContent=fmt(file.size);document.getElementById('previewText').textContent=file.name+' · '+sourceImage.width+' × '+sourceImage.height+' px';document.getElementById('previewStatus').innerHTML='<i></i> Image ready';document.querySelector('.preview').classList.add('has-image');document.getElementById('result').style.display='none';document.getElementById('download').style.display='none';document.getElementById('compressedSize').textContent='—';document.getElementById('reduction').textContent='—';};sourceImage.onerror=()=>{sourceImage=null;showUploadStatus('Could not read this image. Please choose another file.');compressBtn.disabled=true;};sourceImage.src=reader.result;};
  reader.onerror=()=>{sourceImage=null;showUploadStatus('Could not load this file. Please try again.');compressBtn.disabled=true;};
  reader.readAsDataURL(file);
 }
@@ -525,7 +580,7 @@ async function compress(){
  resultBlob=best;
  if(resultUrl)URL.revokeObjectURL(resultUrl);
  resultUrl=URL.createObjectURL(best);
- previewImg.src=resultUrl;previewImg.style.display='block';document.getElementById('placeholder').style.display='none';
+ previewImg.src=resultUrl;previewImg.style.display='block';document.getElementById('placeholder').style.display='none';document.getElementById('previewStatus').innerHTML='<i></i> Compressed';document.querySelector('.preview').classList.add('has-image');
  document.getElementById('compressedSize').textContent=fmt(best.size);
  const reduction=Math.max(0,(1-best.size/sourceFile.size)*100);
  document.getElementById('reduction').textContent=(best.size<=sourceFile.size?reduction.toFixed(1):'-0.0')+'%';
