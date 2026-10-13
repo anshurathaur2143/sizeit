@@ -105,7 +105,7 @@ details p,#faq p,#about p{color:#475467!important}
 html{scroll-behavior:smooth;scroll-padding-top:90px}
 body{background:#fbfaff;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 header{position:sticky;top:0;z-index:40;height:76px;background:rgba(255,255,255,.82);backdrop-filter:blur(18px);border-bottom:1px solid rgba(226,222,250,.85);box-shadow:0 4px 24px rgba(43,34,104,.04)}
-.brand{gap:10px;font-size:25px;letter-spacing:-1.1px}.logo{border-radius:13px;background:linear-gradient(135deg,#635bff,#a855f7 58%,#22d3ee);box-shadow:0 7px 20px rgba(99,91,255,.28)}
+.brand{gap:10px;font-size:25px;letter-spacing:-1.1px;cursor:pointer;user-select:none}.logo{border-radius:13px;background:linear-gradient(135deg,#635bff,#a855f7 58%,#22d3ee);box-shadow:0 7px 20px rgba(99,91,255,.28)}
 .brand span em{background:linear-gradient(100deg,#635bff,#d946ef);-webkit-background-clip:text;background-clip:text;color:transparent}
 .tagline{border-left:1px solid #dedaf7;padding-left:12px}
 nav{gap:22px}nav a{font-weight:650;color:#52516d;transition:color .2s}nav a:hover{color:#635bff}
@@ -189,11 +189,17 @@ button:focus-visible,a:focus-visible,.filebutton:focus-visible{outline:3px solid
 .chip.active{color:#fff;border-color:#6557f5;background:linear-gradient(115deg,#5145e5,#9b4de8);box-shadow:0 6px 16px rgba(99,91,255,.25)}
 .primary:not(:disabled):active,.filebutton:active,.download:active,.ai-launcher:active{transform:translateY(1px) scale(.985);filter:brightness(.92)}
 @media(prefers-reduced-motion:reduce){button,a{transition:none!important}}
+
+/* Consistent visible hover feedback for every button and clickable navigation/control. */
+button:not(:disabled),a,.brand{-webkit-tap-highlight-color:transparent}
+button:not(:disabled):hover,a.filebutton:hover,.reselect-button:hover,.multi-pdf-pick:hover,.download:hover,.ai-launcher:hover,.ai-send:hover,.ai-close:hover,.ai-quick button:hover,.remove-file:hover,.pdf-file-row button:hover,nav a:hover,.brand:hover{filter:brightness(.90) saturate(1.18)}
+button:not(:disabled):focus-visible,a:focus-visible,.brand:focus-visible{outline:3px solid rgba(99,91,255,.48);outline-offset:3px}
+button:not(:disabled):active,.brand:active{transform:scale(.975)}
 </style>
 </head>
 <body>
-<header>
-  <div class="brand"><div class="logo" aria-label="sizeitnow AI logo"><svg viewBox="0 0 48 48" role="img" aria-hidden="true"><defs><linearGradient id="aiLogoGradient" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse"><stop stop-color="#8B5CF6"/><stop offset=".52" stop-color="#3B82F6"/><stop offset="1" stop-color="#22D3EE"/></linearGradient></defs><path d="M24 5.5 28.7 17l11.8 4.8-11.8 4.8L24 38l-4.8-11.4L7.5 21.8 19.2 17 24 5.5Z" fill="url(#aiLogoGradient)"/><path d="m36.5 5.5 1.8 4.2 4.2 1.8-4.2 1.7-1.8 4.3-1.7-4.3-4.3-1.7 4.3-1.8 1.7-4.2Z" fill="#fff"/><circle cx="12" cy="36" r="3" fill="#fff"/><circle cx="12" cy="36" r="1.4" fill="url(#aiLogoGradient)"/><path d="m13.5 15 2.2 2.2m15.8 12.3 3.4 3.4" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".9"/></svg></div><span>sizeit<em>now</em></span><span class="tagline">Compress Images to Any Size</span></div>
+<header id="top">
+  <div class="brand" role="link" tabindex="0" aria-label="SizeItNow — return to top" title="Back to top"><div class="logo" aria-label="sizeitnow AI logo"><svg viewBox="0 0 48 48" role="img" aria-hidden="true"><defs><linearGradient id="aiLogoGradient" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse"><stop stop-color="#8B5CF6"/><stop offset=".52" stop-color="#3B82F6"/><stop offset="1" stop-color="#22D3EE"/></linearGradient></defs><path d="M24 5.5 28.7 17l11.8 4.8-11.8 4.8L24 38l-4.8-11.4L7.5 21.8 19.2 17 24 5.5Z" fill="url(#aiLogoGradient)"/><path d="m36.5 5.5 1.8 4.2 4.2 1.8-4.2 1.7-1.8 4.3-1.7-4.3-4.3-1.7 4.3-1.8 1.7-4.2Z" fill="#fff"/><circle cx="12" cy="36" r="3" fill="#fff"/><circle cx="12" cy="36" r="1.4" fill="url(#aiLogoGradient)"/><path d="m13.5 15 2.2 2.2m15.8 12.3 3.4 3.4" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".9"/></svg></div><span>sizeit<em>now</em></span><span class="tagline">Compress Images to Any Size</span></div>
   <nav><a href="#home">Home</a><a href="#how">How It Works</a><a href="#faq">FAQ</a><a href="#about">About &amp; Support</a></nav>
 </header>
 <main id="home">
@@ -388,7 +394,7 @@ async function compress(){
    if(!Number.isInteger(frameW)||!Number.isInteger(frameH)||frameW<1||frameH<1||frameW>6000||frameH>6000){alert('Enter custom frame width and height between 1 and 6000 pixels.');compressBtn.disabled=false;compressBtn.innerHTML='✦ &nbsp; Compress Image';return;}
  }
  const useFrame=frameW>0&&frameH>0;
- const minQuality=qualityMode==='low'?.55:qualityMode==='high'?.78:.68;
+ const qualityLadder=[.90,.84,.78,.72,.66,.60,.55];
  function drawSource(targetCanvas,outW,outH){
    targetCanvas.width=outW;targetCanvas.height=outH;
    const targetCtx=targetCanvas.getContext('2d');
@@ -400,7 +406,7 @@ async function compress(){
      targetCtx.drawImage(sourceImage,Math.round((outW-drawW)/2),Math.round((outH-drawH)/2),drawW,drawH);
    }else targetCtx.drawImage(sourceImage,0,0,outW,outH);
  }
- async function encodeAt(width,height,quality=minQuality){
+ async function encodeAt(width,height,quality=.90){
    drawSource(canvas,width,height);
    return await canvasBlob(canvas,format,format==='image/png'?undefined:quality);
  }
@@ -409,38 +415,42 @@ async function compress(){
  if(format==='image/png'){
    best=await encodeAt(w,h);
  }else if(useFrame){
-   const blob=await encodeAt(w,h,minQuality);
-   if(blob&&blob.size<=maxBytes){
-     let lo=minQuality,hi=.96;best=blob;
-     for(let i=0;i<9;i++){const q=(lo+hi)/2,candidate=await encodeAt(w,h,q);if(candidate&&candidate.size<=maxBytes){best=candidate;lo=q}else hi=q;}
+   let lo=.45,hi=.96;
+   for(let i=0;i<11;i++){
+     const q=(lo+hi)/2,candidate=await encodeAt(w,h,q);
+     if(candidate&&candidate.size<=maxBytes){best=candidate;lo=q}else hi=q;
    }
  }else{
-   // Find the largest pixel dimensions that fit before tuning quality.
-   // This avoids repeated 10% shrinking, which can throw away far too many pixels.
    const fullW=w,fullH=h;
-   let lowScale=.04,highScale=1,fitScale=0,fitBlob=null;
-   const smallest=await encodeAt(Math.max(1,Math.round(fullW*lowScale)),Math.max(1,Math.round(fullH*lowScale)),minQuality);
-   if(smallest&&smallest.size<=maxBytes){fitScale=lowScale;fitBlob=smallest;}
-   const full=await encodeAt(fullW,fullH,minQuality);
-   if(full&&full.size<=maxBytes){fitScale=1;fitBlob=full;}
-   else if(fitBlob){
-     for(let i=0;i<10;i++){
-       const mid=(lowScale+highScale)/2;
-       const test=await encodeAt(Math.max(1,Math.round(fullW*mid)),Math.max(1,Math.round(fullH*mid)),minQuality);
-       if(test&&test.size<=maxBytes){lowScale=mid;fitScale=mid;fitBlob=test;}else highScale=mid;
+   // Try high quality first; at each quality, find the largest resolution that fits.
+   for(const q of qualityLadder){
+     const full=await encodeAt(fullW,fullH,q);
+     if(full&&full.size<=maxBytes){best=full;w=fullW;h=fullH;break;}
+     let lo=.015,hi=1,fit=null,fitScale=0;
+     const smallest=await encodeAt(Math.max(1,Math.round(fullW*lo)),Math.max(1,Math.round(fullH*lo)),q);
+     if(!smallest||smallest.size>maxBytes)continue;
+     fit=smallest;fitScale=lo;
+     for(let i=0;i<9;i++){
+       const mid=(lo+hi)/2;
+       const test=await encodeAt(Math.max(1,Math.round(fullW*mid)),Math.max(1,Math.round(fullH*mid)),q);
+       if(test&&test.size<=maxBytes){lo=mid;fitScale=mid;fit=test;}else hi=mid;
      }
+     if(fit){w=Math.max(1,Math.round(fullW*fitScale));h=Math.max(1,Math.round(fullH*fitScale));best=fit;break;}
    }
-   if(fitBlob){
-     w=Math.max(1,Math.round(fullW*fitScale));h=Math.max(1,Math.round(fullH*fitScale));
-     let lo=minQuality,hi=.96;best=fitBlob;
-     for(let i=0;i<10;i++){
+   if(best){
+     let lo=.55,hi=.96;
+     for(const q of qualityLadder){
+       const candidate=await encodeAt(w,h,q);
+       if(candidate&&candidate.size<=maxBytes){best=candidate;lo=q;break;}
+     }
+     for(let i=0;i<6;i++){
        const q=(lo+hi)/2,candidate=await encodeAt(w,h,q);
        if(candidate&&candidate.size<=maxBytes){best=candidate;lo=q}else hi=q;
      }
    }
  }
  compressBtn.disabled=false;compressBtn.innerHTML='✦ &nbsp; Compress Image';
- if(!best){document.getElementById('result').style.display='block';document.getElementById('result').textContent='This image cannot fit within '+wantedKB+' KB at the selected quality. Choose WebP or a larger target size to preserve more detail.';document.getElementById('result').style.background='#fff4df';document.getElementById('result').style.color='#805300';document.getElementById('download').style.display='none';return}
+ if(!best){document.getElementById('result').style.display='block';document.getElementById('result').textContent=format==='image/png'?'PNG is lossless and cannot always fit a small target. Choose JPG/WebP or increase the target size.':'This image could not fit the target at usable quality. Try WebP or increase the target size for a sharper result.';document.getElementById('result').style.background='#fff4df';document.getElementById('result').style.color='#805300';document.getElementById('download').style.display='none';return}
  resultBlob=best;
  if(resultUrl)URL.revokeObjectURL(resultUrl);
  resultUrl=URL.createObjectURL(best);
@@ -451,7 +461,7 @@ async function compress(){
  const result=document.getElementById('result');result.style.display='block';
  const dl=document.getElementById('download');
  if(best.size<=maxBytes){
-   result.textContent='Done — '+fmt(best.size)+' of '+wantedKB+' KB. SizeItNow maximised dimensions first, then adjusted quality to fit.';
+   result.textContent='Done — '+fmt(best.size)+' of '+wantedKB+' KB. SizeItNow prioritised image quality, then reduced dimensions only as needed.';
    result.style.background='#e9f9ef';result.style.color='#17663a';
    dl.href=resultUrl;dl.download='sizeitnow-compressed.'+({'image/jpeg':'jpg','image/png':'png','image/webp':'webp'}[format]);dl.style.display='block';
  }else{
@@ -459,6 +469,7 @@ async function compress(){
    result.style.background='#fff4df';result.style.color='#805300';dl.style.display='none';
  }
 }
+
 compressBtn.addEventListener('click',async()=>{
   if(compressBtn.disabled)return;
   try{
@@ -640,7 +651,15 @@ function renderPdfPagesAsImages(){
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
 <script>
 (function(){
-  const canvas=document.getElementById('hero3d');
+  (function(){
+  const brand=document.querySelector('.brand');
+  if(brand){
+    const goTop=()=>window.scrollTo({top:0,behavior:'smooth'});
+    brand.addEventListener('click',goTop);
+    brand.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();goTop();}});
+  }
+})();
+const canvas=document.getElementById('hero3d');
   const fallback=document.querySelector('.hero-orb-fallback');
   const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function init3D(){
