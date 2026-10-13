@@ -192,27 +192,30 @@ async function compress(){
  compressBtn.disabled=true;compressBtn.textContent='Compressing…';
  const maxBytes=Math.max(1,(wantedKB-1)*1024);
  let w=sourceImage.naturalWidth,h=sourceImage.naturalHeight;
- const maxDim=3000;if(Math.max(w,h)>maxDim){const s=maxDim/Math.max(w,h);w=Math.round(w*s);h=Math.round(h*s)}
+ // Preserve source detail by default. Only cap extremely large images to avoid browser memory issues.
+ const maxDim=6000;if(Math.max(w,h)>maxDim){const s=maxDim/Math.max(w,h);w=Math.round(w*s);h=Math.round(h*s)}
  let best=null,canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');
- // Iteratively lower quality, then reduce dimensions if necessary.
- for(let pass=0;pass<9;pass++){
-   canvas.width=w;canvas.height=h;ctx.clearRect(0,0,w,h);
-   if(format==='image/jpeg'){ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h)}
-   ctx.drawImage(sourceImage,0,0,w,h);
-   if(format==='image/png'){
-     best=await canvasBlob(canvas,format);
-     if(best&&best.size<=maxBytes)break;
-   }else{
-     let lo=.08,hi=.94,passBest=null;
-     for(let i=0;i<8;i++){
+ if(format==='image/png'){
+   // PNG is lossless: do not repeatedly shrink its dimensions just to force a tiny file size.
+   canvas.width=w;canvas.height=h;ctx.clearRect(0,0,w,h);ctx.drawImage(sourceImage,0,0,w,h);
+   best=await canvasBlob(canvas,format);
+ }else{
+   // Keep quality at or above 55%. If needed, reduce dimensions in small steps rather than
+   // applying severe quality loss or aggressive 18% size reductions.
+   for(let pass=0;pass<30;pass++){
+     canvas.width=w;canvas.height=h;ctx=canvas.getContext('2d');ctx.clearRect(0,0,w,h);
+     if(format==='image/jpeg'){ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h)}
+     ctx.drawImage(sourceImage,0,0,w,h);
+     let lo=.55,hi=.96,passBest=null;
+     for(let i=0;i<10;i++){
        const q=(lo+hi)/2,blob=await canvasBlob(canvas,format,q);
        if(!blob)continue;
        if(blob.size<=maxBytes){passBest=blob;lo=q}else hi=q;
      }
-     if(passBest && (!best || passBest.size>best.size))best=passBest;
-     if(best&&best.size<=maxBytes)break;
+     if(passBest){best=passBest;break}
+     w=Math.max(1,Math.round(w*.94));h=Math.max(1,Math.round(h*.94));
+     if(w===1&&h===1)break;
    }
-   w=Math.max(1,Math.round(w*.82));h=Math.max(1,Math.round(h*.82));
  }
  compressBtn.disabled=false;compressBtn.innerHTML='✦ &nbsp; Compress Image';
  if(!best){alert('Compression failed. Please try another image or format.');return}
@@ -226,7 +229,7 @@ async function compress(){
  const result=document.getElementById('result');result.style.display='block';
  const dl=document.getElementById('download');
  if(best.size<=maxBytes){result.textContent='Success — image is '+fmt(best.size)+', at least 1 KB below your '+wantedKB+' KB target.';result.style.background='#e9f9ef';result.style.color='#17663a';dl.href=resultUrl;dl.download='sizeitnow-compressed.'+({ 'image/jpeg':'jpg','image/png':'png','image/webp':'webp'}[format]);dl.style.display='block';}
- else{result.textContent='This image could not be reduced to '+(wantedKB-1)+' KB or less in the selected format. No download is offered above your size limit. Try JPG/WebP or a larger target.';result.style.background='#fff4df';result.style.color='#805300';dl.style.display='none';}
+ else{result.textContent=format==='image/png'?'PNG is lossless, so this image was kept clear without shrinking its dimensions. It is still above your target size. Choose JPG or WebP, or increase the target size for a smaller file.':'Could not reach your target while maintaining good image quality. Try a larger target size to keep more detail.';result.style.background='#fff4df';result.style.color='#805300';dl.style.display='none';}
 }
 function renderPdfFileList(){
  pdfFileList.replaceChildren();
