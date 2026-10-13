@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0878f9">
-<title>SizeIt — Compress Images to Your Required KB Size</title>
+<title>sizeitnow — Free Online Image Compressor</title>
 <meta name="description" content="Compress images to a target KB size in your browser. Choose 20 KB, 50 KB, 100 KB, 200 KB or enter a custom size.">
 <style>
 :root{--blue:#0878f9;--blue2:#0068e8;--ink:#13213a;--muted:#5c6e8b;--line:#d9e5f5;--panel:#fff;--bg:#f3f8ff;--soft:#edf5ff;--shadow:0 18px 55px rgba(30,75,130,.09)}
@@ -27,7 +27,7 @@ footer{text-align:center;padding:20px;color:#7888a1;font-size:12px;border-top:1p
 </head>
 <body>
 <header>
-  <div class="brand"><div class="logo">▧</div><span>Size<em>It</em></span><span class="tagline">Compress Images to Any Size</span></div>
+  <div class="brand"><div class="logo">▧</div><span>sizeit<em>now</em></span><span class="tagline">Compress Images to Any Size</span></div>
   <nav><a href="#home">Home</a><a href="#how">How It Works</a><a href="#faq">FAQ</a></nav>
 </header>
 <main id="home">
@@ -43,7 +43,7 @@ footer{text-align:center;padding:20px;color:#7888a1;font-size:12px;border-top:1p
         <div class="or">or</div>
         <label class="filebutton" for="file">▣ &nbsp; Choose Image</label>
         <input id="file" type="file" accept="image/jpeg,image/png,image/webp">
-        <small>Supports JPG, JPEG, PNG, WebP (max 10 MB)</small>
+        <small>Supports JPG, PNG and WebP · Maximum file size: 10 MB</small><div id="uploadStatus" role="status" aria-live="polite" style="display:none;width:100%;max-width:100%;margin-top:12px;padding:10px 12px;border-radius:9px;background:#e9f9ef;color:#17663a;font-size:13px;line-height:1.5;overflow-wrap:anywhere;text-align:left"></div>
       </div>
       <div class="field">
         <div class="fieldlabel">▣ &nbsp; Target Size</div>
@@ -75,7 +75,7 @@ footer{text-align:center;padding:20px;color:#7888a1;font-size:12px;border-top:1p
         <div class="stat"><span>Reduction</span><strong id="reduction">—</strong></div>
       </div>
       <div class="result" id="result"></div>
-      <a class="download" id="download" download="sizeit-compressed.jpg">↓ &nbsp; Download Image</a>
+      <a class="download" id="download" download="sizeitnow-compressed.jpg">↓ &nbsp; Download Image</a>
     </aside>
   </section>
 </main>
@@ -91,9 +91,9 @@ footer{text-align:center;padding:20px;color:#7888a1;font-size:12px;border-top:1p
   <details style="padding:12px 0;border-bottom:1px solid #e4ebf5"><summary>Are my photos uploaded?</summary><p style="color:#5c6e8b;line-height:1.6">This prototype processes the image in your browser. It does not send the image to a server.</p></details>
   <details style="padding:12px 0"><summary>Can I compress PDFs here?</summary><p style="color:#5c6e8b;line-height:1.6">Not in this first prototype. PDF compression can be added as a later feature.</p></details>
 </section>
-<footer>© 2026 SizeIt · Simple image compression, right in your browser.</footer>
+<footer>Made with care by <strong>Ansh Rathaur</strong> · Thank you for visiting sizeitnow. Always free, with no ads.</footer>
 <script>
-const fileInput=document.getElementById('file'),drop=document.getElementById('drop'),compressBtn=document.getElementById('compress');
+const fileInput=document.getElementById('file'),drop=document.getElementById('drop'),compressBtn=document.getElementById('compress'),uploadStatus=document.getElementById('uploadStatus');
 const customInput=document.getElementById('custom'),previewImg=document.getElementById('previewImg');
 let sourceFile=null,sourceImage=null,targetKB=50,format='image/jpeg',resultBlob=null,resultUrl=null;
 document.querySelectorAll('[data-kb]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-kb]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');targetKB=Number(btn.dataset.kb);customInput.value='';}));
@@ -103,13 +103,15 @@ fileInput.addEventListener('change',e=>loadFile(e.target.files[0]));
 ['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('drag')}));
 ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('drag')}));
 drop.addEventListener('drop',e=>loadFile(e.dataTransfer.files[0]));
+function showUploadStatus(message,ok=false){uploadStatus.style.display='block';uploadStatus.style.background=ok?'#e9f9ef':'#fff0f0';uploadStatus.style.color=ok?'#17663a':'#9b2525';uploadStatus.textContent=message;}
 function loadFile(file){
  if(!file)return;
- if(!file.type.startsWith('image/')){alert('Please select an image file.');return}
- if(file.size>10*1024*1024){alert('Please choose an image smaller than 10 MB.');return}
+ if(!['image/jpeg','image/png','image/webp'].includes(file.type)){showUploadStatus('Unsupported file type. Please choose a JPG, PNG or WebP image.');return}
+ if(file.size>10*1024*1024){showUploadStatus('This image is larger than 10 MB. Please choose a smaller file.');return}
  sourceFile=file;
+ showUploadStatus('✓ Image ready: '+file.name+' ('+fmt(file.size)+'). Your image is selected and ready to compress.',true);
  const reader=new FileReader();
- reader.onload=()=>{sourceImage=new Image();sourceImage.onload=()=>{compressBtn.disabled=false;document.getElementById('originalSize').textContent=fmt(file.size);document.getElementById('previewText').textContent=file.name+' · '+sourceImage.width+' × '+sourceImage.height+' px';document.getElementById('result').style.display='none';document.getElementById('download').style.display='none';};sourceImage.src=reader.result;};
+ reader.onload=()=>{sourceImage=new Image();sourceImage.onload=()=>{compressBtn.disabled=false;document.getElementById('originalSize').textContent=fmt(file.size);document.getElementById('previewText').textContent='Selected: '+file.name+' · '+sourceImage.width+' × '+sourceImage.height+' px';document.getElementById('result').style.display='none';document.getElementById('download').style.display='none';document.getElementById('compressedSize').textContent='—';document.getElementById('reduction').textContent='—';};sourceImage.onerror=()=>{showUploadStatus('Could not read this image. Please try another file.');compressBtn.disabled=true;};sourceImage.src=reader.result;};
  reader.readAsDataURL(file);
 }
 function fmt(bytes){return bytes<1024?(bytes+' B'):(bytes/1024).toFixed(1)+' KB'}
@@ -155,7 +157,7 @@ async function compress(){
  const result=document.getElementById('result');result.style.display='block';
  if(best.size<=maxBytes){result.textContent='Success — image is within your target of '+wantedKB+' KB.';result.style.background='#e9f9ef';result.style.color='#17663a'}
  else{result.textContent='Could not reach '+wantedKB+' KB with this format. Current result is '+fmt(best.size)+'. Try JPG/WebP or a larger target.';result.style.background='#fff4df';result.style.color='#805300'}
- const dl=document.getElementById('download');dl.href=resultUrl;dl.download='sizeit-compressed.'+({ 'image/jpeg':'jpg','image/png':'png','image/webp':'webp'}[format]);dl.style.display='block';
+ const dl=document.getElementById('download');dl.href=resultUrl;dl.download='sizeitnow-compressed.'+({ 'image/jpeg':'jpg','image/png':'png','image/webp':'webp'}[format]);dl.style.display='block';
 }
 compressBtn.addEventListener('click',compress);
 </script>
