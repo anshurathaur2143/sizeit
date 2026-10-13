@@ -99,6 +99,84 @@ details p,#faq p,#about p{color:#475467!important}
 .multi-pdf p,.pdf-status{color:#475467}
 .multi-pdf-pick,.reselect-button{color:#1d4ed8}
 
+
+/* SizeItNow 2026 refresh: vivid gradients, tactile surfaces, and mobile-first layout */
+:root{--blue:#635bff;--blue2:#8b5cf6;--ink:#17172f;--muted:#666783;--line:#e7e5f4;--panel:#fff;--bg:#f8f7ff;--soft:#f1efff;--shadow:0 22px 70px rgba(48,35,120,.12)}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{background:#fbfaff;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{position:sticky;top:0;z-index:40;height:76px;background:rgba(255,255,255,.82);backdrop-filter:blur(18px);border-bottom:1px solid rgba(226,222,250,.85);box-shadow:0 4px 24px rgba(43,34,104,.04)}
+.brand{gap:10px;font-size:25px;letter-spacing:-1.1px}.logo{border-radius:13px;background:linear-gradient(135deg,#635bff,#a855f7 58%,#22d3ee);box-shadow:0 7px 20px rgba(99,91,255,.28)}
+.brand span em{background:linear-gradient(100deg,#635bff,#d946ef);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tagline{border-left:1px solid #dedaf7;padding-left:12px}
+nav{gap:22px}nav a{font-weight:650;color:#52516d;transition:color .2s}nav a:hover{color:#635bff}
+main{position:relative;overflow:hidden;background:radial-gradient(ellipse at 12% 12%,rgba(196,181,253,.36),transparent 35%),radial-gradient(ellipse at 91% 10%,rgba(103,232,249,.28),transparent 31%),linear-gradient(180deg,#f6f3ff 0%,#fbfaff 64%,#fff 100%);padding:54px 20px 58px}
+main:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.18;background-image:radial-gradient(#9588e8 1px,transparent 1px);background-size:23px 23px;mask-image:linear-gradient(to bottom,black,transparent 70%)}
+.hero{position:relative;z-index:1;max-width:1160px;min-height:300px;margin:0 auto 30px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(280px,.9fr);align-items:center;gap:24px;text-align:left}
+.hero-copy{padding:10px 0}.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid rgba(124,108,246,.2);border-radius:999px;background:rgba(255,255,255,.72);color:#5b4bd8;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 6px 22px rgba(77,58,180,.06);margin-bottom:18px}
+.eyebrow:before{content:"";width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 4px #dcfce7}
+.hero h1{font-size:clamp(39px,5.2vw,68px);line-height:1.03;letter-spacing:-3.4px;margin:0 0 18px;font-weight:880;color:#191735;max-width:660px}
+.hero h1 span{background:linear-gradient(105deg,#635bff 5%,#a855f7 50%,#0891b2 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:16px;line-height:1.8;color:#65627e;margin:0;max-width:570px}
+.hero-visual{height:300px;position:relative;display:grid;place-items:center;isolation:isolate}
+.hero-visual:before{content:"";position:absolute;width:245px;height:245px;border-radius:50%;background:linear-gradient(135deg,rgba(168,85,247,.25),rgba(34,211,238,.25));filter:blur(35px);z-index:-2}
+#hero3d{width:100%;height:100%;display:block;outline:none}
+.hero-orb-fallback{position:absolute;width:180px;height:180px;border-radius:42% 58% 57% 43%/42% 44% 56% 58%;background:linear-gradient(135deg,#a78bfa,#6366f1 45%,#22d3ee);box-shadow:inset -18px -18px 35px rgba(34,24,105,.25),inset 12px 12px 26px rgba(255,255,255,.7),0 35px 70px rgba(99,91,255,.3);animation:floatOrb 7s ease-in-out infinite;z-index:-1}
+.hero-float-card{position:absolute;background:rgba(255,255,255,.88);border:1px solid rgba(255,255,255,.95);box-shadow:0 14px 40px rgba(54,42,126,.12);backdrop-filter:blur(14px);border-radius:15px;padding:12px 15px;font-size:12px;color:#5c5879;display:flex;align-items:center;gap:9px;font-weight:700}
+.hero-float-card b{display:block;color:#232044;font-size:13px}.hero-float-card .float-icon{width:31px;height:31px;border-radius:10px;background:#ede9fe;color:#6d5dfc;display:grid;place-items:center;font-size:17px}
+.float-one{top:24px;left:0}.float-two{bottom:25px;right:0}.float-two .float-icon{background:#cffafe;color:#0e7490}
+@keyframes floatOrb{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-14px) rotate(7deg)}}
+.workspace{position:relative;z-index:2;max-width:1120px;gap:22px;grid-template-columns:minmax(0,1.08fr) minmax(300px,.92fr);align-items:start}
+.left,.preview{background:rgba(255,255,255,.92);border:1px solid rgba(224,220,248,.9);border-radius:24px;box-shadow:0 22px 65px rgba(50,38,122,.08);padding:26px}
+.drop{border:1.5px dashed #b9b2f2;border-radius:19px;background:linear-gradient(135deg,#f8f6ff,#f0fbff);padding:27px 18px;transition:transform .2s,border-color .2s,box-shadow .2s}
+.drop:hover,.drop.dragover{border-color:#7466f5;box-shadow:0 0 0 4px rgba(124,108,246,.1);transform:translateY(-1px)}
+.uploadicon{width:54px;height:54px;border-radius:17px;display:grid;place-items:center;background:linear-gradient(135deg,#ede9fe,#cffafe);color:#6555e8;font-size:29px;box-shadow:0 9px 24px rgba(99,91,255,.12)}
+.filebutton,.multi-pdf-pick{background:linear-gradient(105deg,#635bff,#8b5cf6);color:#fff;border:0;border-radius:12px;padding:12px 17px;box-shadow:0 8px 18px rgba(99,91,255,.2);transition:transform .18s,box-shadow .18s}
+.filebutton:hover,.multi-pdf-pick:hover{transform:translateY(-2px);box-shadow:0 12px 24px rgba(99,91,255,.25)}
+.field{border-bottom-color:#eeecf8;padding:17px 0}.fieldlabel{font-size:13px;font-weight:800;letter-spacing:.01em;color:#333052;margin-bottom:11px}
+.chip{border:1px solid #e2def5;border-radius:11px;background:#fff;padding:9px 12px;transition:all .18s;font-weight:650}
+.chip:hover{border-color:#aaa0f4;background:#faf9ff}.chip.active{background:linear-gradient(105deg,#635bff,#8b5cf6);border-color:transparent;box-shadow:0 5px 14px rgba(99,91,255,.18)}
+.custom{border:1px solid #e2def5;border-radius:11px}.custom:focus,input:focus,textarea:focus{outline:3px solid rgba(99,91,255,.17);border-color:#8b7cf6}
+.primary{background:linear-gradient(105deg,#635bff,#8b5cf6 65%,#a855f7);border-radius:13px;box-shadow:0 10px 23px rgba(99,91,255,.22);transition:transform .2s,box-shadow .2s}
+.primary:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 15px 28px rgba(99,91,255,.28)}.primary:disabled{box-shadow:none}
+.multi-pdf{background:linear-gradient(140deg,#fbfaff,#f1faff);border:1px solid #e6e1fa;border-radius:18px;padding:18px;margin-top:17px}
+.preview h2{font-size:20px;letter-spacing:-.4px}.imagebox{border:1px solid #e9e6f7;border-radius:18px;background:radial-gradient(circle at 30% 20%,#f0eaff,#f8fbff 68%);min-height:230px}
+.stats{gap:8px}.stat{border:1px solid #ece9f8;background:#fbfaff;border-radius:13px;padding:12px 10px}.stat strong{color:#6555e8}
+.download{background:linear-gradient(105deg,#635bff,#8b5cf6);border-radius:12px;box-shadow:0 8px 20px rgba(99,91,255,.2)}
+.features{max-width:1160px;margin:26px auto 42px;padding:0 20px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.feature{border:1px solid #e9e5f8;border-radius:18px;background:linear-gradient(145deg,#fff,#fbfaff);padding:21px 17px;box-shadow:0 10px 30px rgba(48,35,120,.045);transition:transform .2s,box-shadow .2s}
+.feature:hover{transform:translateY(-4px);box-shadow:0 18px 38px rgba(48,35,120,.09)}
+.feature .icon{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,#ede9fe,#cffafe);color:#6253e6;font-size:22px;margin-bottom:14px}
+#faq{background:#fff;border:1px solid #ece8f8;border-radius:22px;padding:28px!important;box-shadow:0 12px 36px rgba(48,35,120,.05)}
+#faq h2{letter-spacing:-.6px}#faq details{border-bottom-color:#eeeaf8!important}#faq summary:hover{color:#635bff}
+#about{background:linear-gradient(135deg,#f4f0ff,#effcff)!important;border-color:#e4defa!important;border-radius:22px!important}
+footer{padding:24px 20px;background:#17152e;color:#c7c4e5!important;text-align:center}footer strong{color:#fff}
+#pdfToImagesPanel,#multiPdfPanel{scroll-margin-top:90px}
+.ai-launcher{position:fixed;right:24px;bottom:24px;z-index:1000;display:flex;align-items:center;gap:10px;border:0;border-radius:999px;padding:12px 17px 12px 12px;background:linear-gradient(110deg,#635bff,#8b5cf6 60%,#0ea5e9);color:#fff;font-weight:800;box-shadow:0 14px 38px rgba(76,59,190,.36);cursor:pointer;transition:transform .2s,box-shadow .2s}
+.ai-launcher:hover{transform:translateY(-3px);box-shadow:0 18px 44px rgba(76,59,190,.43)}
+.ai-launcher-icon{width:37px;height:37px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.2);font-size:20px;border:1px solid rgba(255,255,255,.25)}
+.ai-window{position:fixed;right:24px;bottom:92px;z-index:1001;width:min(390px,calc(100vw - 28px));height:min(560px,calc(100dvh - 125px));display:none;flex-direction:column;overflow:hidden;border:1px solid #e4defa;border-radius:24px;background:#fff;box-shadow:0 26px 90px rgba(31,24,87,.25)}
+.ai-window.open{display:flex;animation:chatIn .22s ease-out}
+@keyframes chatIn{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.ai-head{display:flex;align-items:center;gap:11px;padding:16px;background:linear-gradient(115deg,#f2edff,#e8fbff);border-bottom:1px solid #e9e5fa}
+.ai-avatar{width:42px;height:42px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(135deg,#635bff,#22d3ee);color:#fff;font-size:22px;box-shadow:0 6px 16px rgba(99,91,255,.2)}
+.ai-head-title{flex:1}.ai-head-title strong{display:block;color:#201c43;font-size:14px}.ai-head-title span{display:block;color:#6c688a;font-size:11px;margin-top:3px}.ai-close{border:0;background:#fff;color:#5f5a7b;border-radius:10px;width:34px;height:34px;font-size:20px;cursor:pointer}
+.ai-messages{padding:16px;display:flex;flex-direction:column;gap:12px;overflow-y:auto;flex:1;background:radial-gradient(ellipse at top left,#faf8ff,#fff 55%)}
+.ai-msg{max-width:88%;font-size:13px;line-height:1.55;padding:11px 13px;border-radius:15px;white-space:pre-wrap;overflow-wrap:anywhere}
+.ai-msg.bot{align-self:flex-start;background:#f1efff;border:1px solid #e6e0ff;color:#29254d;border-bottom-left-radius:5px}
+.ai-msg.user{align-self:flex-end;background:linear-gradient(115deg,#635bff,#8b5cf6);color:#fff;border-bottom-right-radius:5px}
+.ai-quick{display:flex;flex-wrap:wrap;gap:7px;padding:0 14px 12px;background:#fff}
+.ai-quick button{font-size:11px;border:1px solid #e5e0fa;background:#fbfaff;color:#5c4bd8;border-radius:999px;padding:7px 10px;cursor:pointer}
+.ai-quick button:hover{background:#f0edff}
+.ai-compose{display:flex;gap:8px;align-items:flex-end;padding:12px;border-top:1px solid #eeebf8;background:#fff}
+.ai-compose textarea{min-width:0;flex:1;resize:none;max-height:100px;border:1px solid #e4e0f5;border-radius:13px;padding:11px 12px;font:inherit;font-size:13px;line-height:1.4;color:#211e43}
+.ai-send{width:42px;height:42px;flex:0 0 42px;border:0;border-radius:13px;background:linear-gradient(135deg,#635bff,#8b5cf6);color:#fff;font-size:18px;cursor:pointer}.ai-send:disabled{opacity:.55;cursor:wait}
+.ai-privacy{padding:0 13px 11px;font-size:10px;color:#8b88a5;text-align:center;background:#fff}
+.ai-typing{display:flex;gap:4px;padding:13px}.ai-typing i{width:5px;height:5px;background:#8b7cf6;border-radius:50%;animation:typingPulse 1s infinite alternate}.ai-typing i:nth-child(2){animation-delay:.2s}.ai-typing i:nth-child(3){animation-delay:.4s}
+@keyframes typingPulse{to{opacity:.25;transform:translateY(-3px)}}
+@media(max-width:900px){header{padding:0 20px}.tagline{display:none}.hero{grid-template-columns:1fr minmax(220px,.65fr);gap:8px}.hero h1{font-size:clamp(38px,6vw,58px)}.workspace{grid-template-columns:1fr}.preview{order:2}.features{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){header{height:auto;min-height:68px;flex-wrap:wrap;padding:12px 16px;gap:10px}.brand{font-size:23px}.logo{width:35px;height:35px}nav{width:100%;justify-content:space-between;gap:10px;padding:2px 0 3px}nav a{font-size:12px}main{padding:28px 12px 35px}.hero{display:flex;flex-direction:column;align-items:stretch;text-align:center;gap:0;margin-bottom:20px;min-height:0}.hero-copy{padding:0 4px}.hero h1{font-size:clamp(38px,10vw,52px);letter-spacing:-2px}.hero p{font-size:14px}.hero-visual{height:220px;max-width:380px;width:100%;margin:0 auto}.float-one{left:0;top:15px}.float-two{right:0;bottom:12px}.workspace{gap:14px}.left,.preview{padding:16px;border-radius:19px}.drop{padding:22px 12px}.features{padding:0 14px;gap:10px}.feature{padding:16px 13px}.feature strong{font-size:13px}.feature p{font-size:12px}.ai-launcher{right:14px;bottom:14px;padding:9px 13px 9px 9px}.ai-launcher-icon{width:34px;height:34px}.ai-window{right:10px;bottom:78px;width:calc(100vw - 20px);height:min(580px,calc(100dvh - 95px));border-radius:20px}#faq{margin:0 14px 25px!important;padding:20px!important}#about{margin:0 14px 25px!important;padding:22px 18px!important}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
 </style>
 </head>
 <body>
@@ -108,8 +186,17 @@ details p,#faq p,#about p{color:#475467!important}
 </header>
 <main id="home">
   <section class="hero">
-    <h1>Compress Your Images<br>to the <span>Perfect Size</span></h1>
-    <p>Upload your image, choose the target size (e.g. 50 KB, 100 KB, 200 KB),<br class="desktop"> and get a compressed image in seconds.</p>
+    <div class="hero-copy">
+      <div class="eyebrow">Your all-in-one image studio</div>
+      <h1>Make every image<br><span>fit perfectly.</span></h1>
+      <p>Compress to your target KB, resize for any platform, or turn images and PDFs into the format you need — all in one colorful, privacy-first workspace.</p>
+    </div>
+    <div class="hero-visual" aria-label="Animated 3D image-processing illustration">
+      <div class="hero-orb-fallback" aria-hidden="true"></div>
+      <canvas id="hero3d" aria-label="Animated 3D gradient sculpture"></canvas>
+      <div class="hero-float-card float-one"><span class="float-icon">✦</span><span><b>Pixel-perfect</b>Quality control</span></div>
+      <div class="hero-float-card float-two"><span class="float-icon">↗</span><span><b>Files stay yours</b>Browser-based tools</span></div>
+    </div>
   </section>
   <section class="workspace" aria-label="Image compressor">
     <div class="left">
@@ -479,6 +566,93 @@ function renderPdfPagesAsImages(){
     row.append(number,name,size,link,thumb);pdfToImagesList.appendChild(row);
   });
 }
+</script>
+
+<section class="ai-window" id="aiWindow" role="dialog" aria-label="SizeItNow AI assistant" aria-modal="false">
+  <div class="ai-head">
+    <div class="ai-avatar" aria-hidden="true">✦</div>
+    <div class="ai-head-title"><strong>SizeItNow AI</strong><span>Powered by OpenAI · Here to help</span></div>
+    <button class="ai-close" id="aiClose" type="button" aria-label="Close assistant">×</button>
+  </div>
+  <div class="ai-messages" id="aiMessages" aria-live="polite">
+    <div class="ai-msg bot">Hey there! 👋 I can help you choose image settings, explain file formats, troubleshoot a conversion, or guide you through SizeItNow.</div>
+  </div>
+  <div class="ai-quick" id="aiQuick">
+    <button type="button" data-prompt="How do I compress an image to 50 KB without losing too much quality?">Compress to 50 KB</button>
+    <button type="button" data-prompt="Which image format should I choose: JPG, PNG or WebP?">Choose a format</button>
+    <button type="button" data-prompt="How do I convert PDF pages into separate images?">PDF help</button>
+  </div>
+  <form class="ai-compose" id="aiForm">
+    <textarea id="aiInput" rows="1" maxlength="1200" placeholder="Ask me anything about SizeItNow…" aria-label="Message the SizeItNow AI assistant" required></textarea>
+    <button class="ai-send" id="aiSend" type="submit" aria-label="Send message">➤</button>
+  </form>
+  <div class="ai-privacy">Please don’t share passwords or sensitive personal information.</div>
+</section>
+<button class="ai-launcher" id="aiLauncher" type="button" aria-controls="aiWindow" aria-expanded="false">
+  <span class="ai-launcher-icon">✦</span><span>Ask AI</span>
+</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+<script>
+(function(){
+  const canvas=document.getElementById('hero3d');
+  const fallback=document.querySelector('.hero-orb-fallback');
+  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function init3D(){
+    if(!canvas||!window.THREE)return;
+    try{
+      const THREE=window.THREE,renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.8));
+      renderer.setSize(canvas.clientWidth||340,canvas.clientHeight||300,false);
+      renderer.outputEncoding=THREE.sRGBEncoding;
+      const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(34,(canvas.clientWidth||340)/(canvas.clientHeight||300),.1,100);
+      camera.position.z=6.2;
+      scene.add(new THREE.HemisphereLight(0xe7e4ff,0x28205f,2.2));
+      const key=new THREE.PointLight(0x9b8cff,3.5,20);key.position.set(3,3,4);scene.add(key);
+      const cyan=new THREE.PointLight(0x5ee7f4,2.5,18);cyan.position.set(-3,-2,3);scene.add(cyan);
+      const sculpture=new THREE.Group();scene.add(sculpture);
+      const knot=new THREE.Mesh(new THREE.TorusKnotGeometry(1.05,.32,180,28,2,5),new THREE.MeshPhysicalMaterial({color:0x8b7cff,metalness:.42,roughness:.19,clearcoat:1,clearcoatRoughness:.12,iridescence:.8,iridescenceIOR:1.4}));
+      sculpture.add(knot);
+      const inner=new THREE.Mesh(new THREE.IcosahedronGeometry(.48,2),new THREE.MeshPhysicalMaterial({color:0x67e8f9,metalness:.25,roughness:.16,transmission:.18,clearcoat:1}));
+      inner.position.set(0,0,0);sculpture.add(inner);
+      const ring=new THREE.Mesh(new THREE.TorusGeometry(1.68,.012,8,120),new THREE.MeshBasicMaterial({color:0xaaa0ff,transparent:true,opacity:.75}));
+      ring.rotation.set(.8,.3,.4);sculpture.add(ring);
+      const stars=new THREE.Group();
+      for(let i=0;i<34;i++){const dot=new THREE.Mesh(new THREE.SphereGeometry(.018+Math.random()*.025,8,8),new THREE.MeshBasicMaterial({color:i%2?0x8b7cff:0x67e8f9}));const a=Math.random()*Math.PI*2,r=1.8+Math.random()*1.1;dot.position.set(Math.cos(a)*r,(Math.random()-.5)*3,Math.sin(a)*r);stars.add(dot)}
+      scene.add(stars);
+      const resize=()=>{const w=Math.max(1,canvas.clientWidth),h=Math.max(1,canvas.clientHeight);renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()};
+      if(window.ResizeObserver)new ResizeObserver(resize).observe(canvas);else window.addEventListener('resize',resize);
+      let frame;
+      const animate=()=>{if(!document.hidden){if(!reduced){sculpture.rotation.y+=.006;sculpture.rotation.x+=.002;ring.rotation.z+=.002;stars.rotation.y-=.0015;}renderer.render(scene,camera)}frame=requestAnimationFrame(animate)};
+      animate();if(fallback)fallback.style.display='none';
+    }catch(e){/* CSS orb remains as an accessible visual fallback. */}
+  }
+  if(document.readyState==='complete')init3D();else window.addEventListener('load',init3D,{once:true});
+})();
+
+(function(){
+  const launcher=document.getElementById('aiLauncher'),windowEl=document.getElementById('aiWindow'),close=document.getElementById('aiClose');
+  const form=document.getElementById('aiForm'),input=document.getElementById('aiInput'),messages=document.getElementById('aiMessages'),send=document.getElementById('aiSend'),quick=document.getElementById('aiQuick');
+  const history=[];
+  function toggle(open){windowEl.classList.toggle('open',open);launcher.setAttribute('aria-expanded',String(open));if(open)setTimeout(()=>input.focus(),80)}
+  function addMessage(text,role){const el=document.createElement('div');el.className='ai-msg '+role;el.textContent=text;messages.appendChild(el);messages.scrollTop=messages.scrollHeight;return el}
+  launcher.addEventListener('click',()=>toggle(!windowEl.classList.contains('open')));close.addEventListener('click',()=>toggle(false));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')toggle(false)});
+  quick.addEventListener('click',e=>{const b=e.target.closest('[data-prompt]');if(b){input.value=b.dataset.prompt;form.requestSubmit()}});
+  input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();form.requestSubmit()}});
+  form.addEventListener('submit',async e=>{
+    e.preventDefault();const text=input.value.trim();if(!text||send.disabled)return;
+    addMessage(text,'user');history.push({role:'user',content:text});input.value='';send.disabled=true;
+    const typing=addMessage('Thinking…','bot');typing.classList.add('ai-typing');typing.textContent='';for(let i=0;i<3;i++)typing.appendChild(document.createElement('i'));
+    try{
+      const response=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:history.slice(-12)})});
+      const data=await response.json();typing.remove();
+      if(!response.ok)throw new Error(data.error||'The assistant is temporarily unavailable.');
+      addMessage(data.reply||'Sorry, I could not create a response. Please try again.','bot');history.push({role:'assistant',content:data.reply||''});
+    }catch(err){typing.remove();addMessage(err.message||'I could not connect right now. Please try again in a moment.','bot');history.pop()}
+    finally{send.disabled=false;input.focus()}
+  });
+})();
 </script>
 </body>
 </html>
