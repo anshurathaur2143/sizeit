@@ -182,7 +182,7 @@ details p,#faq p,#about p{color:#475467!important}
 
       <div class="multi-pdf" id="pdfToImagesPanel">
         <h3>Convert PDF pages to images</h3>
-        <p>Upload a PDF and convert each page into a PNG or JPG image. Preview and download pages individually, or download all pages together as a ZIP.</p>
+        <p>Convert each PDF page into a separate PNG, JPG or WebP image. Preview the pages and tap Download on any image you want — no ZIP files needed.</p>
         <input id="pdfToImagesFile" type="file" accept="application/pdf,.pdf">
         <div class="multi-pdf-actions">
           <label class="multi-pdf-pick" for="pdfToImagesFile">＋ Choose PDF</label>
@@ -205,7 +205,7 @@ details p,#faq p,#about p{color:#475467!important}
         </div>
         <div class="pdf-status" id="pdfToImagesStatus" role="status" aria-live="polite">Choose a PDF to get started.</div>
         <div class="multi-pdf-list" id="pdfToImagesList"></div>
-        <button class="primary" id="downloadAllPdfImages" disabled style="margin-top:12px">↓ &nbsp; Download all images (ZIP)</button>
+        <p class="hint" style="margin-top:12px">Each page has its own download button, which is easier to use on phones and tablets.</p>
       </div>
 
       <div class="hint">Privacy-first: image processing happens in your browser. Your images are not uploaded to a server.</div>
@@ -236,7 +236,7 @@ details p,#faq p,#about p{color:#475467!important}
   <details style="padding:12px 0;border-bottom:1px solid #e4ebf5"><summary>Can I choose a frame size?</summary><p style="color:#5c6e8b;line-height:1.6">Yes. Keep the original image size, choose a square or portrait frame, or enter custom width and height in pixels. Your image is fitted inside the frame without stretching.</p></details>
   <details style="padding:12px 0;border-bottom:1px solid #e4ebf5"><summary>Are my photos uploaded?</summary><p style="color:#5c6e8b;line-height:1.6">No. Image processing happens directly in your browser, so your selected image is not sent to our servers.</p></details>
   <details style="padding:12px 0"><summary>Can I combine multiple images into one PDF?</summary><p style="color:#5c6e8b;line-height:1.6">Yes. Choose up to 20 JPG, PNG or WebP images. Each image becomes a page in a single PDF file that you can download. You can remove individual images before creating the PDF.</p></details>
-  <details style="padding:12px 0;border-bottom:1px solid #e4ebf5"><summary>Can I convert a PDF into images?</summary><p style="color:#5c6e8b;line-height:1.6">Yes. Upload a PDF to export each page as a PNG or JPG. Download individual pages or all pages together in a ZIP file.</p></details>
+  <details style="padding:12px 0;border-bottom:1px solid #e4ebf5"><summary>Can I convert a PDF into images?</summary><p style="color:#5c6e8b;line-height:1.6">Yes. Upload a PDF to export each page as PNG, JPG or WebP. Each page has its own download button, so you do not need to extract a ZIP file.</p></details>
 </section>
 <section id="about" style="max-width:900px;margin:0 auto 38px;padding:28px 22px;background:#f7faff;border:1px solid #e4eaf3;border-radius:16px"><h2 style="margin:0 0 10px;font-size:22px">About sizeitnow</h2><p style="color:#5c6e8b;line-height:1.7;margin:0 0 14px">sizeitnow is a simple, free image utility to help you compress images to a target file size or convert an image into a PDF. Your files are processed in your browser.</p><h3 style="font-size:16px;margin:0 0 7px">Support &amp; assistance</h3><p style="color:#5c6e8b;line-height:1.7;margin:0">Need help or want to share feedback? Email <a href="mailto:iamanshuthakur@gmail.com" style="color:#2456a6;font-weight:700;text-decoration:none">iamanshuthakur@gmail.com</a>.</p></section>
 <footer>Made with care by <strong>Anshu Rathaur</strong> · Thank you for visiting sizeitnow. Always free, with no ads.</footer>
@@ -418,93 +418,67 @@ async function convertImageToPdf(){
 }
 pdfBtn.addEventListener('click',convertImageToPdf);
 
-/* PDF page to image converter */
-let pdfImageFormat='image/png',pdfPageImages=[],pdfJsReady=null;
+/* PDF page to image converter — download pages individually, no ZIP */
+let pdfImageFormat='image/png',pdfPageImages=[],pdfJsReady=null,pdfImageObjectUrls=[];
 const pdfToImagesInput=document.getElementById('pdfToImagesFile');
 const pdfToImagesStatus=document.getElementById('pdfToImagesStatus');
 const pdfToImagesList=document.getElementById('pdfToImagesList');
-const downloadAllPdfImagesBtn=document.getElementById('downloadAllPdfImages');
 document.querySelectorAll('[data-pdf-image-format]').forEach(btn=>btn.addEventListener('click',()=>{
   document.querySelectorAll('[data-pdf-image-format]').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');pdfImageFormat=btn.dataset.pdfImageFormat;
-  if(pdfPageImages.length) renderPdfPagesAsImages();
+  if(pdfPageImages.length)renderPdfPagesAsImages();
 }));
 pdfToImagesInput.addEventListener('change',async()=>{
-  const file=pdfToImagesInput.files&&pdfToImagesInput.files[0];
-  pdfToImagesInput.value='';
+  const file=pdfToImagesInput.files&&pdfToImagesInput.files[0];pdfToImagesInput.value='';
   if(!file)return;
   if(file.type!=='application/pdf'&&!file.name.toLowerCase().endsWith('.pdf')){pdfToImagesStatus.textContent='Please select a PDF file.';return;}
   if(file.size>50*1024*1024){pdfToImagesStatus.textContent='This PDF is larger than 50 MB. Please choose a smaller PDF.';return;}
-  pdfPageImages=[];pdfToImagesList.replaceChildren();downloadAllPdfImagesBtn.disabled=true;
+  pdfPageImages=[];pdfToImagesList.replaceChildren();pdfImageObjectUrls.forEach(url=>URL.revokeObjectURL(url));pdfImageObjectUrls=[];
   pdfToImagesStatus.textContent='Loading PDF and preparing pages…';
   try{
-    if(!pdfJsReady){
-      pdfJsReady=new Promise((resolve,reject)=>{
-        if(window.pdfjsLib){resolve(window.pdfjsLib);return;}
-        const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
-        s.onload=()=>window.pdfjsLib?resolve(window.pdfjsLib):reject(new Error('PDF reader did not load.'));
-        s.onerror=()=>reject(new Error('Could not load the PDF reader. Check your internet connection and try again.'));
-        document.head.appendChild(s);
-      });
-    }
+    if(!pdfJsReady)pdfJsReady=new Promise((resolve,reject)=>{
+      if(window.pdfjsLib){resolve(window.pdfjsLib);return;}
+      const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+      s.onload=()=>window.pdfjsLib?resolve(window.pdfjsLib):reject(new Error('PDF reader did not load.'));
+      s.onerror=()=>reject(new Error('Could not load the PDF reader. Check your internet connection and try again.'));
+      document.head.appendChild(s);
+    });
     const pdfjs=await pdfJsReady;
     pdfjs.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     const doc=await pdfjs.getDocument({data:await file.arrayBuffer()}).promise;
     if(doc.numPages>100){pdfToImagesStatus.textContent='This PDF has '+doc.numPages+' pages. For performance, please use a PDF with 100 pages or fewer.';return;}
     for(let pageNum=1;pageNum<=doc.numPages;pageNum++){
       pdfToImagesStatus.textContent='Converting page '+pageNum+' of '+doc.numPages+'…';
-      const page=await doc.getPage(pageNum);
-      const scale=Number(document.getElementById('pdfRenderScale').value)||2;
-      const viewport=page.getViewport({scale});
-      const canvas=document.createElement('canvas');canvas.width=Math.ceil(viewport.width);canvas.height=Math.ceil(viewport.height);
+      const page=await doc.getPage(pageNum),scale=Number(document.getElementById('pdfRenderScale').value)||2;
+      const viewport=page.getViewport({scale}),canvas=document.createElement('canvas');
+      canvas.width=Math.ceil(viewport.width);canvas.height=Math.ceil(viewport.height);
       const ctx=canvas.getContext('2d',{alpha:false});ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);
       await page.render({canvasContext:ctx,viewport,background:'#ffffff'}).promise;
-      const blob=await new Promise(resolve=>canvas.toBlob(resolve,pdfImageFormat,pdfImageFormat==='image/jpeg'?.92:undefined));
+      const blob=await new Promise(resolve=>canvas.toBlob(resolve,pdfImageFormat,pdfImageFormat==='image/jpeg'||pdfImageFormat==='image/webp'?.92:undefined));
       if(!blob)throw new Error('Could not export page '+pageNum+'.');
       pdfPageImages.push({pageNum,blob,width:canvas.width,height:canvas.height});
       canvas.width=1;canvas.height=1;
     }
     renderPdfPagesAsImages();
-    pdfToImagesStatus.textContent='✓ Converted '+pdfPageImages.length+' page'+(pdfPageImages.length===1?'':'s')+'. Choose individual downloads or download all as a ZIP.';
+    pdfToImagesStatus.textContent='✓ Converted '+pdfPageImages.length+' page'+(pdfPageImages.length===1?'':'s')+'. Tap Download on each page you want to save.';
   }catch(err){
     pdfToImagesStatus.textContent=(err&&err.message&&err.message.includes('internet connection'))?err.message:'Could not convert this PDF. It may be password-protected, damaged, or too complex. Please try another PDF.';
   }
 });
 function renderPdfPagesAsImages(){
-  pdfToImagesList.replaceChildren();
-  const ext=pdfImageFormat==='image/jpeg'?'jpg':'png';
+  pdfToImagesList.replaceChildren();pdfImageObjectUrls.forEach(url=>URL.revokeObjectURL(url));pdfImageObjectUrls=[];
+  const ext=pdfImageFormat==='image/jpeg'?'jpg':pdfImageFormat==='image/webp'?'webp':'png';
   pdfPageImages.forEach(item=>{
     const row=document.createElement('div');row.className='pdf-file-row';row.style.flexWrap='wrap';
     const number=document.createElement('span');number.className='pdf-index';number.textContent=String(item.pageNum);
     const name=document.createElement('span');name.className='pdf-name';name.textContent='Page '+item.pageNum+' · '+item.width+' × '+item.height+' px';
     const size=document.createElement('span');size.className='pdf-size';size.textContent=fmt(item.blob.size);
-    const link=document.createElement('a');link.className='reselect-button';link.textContent='Download';link.href=URL.createObjectURL(item.blob);link.download='page-'+String(item.pageNum).padStart(3,'0')+'.'+ext;link.style.textDecoration='none';
-    row.append(number,name,size,link);pdfToImagesList.appendChild(row);
+    const url=URL.createObjectURL(item.blob);pdfImageObjectUrls.push(url);
+    const link=document.createElement('a');link.className='reselect-button';link.textContent='Download '+ext.toUpperCase();link.href=url;link.download='page-'+String(item.pageNum).padStart(3,'0')+'.'+ext;link.style.textDecoration='none';
+    const thumb=document.createElement('img');thumb.alt='Preview of PDF page '+item.pageNum;thumb.src=url;thumb.style.cssText='width:100%;max-height:220px;object-fit:contain;order:5;flex-basis:100%;background:#f8fafc;border-radius:8px;margin-top:8px';
+    row.append(number,name,size,link,thumb);pdfToImagesList.appendChild(row);
   });
-  downloadAllPdfImagesBtn.disabled=pdfPageImages.length===0;
-  downloadAllPdfImagesBtn.textContent='↓  Download all '+pdfPageImages.length+' image'+(pdfPageImages.length===1?'':'s')+' (ZIP)';
 }
-downloadAllPdfImagesBtn.addEventListener('click',async()=>{
-  if(!pdfPageImages.length)return;
-  downloadAllPdfImagesBtn.disabled=true;downloadAllPdfImagesBtn.textContent='Preparing ZIP…';
-  try{
-    const JSZip=await new Promise((resolve,reject)=>{
-      if(window.JSZip){resolve(window.JSZip);return;}
-      const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
-      s.onload=()=>window.JSZip?resolve(window.JSZip):reject(new Error('ZIP library did not load.'));
-      s.onerror=()=>reject(new Error('Could not load ZIP support. Check your internet connection.'));
-      document.head.appendChild(s);
-    });
-    const zip=new JSZip(),ext=pdfImageFormat==='image/jpeg'?'jpg':'png';
-    pdfPageImages.forEach(item=>zip.file('page-'+String(item.pageNum).padStart(3,'0')+'.'+ext,item.blob));
-    const blob=await zip.generateAsync({type:'blob'});
-    const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='sizeitnow-pdf-images.zip';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),15000);
-    pdfToImagesStatus.textContent='✓ ZIP created with '+pdfPageImages.length+' image files.';
-  }catch(err){pdfToImagesStatus.textContent=err.message||'Could not create ZIP. Please try again.';}
-  finally{downloadAllPdfImagesBtn.disabled=pdfPageImages.length===0;downloadAllPdfImagesBtn.textContent='↓  Download all '+pdfPageImages.length+' image'+(pdfPageImages.length===1?'':'s')+' (ZIP)';}
-});
-
-compressBtn.addEventListener('click',compress);
 </script>
 </body>
 </html>
