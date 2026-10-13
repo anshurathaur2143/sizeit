@@ -236,7 +236,8 @@ async function compress(){
    targetCtx.clearRect(0,0,outW,outH);
    if(format==='image/jpeg'){targetCtx.fillStyle='#fff';targetCtx.fillRect(0,0,outW,outH);}
    if(useFrame){
-     const scale=Math.min(outW/w,outH/h),drawW=Math.max(1,Math.round(w*scale)),drawH=Math.max(1,Math.round(h*scale));
+     const scale=Math.min(outW/sourceImage.naturalWidth,outH/sourceImage.naturalHeight);
+     const drawW=Math.max(1,Math.round(sourceImage.naturalWidth*scale)),drawH=Math.max(1,Math.round(sourceImage.naturalHeight*scale));
      targetCtx.drawImage(sourceImage,Math.round((outW-drawW)/2),Math.round((outH-drawH)/2),drawW,drawH);
    }else targetCtx.drawImage(sourceImage,0,0,outW,outH);
    return targetCtx;
