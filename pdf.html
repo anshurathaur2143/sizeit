@@ -230,16 +230,17 @@ button:not(:disabled):hover,.filebutton:hover,.download:hover,.multi-pdf-pick:ho
 .pdf-tools-grid .multi-pdf h2{font-size:20px;letter-spacing:-.5px;margin:0 0 8px;color:#211b49}
 .pdf-tools-grid .multi-pdf p{font-size:13px;line-height:1.7;color:#65627e}
 .pdf-tools-grid .primary{margin-top:14px}
+.back-nav{display:inline-flex;align-items:center;gap:5px;background:#f3f4f6!important;color:#4b5563!important;border-radius:999px;padding:9px 13px;font-weight:750!important;text-decoration:none!important;white-space:nowrap}.back-nav:hover{background:#e9e7ff!important;color:#5140c7!important}
 .pdf-nav-active{background:#f0edff!important;color:#5140c7!important;border-radius:999px;padding:9px 13px}
 @media(max-width:760px){.pdf-tools-grid{grid-template-columns:1fr}.pdf-page-main{padding:28px 13px 42px}.pdf-tools-grid .multi-pdf{padding:18px;border-radius:18px}.pdf-page-intro h1{letter-spacing:-1.2px}}
-@media(max-width:760px){.site-nav a{display:none!important}.site-nav a:first-child,.site-nav a.pdf-nav{display:inline-flex!important}}
-@media(max-width:620px){header{height:auto!important;min-height:62px!important;flex-wrap:nowrap!important;padding:10px 14px!important}.site-nav{width:auto!important;display:flex!important;justify-content:flex-end!important;gap:8px!important;padding:0!important;margin-left:auto}.site-nav a{display:none!important}.site-nav a:first-child,.site-nav a.pdf-nav{display:inline-flex!important;font-size:13px!important;font-weight:800!important;padding:8px 10px;border-radius:999px;background:#f0edff;color:#5140c7!important}.brand{font-size:21px!important}.logo{width:33px!important;height:33px!important}}
+@media(max-width:760px){.site-nav a{display:none!important}.site-nav a.back-nav,.site-nav a.pdf-nav{display:inline-flex!important}}
+@media(max-width:620px){header{height:auto!important;min-height:62px!important;flex-wrap:nowrap!important;padding:10px 14px!important}.site-nav{width:auto!important;display:flex!important;justify-content:flex-end!important;gap:8px!important;padding:0!important;margin-left:auto}.site-nav a{display:none!important}.site-nav a.back-nav,.site-nav a.pdf-nav{display:inline-flex!important;font-size:13px!important;font-weight:800!important;padding:8px 10px;border-radius:999px;background:#f0edff;color:#5140c7!important}.brand{font-size:21px!important}.logo{width:33px!important;height:33px!important}}
 </style>
 </head>
 <body>
 <header id="top">
   <a class="brand" href="index.html" style="text-decoration:none;color:inherit" aria-label="SizeItNow home"><div class="logo" aria-hidden="true">✦</div><span>sizeit<em>now</em></span></a>
-  <nav class="site-nav"><a href="index.html">Home</a><a class="pdf-nav pdf-nav-active" href="pdf.html" aria-current="page">PDF</a><a href="index.html#how">How It Works</a><a href="index.html#faq">FAQ</a></nav>
+  <nav class="site-nav"><a class="back-nav" href="index.html" aria-label="Back to image compressor">← Back</a><a class="pdf-nav pdf-nav-active" href="pdf.html" aria-current="page">PDF</a><a href="index.html#how">How It Works</a><a href="index.html#faq">FAQ</a></nav>
 </header>
 <main class="pdf-page-main">
   <section class="pdf-page-intro"><div class="eyebrow">Two simple PDF tools</div><h1>Your files, <span>your format.</span></h1><p>Combine images into one PDF, or turn PDF pages into downloadable images. Everything runs in your browser — your files stay on your device.</p></section>
