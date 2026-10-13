@@ -219,12 +219,53 @@ button:not(:disabled),.filebutton,.download,.multi-pdf-pick,.reselect-button{tra
 button:not(:disabled):hover,.filebutton:hover,.download:hover,.multi-pdf-pick:hover,.reselect-button:hover{filter:brightness(.88) saturate(1.22);box-shadow:0 12px 28px rgba(99,91,255,.23)}
 @media(max-width:760px){.hero-visual:after{inset:12% 12%}.scroll-reveal{transform:translateY(22px) scale(.99)}}
 @media(prefers-reduced-motion:reduce){.scroll-reveal{opacity:1;transform:none;transition:none}.hero-visual,.hero-float-card,.feature{transition:none!important}}
+
+/* New image-studio hero: vivid layered artwork instead of the old 3D knot/orb. */
+.hero-visual.studio-visual{height:330px;min-width:0;overflow:visible;perspective:1000px;transform-style:preserve-3d}
+.studio-glow{position:absolute;width:245px;height:245px;border-radius:50%;background:conic-gradient(from 30deg,#8b5cf6,#22d3ee,#ec4899,#8b5cf6);filter:blur(42px);opacity:.22;animation:glowBreathe 7s ease-in-out infinite}
+.studio-orbit{position:absolute;border:1px solid rgba(111,92,245,.24);border-radius:50%;transform:rotate(-24deg) rotateX(63deg)}
+.orbit-a{width:330px;height:225px}.orbit-b{width:270px;height:185px;transform:rotate(36deg) rotateX(63deg);border-color:rgba(34,211,238,.3)}
+.studio-card{position:absolute;width:220px;height:235px;border:1px solid rgba(255,255,255,.9);border-radius:24px;background:rgba(255,255,255,.78);padding:12px;box-shadow:0 26px 70px rgba(70,52,165,.18);backdrop-filter:blur(16px)}
+.card-back{width:190px;height:215px;transform:translate(42px,-12px) rotate(9deg) translateZ(-25px);opacity:.75;background:linear-gradient(145deg,#fff,#d9f8ff)}
+.mini-sky{height:120px;border-radius:15px;background:linear-gradient(145deg,#c4b5fd,#8b5cf6 45%,#22d3ee);position:relative;overflow:hidden}
+.mini-sky:before,.mini-sky:after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.65)}
+.mini-sky:before{width:34px;height:34px;right:22px;top:20px}.mini-sky:after{width:140px;height:70px;left:-18px;bottom:-35px;background:#4338ca}
+.mini-line{height:8px;border-radius:8px;background:#d9d5fa;margin:14px 4px 0}.mini-line.short{width:58%;margin-top:8px;background:#bfeef5}
+.card-front{transform:translate(-13px,4px) rotate(-7deg) translateZ(35px);overflow:hidden}
+.artwork{height:174px;position:relative;overflow:hidden;border-radius:16px;background:linear-gradient(155deg,#c4b5fd 0%,#8b5cf6 42%,#38bdf8 100%)}
+.art-sun{position:absolute;width:48px;height:48px;border-radius:50%;right:25px;top:24px;background:linear-gradient(135deg,#fff7ad,#fb7185);box-shadow:0 0 38px rgba(255,247,173,.65)}
+.art-mountain{position:absolute;bottom:25px;width:0;height:0;border-left:110px solid transparent;border-right:110px solid transparent;border-bottom:125px solid #4338ca;filter:drop-shadow(0 10px 14px rgba(39,26,112,.16))}
+.mountain-one{left:-48px}.mountain-two{left:45px;bottom:17px;border-left-width:95px;border-right-width:95px;border-bottom:100px solid #312e81;opacity:.88}
+.art-water{position:absolute;left:0;right:0;bottom:0;height:37px;background:linear-gradient(180deg,rgba(34,211,238,.8),rgba(14,116,144,.8));clip-path:polygon(0 28%,22% 0,45% 24%,68% 5%,100% 30%,100% 100%,0 100%)}
+.art-meta{height:25px;display:flex;align-items:center;gap:7px;padding:10px 3px 0;font-size:9px;letter-spacing:.14em;color:#6d6791;font-weight:850}.art-meta b{margin-left:auto;border-radius:7px;padding:4px 6px;background:#ede9fe;color:#6d28d9;letter-spacing:0}
+.art-dot{width:6px;height:6px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px #dcfce7}
+.studio-chip{position:absolute;display:flex;align-items:center;gap:9px;padding:11px 13px;border:1px solid rgba(255,255,255,.9);border-radius:15px;background:rgba(255,255,255,.9);box-shadow:0 15px 35px rgba(50,38,122,.14);backdrop-filter:blur(15px);color:#5b5878;font-size:11px;animation:chipFloat 6s ease-in-out infinite}
+.studio-chip>span:first-child{width:31px;height:31px;display:grid;place-items:center;border-radius:10px;background:#ede9fe;color:#6d5dfc;font-size:17px}
+.studio-chip b,.studio-chip small{display:block}.studio-chip b{font-size:12px;color:#211b49}.studio-chip small{font-size:10px;color:#777391;margin-top:3px}
+.chip-quality{left:-4px;top:24px}.chip-size{right:-2px;bottom:24px;animation-delay:-2.5s}.chip-size>span:first-child{background:#cffafe;color:#0e7490}
+.studio-spark{position:absolute;color:#8b5cf6;font-size:23px;text-shadow:0 0 20px rgba(139,92,246,.4);animation:sparkPulse 3s ease-in-out infinite}.spark-one{top:48px;right:36px}.spark-two{bottom:56px;left:25px;color:#06b6d4;animation-delay:-1.2s}
+@keyframes chipFloat{0%,100%{translate:0 0}50%{translate:0 -7px}}
+@keyframes sparkPulse{0%,100%{opacity:.55;scale:.9}50%{opacity:1;scale:1.15}}
+@keyframes glowBreathe{0%,100%{opacity:.16;scale:.94}50%{opacity:.3;scale:1.06}}
+@media(max-width:900px){.hero-visual.studio-visual{height:290px}.studio-card{scale:.92}.orbit-a{width:280px}.orbit-b{width:230px}}
+@media(max-width:620px){
+ header{padding:10px 14px!important;gap:8px!important}
+ .site-nav{width:auto!important;display:flex!important;justify-content:flex-end!important;gap:13px!important;padding:0!important;margin-left:auto}
+ .site-nav a{display:none!important}
+ .site-nav a:first-child,.site-nav a.pdf-nav{display:inline-flex!important;font-size:13px!important;font-weight:800!important;padding:8px 10px;border-radius:999px;background:#f0edff;color:#5140c7!important}
+ .hero-visual.studio-visual{height:255px;margin:3px auto 0;max-width:350px}
+ .studio-card{scale:.84}.card-front{transform:translate(-8px,2px) rotate(-7deg) translateZ(35px)}.card-back{transform:translate(32px,-9px) rotate(9deg) translateZ(-25px)}
+ .studio-chip{padding:9px 10px}.chip-quality{left:0;top:13px}.chip-size{right:0;bottom:12px}
+ .orbit-a{width:255px;height:180px}.orbit-b{width:210px;height:150px}
+}
+@media(prefers-reduced-motion:reduce){.studio-glow,.studio-chip,.studio-spark{animation:none!important}}
+
 </style>
 </head>
 <body>
 <header id="top">
   <div class="brand" role="link" tabindex="0" aria-label="SizeItNow — return to top" title="Back to top"><div class="logo" aria-label="sizeitnow AI logo"><svg viewBox="0 0 48 48" role="img" aria-hidden="true"><defs><linearGradient id="aiLogoGradient" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse"><stop stop-color="#8B5CF6"/><stop offset=".52" stop-color="#3B82F6"/><stop offset="1" stop-color="#22D3EE"/></linearGradient></defs><path d="M24 5.5 28.7 17l11.8 4.8-11.8 4.8L24 38l-4.8-11.4L7.5 21.8 19.2 17 24 5.5Z" fill="url(#aiLogoGradient)"/><path d="m36.5 5.5 1.8 4.2 4.2 1.8-4.2 1.7-1.8 4.3-1.7-4.3-4.3-1.7 4.3-1.8 1.7-4.2Z" fill="#fff"/><circle cx="12" cy="36" r="3" fill="#fff"/><circle cx="12" cy="36" r="1.4" fill="url(#aiLogoGradient)"/><path d="m13.5 15 2.2 2.2m15.8 12.3 3.4 3.4" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".9"/></svg></div><span>sizeit<em>now</em></span><span class="tagline">Compress Images to Any Size</span></div>
-  <nav><a href="#home">Home</a><a href="#how">How It Works</a><a href="#faq">FAQ</a><a href="#about">About &amp; Support</a></nav>
+  <nav class="site-nav"><a href="index.html">Home</a><a class="pdf-nav" href="pdf.html" aria-label="Open PDF tools">PDF</a><a href="#how">How It Works</a><a href="#faq">FAQ</a><a href="#about">About &amp; Support</a></nav>
 </header>
 <main id="home">
   <section class="hero">
@@ -233,12 +274,18 @@ button:not(:disabled):hover,.filebutton:hover,.download:hover,.multi-pdf-pick:ho
       <h1>Make every image<br><span>fit perfectly.</span></h1>
       <p>Compress to your target KB, resize for any platform, or turn images and PDFs into the format you need — all in one colorful, privacy-first workspace.</p>
     </div>
-    <div class="hero-visual" aria-label="Animated 3D image-processing illustration">
-      <div class="hero-orb-fallback" aria-hidden="true"></div>
-      <canvas id="hero3d" aria-label="Animated 3D gradient sculpture"></canvas>
-      <div class="hero-float-card float-one"><span class="float-icon">✦</span><span><b>Pixel-perfect</b>Quality control</span></div>
-      <div class="hero-float-card float-two"><span class="float-icon">↗</span><span><b>Files stay yours</b>Browser-based tools</span></div>
-    </div>
+    <div class="hero-visual studio-visual" aria-label="Layered image studio illustration">
+      <div class="studio-glow"></div>
+      <div class="studio-orbit orbit-a"></div><div class="studio-orbit orbit-b"></div>
+      <div class="studio-card card-back"><div class="mini-sky"></div><div class="mini-line"></div><div class="mini-line short"></div></div>
+      <div class="studio-card card-front">
+        <div class="artwork"><div class="art-sun"></div><div class="art-mountain mountain-one"></div><div class="art-mountain mountain-two"></div><div class="art-water"></div></div>
+        <div class="art-meta"><span class="art-dot"></span><span>IMAGE STUDIO</span><b>4K</b></div>
+      </div>
+      <div class="studio-chip chip-quality"><span>✦</span><span><b>Crystal clear</b><small>Quality preserved</small></span></div>
+      <div class="studio-chip chip-size"><span class="chip-symbol">↘</span><span><b>50 KB</b><small>Ready to share</small></span></div>
+      <div class="studio-spark spark-one">✦</div><div class="studio-spark spark-two">✧</div>
+    </div>iv>
   </section>
   <section class="workspace" aria-label="Image compressor">
     <div class="left">
@@ -299,44 +346,6 @@ button:not(:disabled):hover,.filebutton:hover,.download:hover,.multi-pdf-pick:ho
         </div>
       </div>
       <button class="primary" id="compress" disabled>✦ &nbsp; Compress Image</button>
-      <div class="multi-pdf" id="multiPdfPanel">
-        <h3>Combine multiple images into one PDF</h3>
-        <p>Select several JPG, PNG or WebP images. Each image becomes a page in one downloadable PDF. Files stay on your device.</p>
-        <input id="pdfFiles" type="file" accept="image/jpeg,image/png,image/webp" multiple>
-        <div class="multi-pdf-actions"><label class="multi-pdf-pick" for="pdfFiles">＋ Choose images</label><span class="hint" style="margin:0">Up to 20 images · 10 MB each</span></div>
-        <div class="multi-pdf-list" id="pdfFileList" aria-live="polite"></div>
-        <div class="pdf-status" id="pdfStatus" role="status" aria-live="polite">No images selected yet.</div>
-        <button class="primary" id="convertPdf" disabled style="margin-top:12px">▤ &nbsp; Create one PDF</button>
-      </div>
-
-      <div class="multi-pdf" id="pdfToImagesPanel">
-        <h3>Convert PDF pages to images</h3>
-        <p>Convert each PDF page into a separate PNG, JPG or WebP image. Preview the pages and tap Download on any image you want — no ZIP files needed.</p>
-        <input id="pdfToImagesFile" type="file" accept="application/pdf,.pdf">
-        <div class="multi-pdf-actions">
-          <label class="multi-pdf-pick" for="pdfToImagesFile">＋ Choose PDF</label>
-          <span class="hint" style="margin:0">PDF files · Processed in your browser</span>
-        </div>
-        <div class="field" style="margin-top:13px">
-          <div class="fieldlabel">Output format</div>
-          <div class="formats" id="pdfImageFormatOptions">
-            <button type="button" class="chip active" data-pdf-image-format="image/png">PNG · Clearer</button>
-            <button type="button" class="chip" data-pdf-image-format="image/jpeg">JPG · Smaller</button>
-          </div>
-        </div>
-        <div class="field" style="margin-top:13px">
-          <label class="fieldlabel" for="pdfRenderScale">Image resolution</label>
-          <select id="pdfRenderScale" class="custom" style="width:100%;max-width:260px">
-            <option value="1.5">Standard</option>
-            <option value="2" selected>High quality</option>
-            <option value="3">Very high quality (larger files)</option>
-          </select>
-        </div>
-        <div class="pdf-status" id="pdfToImagesStatus" role="status" aria-live="polite">Choose a PDF to get started.</div>
-        <div class="multi-pdf-list" id="pdfToImagesList"></div>
-        <p class="hint" style="margin-top:12px">Each page has its own download button, which is easier to use on phones and tablets.</p>
-      </div>
-
       <div class="hint">Privacy-first: image processing happens in your browser. Your images are not uploaded to a server.</div>
     </div>
     <aside class="preview">
@@ -688,7 +697,6 @@ function renderPdfPagesAsImages(){
   <span class="ai-launcher-icon">✦</span><span>Ask AI</span>
 </button>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
 <script>
 (function(){
   (function(){
@@ -725,41 +733,6 @@ function renderPdfPagesAsImages(){
    });
  },{passive:true});
 })();
-const canvas=document.getElementById('hero3d');
-  const fallback=document.querySelector('.hero-orb-fallback');
-  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function init3D(){
-    if(!canvas||!window.THREE)return;
-    try{
-      const THREE=window.THREE,renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.8));
-      renderer.setSize(canvas.clientWidth||340,canvas.clientHeight||300,false);
-      renderer.outputEncoding=THREE.sRGBEncoding;
-      const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(34,(canvas.clientWidth||340)/(canvas.clientHeight||300),.1,100);
-      camera.position.z=6.2;
-      scene.add(new THREE.HemisphereLight(0xe7e4ff,0x28205f,2.2));
-      const key=new THREE.PointLight(0x9b8cff,3.5,20);key.position.set(3,3,4);scene.add(key);
-      const cyan=new THREE.PointLight(0x5ee7f4,2.5,18);cyan.position.set(-3,-2,3);scene.add(cyan);
-      const sculpture=new THREE.Group();scene.add(sculpture);
-      const knot=new THREE.Mesh(new THREE.TorusKnotGeometry(1.05,.32,180,28,2,5),new THREE.MeshPhysicalMaterial({color:0x8b7cff,metalness:.42,roughness:.19,clearcoat:1,clearcoatRoughness:.12,iridescence:.8,iridescenceIOR:1.4}));
-      sculpture.add(knot);
-      const inner=new THREE.Mesh(new THREE.IcosahedronGeometry(.48,2),new THREE.MeshPhysicalMaterial({color:0x67e8f9,metalness:.25,roughness:.16,transmission:.18,clearcoat:1}));
-      inner.position.set(0,0,0);sculpture.add(inner);
-      const ring=new THREE.Mesh(new THREE.TorusGeometry(1.68,.012,8,120),new THREE.MeshBasicMaterial({color:0xaaa0ff,transparent:true,opacity:.75}));
-      ring.rotation.set(.8,.3,.4);sculpture.add(ring);
-      const stars=new THREE.Group();
-      for(let i=0;i<34;i++){const dot=new THREE.Mesh(new THREE.SphereGeometry(.018+Math.random()*.025,8,8),new THREE.MeshBasicMaterial({color:i%2?0x8b7cff:0x67e8f9}));const a=Math.random()*Math.PI*2,r=1.8+Math.random()*1.1;dot.position.set(Math.cos(a)*r,(Math.random()-.5)*3,Math.sin(a)*r);stars.add(dot)}
-      scene.add(stars);
-      const resize=()=>{const w=Math.max(1,canvas.clientWidth),h=Math.max(1,canvas.clientHeight);renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()};
-      if(window.ResizeObserver)new ResizeObserver(resize).observe(canvas);else window.addEventListener('resize',resize);
-      let frame;
-      const animate=()=>{if(!document.hidden){if(!reduced){sculpture.rotation.y+=.006;sculpture.rotation.x+=.002;ring.rotation.z+=.002;stars.rotation.y-=.0015;}renderer.render(scene,camera)}frame=requestAnimationFrame(animate)};
-      animate();if(fallback)fallback.style.display='none';
-    }catch(e){/* CSS orb remains as an accessible visual fallback. */}
-  }
-  if(document.readyState==='complete')init3D();else window.addEventListener('load',init3D,{once:true});
-})();
-
 (function(){
   const launcher=document.getElementById('aiLauncher'),windowEl=document.getElementById('aiWindow'),close=document.getElementById('aiClose');
   const form=document.getElementById('aiForm'),input=document.getElementById('aiInput'),messages=document.getElementById('aiMessages'),send=document.getElementById('aiSend'),quick=document.getElementById('aiQuick');
