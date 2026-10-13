@@ -571,7 +571,7 @@ function renderPdfPagesAsImages(){
 <section class="ai-window" id="aiWindow" role="dialog" aria-label="SizeItNow AI assistant" aria-modal="false">
   <div class="ai-head">
     <div class="ai-avatar" aria-hidden="true">✦</div>
-    <div class="ai-head-title"><strong>SizeItNow AI</strong><span>Powered by OpenAI · Here to help</span></div>
+    <div class="ai-head-title"><strong>SizeItNow Helper</strong><span id="aiModeLabel">Built-in help · Works without an API key</span></div>
     <button class="ai-close" id="aiClose" type="button" aria-label="Close assistant">×</button>
   </div>
   <div class="ai-messages" id="aiMessages" aria-live="polite">
@@ -648,7 +648,7 @@ function renderPdfPagesAsImages(){
       const response=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:history.slice(-12)})});
       const data=await response.json();typing.remove();
       if(!response.ok)throw new Error(data.error||'The assistant is temporarily unavailable.');
-      addMessage(data.reply||'Sorry, I could not create a response. Please try again.','bot');history.push({role:'assistant',content:data.reply||''});
+      const reply=data.reply||'Sorry, I could not create a response. Please try again.';const modeLabel=document.getElementById('aiModeLabel');if(modeLabel)modeLabel.textContent=data.mode==='openai'?'Powered by OpenAI · AI responses':'Built-in help · Always available';addMessage(reply,'bot');history.push({role:'assistant',content:reply});
     }catch(err){typing.remove();addMessage(err.message||'I could not connect right now. Please try again in a moment.','bot');history.pop()}
     finally{send.disabled=false;input.focus()}
   });
