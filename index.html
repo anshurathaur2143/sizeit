@@ -378,8 +378,10 @@ async function compress(){
    if(!Number.isInteger(frameW)||!Number.isInteger(frameH)||frameW<1||frameH<1||frameW>6000||frameH>6000){alert('Enter custom frame width and height between 1 and 6000 pixels.');compressBtn.disabled=false;compressBtn.innerHTML='✦ &nbsp; Compress Image';return;}
  }
  const useFrame=frameW>0&&frameH>0;
- const minQuality=qualityMode==='low'?.25:qualityMode==='high'?.65:.45;
- const resizeFactor=qualityMode==='low'?.92:qualityMode==='high'?.97:.94;
+ // Prioritise visual clarity: keep a reasonably high JPEG/WebP quality floor,
+ // and reduce dimensions in measured steps only when the target cannot be met.
+ const minQuality=qualityMode==='low'?.55:qualityMode==='high'?.78:.68;
+ const resizeFactor=qualityMode==='low'?.88:qualityMode==='high'?.94:.90;
  function drawSource(targetCanvas,targetCtx,outW,outH){
    targetCanvas.width=outW;targetCanvas.height=outH;targetCtx=targetCanvas.getContext('2d');
    targetCtx.clearRect(0,0,outW,outH);
@@ -400,17 +402,26 @@ async function compress(){
  }else{
    // The quality choice sets minimum encoding quality and resize aggressiveness.
    // Fixed frames keep their selected dimensions and tune encoding quality only.
-   for(let pass=0;pass<(useFrame?1:40);pass++){
+   for(let pass=0;pass<(useFrame?1:48);pass++){
      drawSource(canvas,ctx,w,h);
-     let lo=minQuality,hi=.96,passBest=null;
-     for(let i=0;i<10;i++){
-       const q=(lo+hi)/2,blob=await canvasBlob(canvas,format,q);
-       if(!blob)continue;
-       if(blob.size<=maxBytes){passBest=blob;lo=q}else hi=q;
+     // First test the clearest acceptable encode at this resolution.
+     const floorBlob=await canvasBlob(canvas,format,minQuality);
+     if(floorBlob&&floorBlob.size<=maxBytes){
+       // The target fits at this resolution. Binary-search upward to the
+       // highest encoding quality that stays under the requested byte limit.
+       let lo=minQuality,hi=.96,passBest=floorBlob;
+       for(let i=0;i<12;i++){
+         const q=(lo+hi)/2,blob=await canvasBlob(canvas,format,q);
+         if(!blob)continue;
+         if(blob.size<=maxBytes){passBest=blob;lo=q}else hi=q;
+       }
+       best=passBest;
+       break;
      }
-     if(passBest){best=passBest;break}
-     w=Math.max(1,Math.round(w*resizeFactor));h=Math.max(1,Math.round(h*resizeFactor));
-     if(w===1&&h===1)break;
+     if(useFrame)break;
+     const nextW=Math.max(1,Math.round(w*resizeFactor)),nextH=Math.max(1,Math.round(h*resizeFactor));
+     if(nextW===w&&nextH===h)break;
+     w=nextW;h=nextH;
    }
  }
  compressBtn.disabled=false;compressBtn.innerHTML='✦ &nbsp; Compress Image';
@@ -424,7 +435,7 @@ async function compress(){
  document.getElementById('reduction').textContent=(best.size<=sourceFile.size?reduction.toFixed(1):'-0.0')+'%';
  const result=document.getElementById('result');result.style.display='block';
  const dl=document.getElementById('download');
- if(best.size<=maxBytes){result.textContent='Success — image is '+fmt(best.size)+', at least 1 KB below your '+wantedKB+' KB target.';result.style.background='#e9f9ef';result.style.color='#17663a';dl.href=resultUrl;dl.download='sizeitnow-compressed.'+({ 'image/jpeg':'jpg','image/png':'png','image/webp':'webp'}[format]);dl.style.display='block';}
+ if(best.size<=maxBytes){result.textContent='Success — image is '+fmt(best.size)+', at least 1 KB below your '+wantedKB+' KB target. Compression prioritised clarity; very small targets such as 50 KB can still reduce fine detail.';result.style.background='#e9f9ef';result.style.color='#17663a';dl.href=resultUrl;dl.download='sizeitnow-compressed.'+({ 'image/jpeg':'jpg','image/png':'png','image/webp':'webp'}[format]);dl.style.display='block';}
  else{result.textContent=format==='image/png'?'PNG is lossless, so this image was kept clear without shrinking its dimensions. It is still above your target size. Choose JPG or WebP, or increase the target size for a smaller file.':'Could not reach your target while maintaining good image quality. Try a larger target size to keep more detail.';result.style.background='#fff4df';result.style.color='#805300';dl.style.display='none';}
 }
 compressBtn.addEventListener('click',async()=>{
