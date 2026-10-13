@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0878f9">
+<title>SizeIt — Compress Images to Your Required KB Size</title>
+<meta name="description" content="Compress images to a target KB size in your browser. Choose 20 KB, 50 KB, 100 KB, 200 KB or enter a custom size.">
+<style>
+:root{--blue:#0878f9;--blue2:#0068e8;--ink:#13213a;--muted:#5c6e8b;--line:#d9e5f5;--panel:#fff;--bg:#f3f8ff;--soft:#edf5ff;--shadow:0 18px 55px rgba(30,75,130,.09)}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:#fff}
+header{height:76px;display:flex;align-items:center;justify-content:space-between;padding:0 max(24px,calc((100vw - 1220px)/2));border-bottom:1px solid #eef2f8;background:#fff}
+.brand{display:flex;align-items:center;gap:12px;font-size:27px;font-weight:800;letter-spacing:-1px}.logo{width:38px;height:38px;border-radius:10px;background:var(--blue);color:white;display:grid;place-items:center;font-size:23px}.brand span em{color:var(--blue);font-style:normal}.tagline{font-size:14px;color:var(--muted);font-weight:400;letter-spacing:0;margin-left:8px}
+nav{display:flex;gap:26px;align-items:center}nav a{color:#435675;text-decoration:none;font-size:14px}nav a:hover{color:var(--blue)}
+main{background:linear-gradient(180deg,#f4f9ff 0%,#f7fbff 100%);padding:34px 20px 42px}
+.hero{text-align:center;max-width:850px;margin:0 auto 20px}.hero h1{font-size:clamp(34px,4.3vw,54px);line-height:1.1;letter-spacing:-2px;margin:0 0 14px;font-weight:850}.hero h1 span{color:var(--blue)}.hero p{color:#536582;line-height:1.7;margin:0 auto;max-width:650px;font-size:16px}
+.workspace{max-width:940px;margin:0 auto;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:var(--shadow);display:grid;grid-template-columns:1.55fr .85fr;gap:22px}
+.left{min-width:0}.drop{min-height:184px;border:2px dashed #cfe0f8;border-radius:13px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:18px;transition:.2s;background:#fbfdff}.drop.drag{background:#eaf4ff;border-color:var(--blue)}.uploadicon{font-size:42px;color:var(--blue);line-height:1.1}.drop strong{margin:8px 0 5px;font-size:15px}.drop small{color:var(--muted);margin-top:8px}.or{color:#8190a8;font-size:13px;margin:1px 0 9px}
+button,.filebutton{font:inherit;cursor:pointer}.filebutton,.primary{border:0;border-radius:9px;background:var(--blue);color:white;font-weight:700;padding:11px 20px;display:inline-flex;justify-content:center;align-items:center;gap:8px;transition:.15s}.filebutton:hover,.primary:hover{background:var(--blue2);transform:translateY(-1px)}input[type=file]{display:none}
+.field{margin-top:18px}.fieldlabel{font-size:13px;font-weight:750;display:flex;align-items:center;gap:8px;margin-bottom:10px}.sizes,.formats{display:flex;gap:9px;flex-wrap:wrap}.chip{border:1px solid #cfdbec;border-radius:9px;background:#fff;padding:9px 13px;min-width:82px;color:#253a5c;font-size:13px}.chip.active{background:var(--blue);border-color:var(--blue);color:white}.custom{border:1px solid #cfdbec;border-radius:9px;padding:9px 11px;width:145px;min-width:110px;font:inherit;font-size:13px;outline-color:var(--blue)}.primary{width:100%;margin-top:20px;padding:15px;font-size:15px}.primary:disabled{opacity:.5;cursor:not-allowed;transform:none}.hint{font-size:12px;color:var(--muted);margin-top:9px;line-height:1.5}
+.preview{background:linear-gradient(160deg,#f2f8ff,#f8fbff);border-radius:12px;padding:20px;min-height:100%;display:flex;flex-direction:column}.preview h2{font-size:15px;margin:0 0 7px}.preview p{font-size:13px;color:var(--muted);margin:0 0 15px;line-height:1.5}.imagebox{height:165px;border:1px solid #d8e7fb;background:#edf5ff;border-radius:10px;display:grid;place-items:center;overflow:hidden;color:#8da2bd}.imagebox img{width:100%;height:100%;object-fit:contain;display:none}.imagebox .placeholder{font-size:45px}.stats{margin-top:16px;display:grid;gap:12px}.stat{display:flex;justify-content:space-between;gap:10px;font-size:13px}.stat span:first-child{color:#536582}.stat strong{font-weight:700;text-align:right}.result{display:none;margin-top:16px;padding:12px;border-radius:9px;background:#e9f9ef;color:#17663a;font-size:13px;line-height:1.5}.download{display:none;text-align:center;text-decoration:none;margin-top:12px;background:#15a66a;color:#fff;border-radius:9px;padding:11px;font-size:14px;font-weight:750}
+.features{max-width:1200px;margin:0 auto;padding:35px 20px;display:grid;grid-template-columns:repeat(4,1fr);gap:18px}.feature{display:flex;gap:13px;padding:7px 12px;border-right:1px solid #e4ebf5}.feature:last-child{border-right:0}.icon{width:40px;height:40px;flex-shrink:0;border-radius:50%;display:grid;place-items:center;color:white;background:#18b96a;font-size:18px}.feature:nth-child(2) .icon{background:#1885f8}.feature:nth-child(3) .icon{background:#7962ef}.feature:nth-child(4) .icon{background:#14b98a}.feature strong{font-size:13px}.feature p{font-size:12px;color:var(--muted);line-height:1.55;margin:7px 0 0}
+footer{text-align:center;padding:20px;color:#7888a1;font-size:12px;border-top:1px solid #eef2f8}
+@media(max-width:760px){header{height:auto;min-height:68px;padding:14px 18px}.tagline,nav a:not(:first-child){display:none}.brand{font-size:23px}.workspace{grid-template-columns:1fr;padding:15px}.preview{min-height:auto}.features{grid-template-columns:1fr 1fr;padding:22px 12px}.feature{border-right:0}.hero h1{letter-spacing:-1.3px}main{padding-top:30px}}
+@media(max-width:420px){.features{grid-template-columns:1fr}.sizes{gap:6px}.chip{min-width:70px;flex:1}.custom{width:100%;flex:1}.hero p{font-size:14px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="logo">▧</div><span>Size<em>It</em></span><span class="tagline">Compress Images to Any Size</span></div>
+  <nav><a href="#home">Home</a><a href="#how">How It Works</a><a href="#faq">FAQ</a></nav>
+</header>
+<main id="home">
+  <section class="hero">
+    <h1>Compress Your Images<br>to the <span>Perfect Size</span></h1>
+    <p>Upload your image, choose the target size (e.g. 50 KB, 100 KB, 200 KB),<br class="desktop"> and get a compressed image in seconds.</p>
+  </section>
+  <section class="workspace" aria-label="Image compressor">
+    <div class="left">
+      <div class="drop" id="drop">
+        <div class="uploadicon">⇧</div>
+        <strong>Drag &amp; drop your image here</strong>
+        <div class="or">or</div>
+        <label class="filebutton" for="file">▣ &nbsp; Choose Image</label>
+        <input id="file" type="file" accept="image/jpeg,image/png,image/webp">
+        <small>Supports JPG, JPEG, PNG, WebP (max 10 MB)</small>
+      </div>
+      <div class="field">
+        <div class="fieldlabel">▣ &nbsp; Target Size</div>
+        <div class="sizes">
+          <button class="chip" data-kb="20">20 KB</button>
+          <button class="chip active" data-kb="50">50 KB</button>
+          <button class="chip" data-kb="100">100 KB</button>
+          <button class="chip" data-kb="200">200 KB</button>
+          <input class="custom" id="custom" type="number" min="1" max="10240" placeholder="Custom (KB)" aria-label="Custom target size in KB">
+        </div>
+      </div>
+      <div class="field">
+        <div class="fieldlabel">▧ &nbsp; Output Format</div>
+        <div class="formats">
+          <button class="chip active" data-format="image/jpeg">JPG</button>
+          <button class="chip" data-format="image/png">PNG</button>
+          <button class="chip" data-format="image/webp">WebP</button>
+        </div>
+      </div>
+      <button class="primary" id="compress" disabled>✦ &nbsp; Compress Image</button>
+      <div class="hint">Privacy-first: image processing happens in your browser. Your image is not uploaded to a server.</div>
+    </div>
+    <aside class="preview">
+      <h2>Preview</h2><p id="previewText">Your compressed image will appear here.</p>
+      <div class="imagebox"><div class="placeholder" id="placeholder">▧</div><img id="previewImg" alt="Compressed image preview"></div>
+      <div class="stats">
+        <div class="stat"><span>Original Size</span><strong id="originalSize">—</strong></div>
+        <div class="stat"><span>Compressed Size</span><strong id="compressedSize">—</strong></div>
+        <div class="stat"><span>Reduction</span><strong id="reduction">—</strong></div>
+      </div>
+      <div class="result" id="result"></div>
+      <a class="download" id="download" download="sizeit-compressed.jpg">↓ &nbsp; Download Image</a>
+    </aside>
+  </section>
+</main>
+<section class="features" id="how">
+  <div class="feature"><div class="icon">ϟ</div><div><strong>Fast &amp; Easy</strong><p>Simple steps, get your image compressed in seconds.</p></div></div>
+  <div class="feature"><div class="icon">◇</div><div><strong>Quality Aware</strong><p>Choose your target size and preview the result before downloading.</p></div></div>
+  <div class="feature"><div class="icon">▣</div><div><strong>Works Everywhere</strong><p>Use it on your phone, tablet or computer — right in your browser.</p></div></div>
+  <div class="feature"><div class="icon">♙</div><div><strong>No Signup Needed</strong><p>Just upload, compress and download. No account required.</p></div></div>
+</section>
+<section id="faq" style="max-width:900px;margin:0 auto 35px;padding:0 22px">
+  <h2 style="font-size:20px">Frequently asked questions</h2>
+  <details style="padding:12px 0;border-bottom:1px solid #e4ebf5"><summary>Will the image always reach my exact target size?</summary><p style="color:#5c6e8b;line-height:1.6">The tool tries to get the image at or below your target size. Some formats or images may need a reduction in dimensions, and a very small target can reduce quality noticeably.</p></details>
+  <details style="padding:12px 0;border-bottom:1px solid #e4ebf5"><summary>Are my photos uploaded?</summary><p style="color:#5c6e8b;line-height:1.6">This prototype processes the image in your browser. It does not send the image to a server.</p></details>
+  <details style="padding:12px 0"><summary>Can I compress PDFs here?</summary><p style="color:#5c6e8b;line-height:1.6">Not in this first prototype. PDF compression can be added as a later feature.</p></details>
+</section>
+<footer>© 2026 SizeIt · Simple image compression, right in your browser.</footer>
+<script>
+const fileInput=document.getElementById('file'),drop=document.getElementById('drop'),compressBtn=document.getElementById('compress');
+const customInput=document.getElementById('custom'),previewImg=document.getElementById('previewImg');
+let sourceFile=null,sourceImage=null,targetKB=50,format='image/jpeg',resultBlob=null,resultUrl=null;
+document.querySelectorAll('[data-kb]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-kb]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');targetKB=Number(btn.dataset.kb);customInput.value='';}));
+customInput.addEventListener('input',()=>{document.querySelectorAll('[data-kb]').forEach(b=>b.classList.remove('active'));if(customInput.value && Number(customInput.value)>0)targetKB=Number(customInput.value);});
+document.querySelectorAll('[data-format]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-format]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');format=btn.dataset.format;}));
+fileInput.addEventListener('change',e=>loadFile(e.target.files[0]));
+['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('drag')}));
+['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('drag')}));
+drop.addEventListener('drop',e=>loadFile(e.dataTransfer.files[0]));
+function loadFile(file){
+ if(!file)return;
+ if(!file.type.startsWith('image/')){alert('Please select an image file.');return}
+ if(file.size>10*1024*1024){alert('Please choose an image smaller than 10 MB.');return}
+ sourceFile=file;
+ const reader=new FileReader();
+ reader.onload=()=>{sourceImage=new Image();sourceImage.onload=()=>{compressBtn.disabled=false;document.getElementById('originalSize').textContent=fmt(file.size);document.getElementById('previewText').textContent=file.name+' · '+sourceImage.width+' × '+sourceImage.height+' px';document.getElementById('result').style.display='none';document.getElementById('download').style.display='none';};sourceImage.src=reader.result;};
+ reader.readAsDataURL(file);
+}
+function fmt(bytes){return bytes<1024?(bytes+' B'):(bytes/1024).toFixed(1)+' KB'}
+function canvasBlob(canvas,type,q){return new Promise(resolve=>canvas.toBlob(resolve,type,q))}
+async function compress(){
+ if(!sourceImage)return;
+ let wantedKB=customInput.value?Number(customInput.value):targetKB;
+ if(!Number.isFinite(wantedKB)||wantedKB<1||wantedKB>10240){alert('Enter a target size between 1 and 10240 KB.');return}
+ compressBtn.disabled=true;compressBtn.textContent='Compressing…';
+ const maxBytes=wantedKB*1024;
+ let w=sourceImage.naturalWidth,h=sourceImage.naturalHeight;
+ const maxDim=3000;if(Math.max(w,h)>maxDim){const s=maxDim/Math.max(w,h);w=Math.round(w*s);h=Math.round(h*s)}
+ let best=null,canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');
+ // Iteratively lower quality, then reduce dimensions if necessary.
+ for(let pass=0;pass<9;pass++){
+   canvas.width=w;canvas.height=h;ctx.clearRect(0,0,w,h);
+   if(format==='image/jpeg'){ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h)}
+   ctx.drawImage(sourceImage,0,0,w,h);
+   if(format==='image/png'){
+     best=await canvasBlob(canvas,format);
+     if(best&&best.size<=maxBytes)break;
+   }else{
+     let lo=.08,hi=.94,passBest=null;
+     for(let i=0;i<8;i++){
+       const q=(lo+hi)/2,blob=await canvasBlob(canvas,format,q);
+       if(!blob)continue;
+       if(blob.size<=maxBytes){passBest=blob;lo=q}else hi=q;
+     }
+     if(passBest && (!best || passBest.size>best.size))best=passBest;
+     if(best&&best.size<=maxBytes)break;
+   }
+   w=Math.max(1,Math.round(w*.82));h=Math.max(1,Math.round(h*.82));
+ }
+ compressBtn.disabled=false;compressBtn.innerHTML='✦ &nbsp; Compress Image';
+ if(!best){alert('Compression failed. Please try another image or format.');return}
+ resultBlob=best;
+ if(resultUrl)URL.revokeObjectURL(resultUrl);
+ resultUrl=URL.createObjectURL(best);
+ previewImg.src=resultUrl;previewImg.style.display='block';document.getElementById('placeholder').style.display='none';
+ document.getElementById('compressedSize').textContent=fmt(best.size);
+ const reduction=Math.max(0,(1-best.size/sourceFile.size)*100);
+ document.getElementById('reduction').textContent=(best.size<=sourceFile.size?reduction.toFixed(1):'-0.0')+'%';
+ const result=document.getElementById('result');result.style.display='block';
+ if(best.size<=maxBytes){result.textContent='Success — image is within your target of '+wantedKB+' KB.';result.style.background='#e9f9ef';result.style.color='#17663a'}
+ else{result.textContent='Could not reach '+wantedKB+' KB with this format. Current result is '+fmt(best.size)+'. Try JPG/WebP or a larger target.';result.style.background='#fff4df';result.style.color='#805300'}
+ const dl=document.getElementById('download');dl.href=resultUrl;dl.download='sizeit-compressed.'+({ 'image/jpeg':'jpg','image/png':'png','image/webp':'webp'}[format]);dl.style.display='block';
+}
+compressBtn.addEventListener('click',compress);
+</script>
+</body>
+</html>
