@@ -490,7 +490,7 @@ async function compress(){
    }
  }
  compressBtn.disabled=false;compressBtn.innerHTML='✦ &nbsp; Compress Image';
- if(!best){document.getElementById('result').style.display='block';document.getElementById('result').textContent=format==='image/png'?'PNG is lossless and cannot always fit a small target. Choose JPG/WebP or increase the target size.':'This image could not fit the target at usable quality. Try WebP or increase the target size for a sharper result.';document.getElementById('result').style.background='#fff4df';document.getElementById('result').style.color='#805300';document.getElementById('download').style.display='none';return}
+ if(!best){document.getElementById('result').style.display='block';document.getElementById('result').textContent=format==='image/png'?'This PNG could not fit the target even after reducing its dimensions. Try a larger target size or choose JPG/WebP.':'This image could not fit the target at usable quality. Try WebP or increase the target size for a sharper result.';document.getElementById('result').style.background='#fff4df';document.getElementById('result').style.color='#805300';document.getElementById('download').style.display='none';return}
  resultBlob=best;
  if(resultUrl)URL.revokeObjectURL(resultUrl);
  resultUrl=URL.createObjectURL(best);
