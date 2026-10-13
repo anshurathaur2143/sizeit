@@ -179,6 +179,16 @@ footer{padding:24px 20px;background:#17152e;color:#c7c4e5!important;text-align:c
 @media(max-width:620px){header{height:auto;min-height:68px;flex-wrap:wrap;padding:12px 16px;gap:10px}.brand{font-size:23px}.logo{width:35px;height:35px}nav{width:100%;justify-content:space-between;gap:10px;padding:2px 0 3px}nav a{font-size:12px}main{padding:28px 12px 35px}.hero{display:flex;flex-direction:column;align-items:stretch;text-align:center;gap:0;margin-bottom:20px;min-height:0}.hero-copy{padding:0 4px}.hero h1{font-size:clamp(38px,10vw,52px);letter-spacing:-2px}.hero p{font-size:14px}.hero-visual{height:220px;max-width:380px;width:100%;margin:0 auto}.float-one{left:0;top:15px}.float-two{right:0;bottom:12px}.workspace{gap:14px}.left,.preview{padding:16px;border-radius:19px}.drop{padding:22px 12px}.features{padding:0 14px;gap:10px}.feature{padding:16px 13px}.feature strong{font-size:13px}.feature p{font-size:12px}.ai-launcher{right:14px;bottom:14px;padding:9px 13px 9px 9px}.ai-launcher-icon{width:34px;height:34px}.ai-window{right:10px;bottom:78px;width:calc(100vw - 20px);height:min(580px,calc(100dvh - 95px));border-radius:20px}#faq{margin:0 14px 25px!important;padding:20px!important}#about{margin:0 14px 25px!important;padding:22px 18px!important}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 
+
+/* Responsive, tactile feedback for every interactive control */
+button,a.filebutton,.reselect-button,.multi-pdf-pick{ -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
+button:not(:disabled),a.filebutton,.reselect-button,.multi-pdf-pick{ transition:transform .16s ease,filter .16s ease,box-shadow .16s ease,background-color .16s ease,border-color .16s ease; }
+button:not(:disabled):active,.reselect-button:active,.multi-pdf-pick:active{transform:scale(.965);filter:brightness(.92);box-shadow:0 2px 7px rgba(55,40,140,.18)}
+button:focus-visible,a:focus-visible,.filebutton:focus-visible{outline:3px solid rgba(99,91,255,.48);outline-offset:3px}
+.chip:not(:disabled):hover{filter:brightness(.97);box-shadow:0 5px 14px rgba(99,91,255,.12)}
+.chip.active{color:#fff;border-color:#6557f5;background:linear-gradient(115deg,#5145e5,#9b4de8);box-shadow:0 6px 16px rgba(99,91,255,.25)}
+.primary:not(:disabled):active,.filebutton:active,.download:active,.ai-launcher:active{transform:translateY(1px) scale(.985);filter:brightness(.92)}
+@media(prefers-reduced-motion:reduce){button,a{transition:none!important}}
 </style>
 </head>
 <body>
@@ -365,11 +375,11 @@ async function compress(){
  if(!sourceImage)return;
  let wantedKB=customInput.value?Number(customInput.value):targetKB;
  if(!Number.isFinite(wantedKB)||wantedKB<1||wantedKB>10240){alert('Enter a target size between 1 and 10240 KB.');return}
- compressBtn.disabled=true;compressBtn.textContent='Compressing…';
- const maxBytes=Math.max(1,(wantedKB-1)*1024);
+ compressBtn.disabled=true;compressBtn.textContent='Optimising image…';
+ const maxBytes=Math.max(1,Math.floor(wantedKB*1024));
  let w=sourceImage.naturalWidth,h=sourceImage.naturalHeight;
- // Preserve source detail by default. Only cap extremely large images to avoid browser memory issues.
- const maxDim=6000;if(Math.max(w,h)>maxDim){const s=maxDim/Math.max(w,h);w=Math.round(w*s);h=Math.round(h*s)}
+ const maxDim=6000;
+ if(Math.max(w,h)>maxDim){const s=maxDim/Math.max(w,h);w=Math.round(w*s);h=Math.round(h*s)}
  let frameW=0,frameH=0;
  if(frameMode==='square'){frameW=1080;frameH=1080;}
  else if(frameMode==='portrait'){frameW=1080;frameH=1350;}
@@ -378,12 +388,10 @@ async function compress(){
    if(!Number.isInteger(frameW)||!Number.isInteger(frameH)||frameW<1||frameH<1||frameW>6000||frameH>6000){alert('Enter custom frame width and height between 1 and 6000 pixels.');compressBtn.disabled=false;compressBtn.innerHTML='✦ &nbsp; Compress Image';return;}
  }
  const useFrame=frameW>0&&frameH>0;
- // Prioritise visual clarity: keep a reasonably high JPEG/WebP quality floor,
- // and reduce dimensions in measured steps only when the target cannot be met.
  const minQuality=qualityMode==='low'?.55:qualityMode==='high'?.78:.68;
- const resizeFactor=qualityMode==='low'?.88:qualityMode==='high'?.94:.90;
- function drawSource(targetCanvas,targetCtx,outW,outH){
-   targetCanvas.width=outW;targetCanvas.height=outH;targetCtx=targetCanvas.getContext('2d');
+ function drawSource(targetCanvas,outW,outH){
+   targetCanvas.width=outW;targetCanvas.height=outH;
+   const targetCtx=targetCanvas.getContext('2d');
    targetCtx.clearRect(0,0,outW,outH);
    if(format==='image/jpeg'){targetCtx.fillStyle='#fff';targetCtx.fillRect(0,0,outW,outH);}
    if(useFrame){
@@ -391,41 +399,48 @@ async function compress(){
      const drawW=Math.max(1,Math.round(sourceImage.naturalWidth*scale)),drawH=Math.max(1,Math.round(sourceImage.naturalHeight*scale));
      targetCtx.drawImage(sourceImage,Math.round((outW-drawW)/2),Math.round((outH-drawH)/2),drawW,drawH);
    }else targetCtx.drawImage(sourceImage,0,0,outW,outH);
-   return targetCtx;
  }
- let best=null,canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');
+ async function encodeAt(width,height,quality=minQuality){
+   drawSource(canvas,width,height);
+   return await canvasBlob(canvas,format,format==='image/png'?undefined:quality);
+ }
+ let best=null,canvas=document.createElement('canvas');
  if(useFrame){w=frameW;h=frameH;}
  if(format==='image/png'){
-   // PNG is lossless: do not repeatedly shrink its dimensions just to force a tiny file size.
-   drawSource(canvas,ctx,w,h);
-   best=await canvasBlob(canvas,format);
+   best=await encodeAt(w,h);
+ }else if(useFrame){
+   const blob=await encodeAt(w,h,minQuality);
+   if(blob&&blob.size<=maxBytes){
+     let lo=minQuality,hi=.96;best=blob;
+     for(let i=0;i<9;i++){const q=(lo+hi)/2,candidate=await encodeAt(w,h,q);if(candidate&&candidate.size<=maxBytes){best=candidate;lo=q}else hi=q;}
+   }
  }else{
-   // The quality choice sets minimum encoding quality and resize aggressiveness.
-   // Fixed frames keep their selected dimensions and tune encoding quality only.
-   for(let pass=0;pass<(useFrame?1:48);pass++){
-     drawSource(canvas,ctx,w,h);
-     // First test the clearest acceptable encode at this resolution.
-     const floorBlob=await canvasBlob(canvas,format,minQuality);
-     if(floorBlob&&floorBlob.size<=maxBytes){
-       // The target fits at this resolution. Binary-search upward to the
-       // highest encoding quality that stays under the requested byte limit.
-       let lo=minQuality,hi=.96,passBest=floorBlob;
-       for(let i=0;i<12;i++){
-         const q=(lo+hi)/2,blob=await canvasBlob(canvas,format,q);
-         if(!blob)continue;
-         if(blob.size<=maxBytes){passBest=blob;lo=q}else hi=q;
-       }
-       best=passBest;
-       break;
+   // Find the largest pixel dimensions that fit before tuning quality.
+   // This avoids repeated 10% shrinking, which can throw away far too many pixels.
+   const fullW=w,fullH=h;
+   let lowScale=.04,highScale=1,fitScale=0,fitBlob=null;
+   const smallest=await encodeAt(Math.max(1,Math.round(fullW*lowScale)),Math.max(1,Math.round(fullH*lowScale)),minQuality);
+   if(smallest&&smallest.size<=maxBytes){fitScale=lowScale;fitBlob=smallest;}
+   const full=await encodeAt(fullW,fullH,minQuality);
+   if(full&&full.size<=maxBytes){fitScale=1;fitBlob=full;}
+   else if(fitBlob){
+     for(let i=0;i<10;i++){
+       const mid=(lowScale+highScale)/2;
+       const test=await encodeAt(Math.max(1,Math.round(fullW*mid)),Math.max(1,Math.round(fullH*mid)),minQuality);
+       if(test&&test.size<=maxBytes){lowScale=mid;fitScale=mid;fitBlob=test;}else highScale=mid;
      }
-     if(useFrame)break;
-     const nextW=Math.max(1,Math.round(w*resizeFactor)),nextH=Math.max(1,Math.round(h*resizeFactor));
-     if(nextW===w&&nextH===h)break;
-     w=nextW;h=nextH;
+   }
+   if(fitBlob){
+     w=Math.max(1,Math.round(fullW*fitScale));h=Math.max(1,Math.round(fullH*fitScale));
+     let lo=minQuality,hi=.96;best=fitBlob;
+     for(let i=0;i<10;i++){
+       const q=(lo+hi)/2,candidate=await encodeAt(w,h,q);
+       if(candidate&&candidate.size<=maxBytes){best=candidate;lo=q}else hi=q;
+     }
    }
  }
  compressBtn.disabled=false;compressBtn.innerHTML='✦ &nbsp; Compress Image';
- if(!best){alert('This target is too small to preserve good image quality. Please choose a larger target size, or try JPG/WebP.');return}
+ if(!best){document.getElementById('result').style.display='block';document.getElementById('result').textContent='This image cannot fit within '+wantedKB+' KB at the selected quality. Choose WebP or a larger target size to preserve more detail.';document.getElementById('result').style.background='#fff4df';document.getElementById('result').style.color='#805300';document.getElementById('download').style.display='none';return}
  resultBlob=best;
  if(resultUrl)URL.revokeObjectURL(resultUrl);
  resultUrl=URL.createObjectURL(best);
@@ -435,8 +450,14 @@ async function compress(){
  document.getElementById('reduction').textContent=(best.size<=sourceFile.size?reduction.toFixed(1):'-0.0')+'%';
  const result=document.getElementById('result');result.style.display='block';
  const dl=document.getElementById('download');
- if(best.size<=maxBytes){result.textContent='Success — image is '+fmt(best.size)+', at least 1 KB below your '+wantedKB+' KB target. Compression prioritised clarity; very small targets such as 50 KB can still reduce fine detail.';result.style.background='#e9f9ef';result.style.color='#17663a';dl.href=resultUrl;dl.download='sizeitnow-compressed.'+({ 'image/jpeg':'jpg','image/png':'png','image/webp':'webp'}[format]);dl.style.display='block';}
- else{result.textContent=format==='image/png'?'PNG is lossless, so this image was kept clear without shrinking its dimensions. It is still above your target size. Choose JPG or WebP, or increase the target size for a smaller file.':'Could not reach your target while maintaining good image quality. Try a larger target size to keep more detail.';result.style.background='#fff4df';result.style.color='#805300';dl.style.display='none';}
+ if(best.size<=maxBytes){
+   result.textContent='Done — '+fmt(best.size)+' of '+wantedKB+' KB. SizeItNow maximised dimensions first, then adjusted quality to fit.';
+   result.style.background='#e9f9ef';result.style.color='#17663a';
+   dl.href=resultUrl;dl.download='sizeitnow-compressed.'+({'image/jpeg':'jpg','image/png':'png','image/webp':'webp'}[format]);dl.style.display='block';
+ }else{
+   result.textContent=format==='image/png'?'PNG is lossless and remains above your target. Choose JPG/WebP or increase the target size.':'Could not meet this target at the selected quality. Increase the target size to retain more detail.';
+   result.style.background='#fff4df';result.style.color='#805300';dl.style.display='none';
+ }
 }
 compressBtn.addEventListener('click',async()=>{
   if(compressBtn.disabled)return;
