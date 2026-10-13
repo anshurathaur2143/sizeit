@@ -427,6 +427,17 @@ async function compress(){
  if(best.size<=maxBytes){result.textContent='Success — image is '+fmt(best.size)+', at least 1 KB below your '+wantedKB+' KB target.';result.style.background='#e9f9ef';result.style.color='#17663a';dl.href=resultUrl;dl.download='sizeitnow-compressed.'+({ 'image/jpeg':'jpg','image/png':'png','image/webp':'webp'}[format]);dl.style.display='block';}
  else{result.textContent=format==='image/png'?'PNG is lossless, so this image was kept clear without shrinking its dimensions. It is still above your target size. Choose JPG or WebP, or increase the target size for a smaller file.':'Could not reach your target while maintaining good image quality. Try a larger target size to keep more detail.';result.style.background='#fff4df';result.style.color='#805300';dl.style.display='none';}
 }
+compressBtn.addEventListener('click',async()=>{
+  if(compressBtn.disabled)return;
+  try{
+    await compress();
+  }catch(error){
+    console.error('SizeItNow compression failed:',error);
+    compressBtn.disabled=!sourceImage;
+    compressBtn.innerHTML='✦ &nbsp; Compress Image';
+    showUploadStatus('Compression could not finish. Please try another image or a larger target size.');
+  }
+});
 function renderPdfFileList(){
  pdfFileList.replaceChildren();
  pdfImages.forEach((item,index)=>{
