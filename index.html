@@ -218,7 +218,7 @@ async function compress(){
    }
  }
  compressBtn.disabled=false;compressBtn.innerHTML='✦ &nbsp; Compress Image';
- if(!best){alert('Compression failed. Please try another image or format.');return}
+ if(!best){alert('This target is too small to preserve good image quality. Please choose a larger target size, or try JPG/WebP.');return}
  resultBlob=best;
  if(resultUrl)URL.revokeObjectURL(resultUrl);
  resultUrl=URL.createObjectURL(best);
