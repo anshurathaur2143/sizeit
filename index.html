@@ -745,7 +745,7 @@ function renderPdfPagesAsImages(){
 <section class="ai-window" id="aiWindow" role="dialog" aria-label="SizeItNow AI assistant" aria-modal="false">
   <div class="ai-head">
     <div class="ai-avatar" aria-hidden="true">✦</div>
-    <div class="ai-head-title"><strong>SizeItNow Helper</strong><span id="aiModeLabel">Built-in help · Works without an API key</span></div>
+    <div class="ai-head-title"><strong>SizeItNow AI</strong><span id="aiModeLabel">AI assistant · Powered by OpenAI</span></div>
     <button class="ai-close" id="aiClose" type="button" aria-label="Close assistant">×</button>
   </div>
   <div class="ai-messages" id="aiMessages" aria-live="polite">
@@ -828,7 +828,7 @@ function renderPdfPagesAsImages(){
     addMessage(text,'user');history.push({role:'user',content:text});input.value='';send.disabled=true;
     const typing=addMessage('Thinking…','bot');typing.classList.add('ai-typing');typing.textContent='';for(let i=0;i<3;i++)typing.appendChild(document.createElement('i'));
     let answered=false;
-    const showReply=(reply,mode)=>{if(answered)return;answered=true;typing.remove();const modeLabel=document.getElementById('aiModeLabel');if(modeLabel)modeLabel.textContent=mode==='openai'?'Powered by OpenAI · AI responses':'Built-in help · Always available';addMessage(reply,'bot');history.push({role:'assistant',content:reply})};
+    const showReply=(reply,mode)=>{if(answered)return;answered=true;typing.remove();const modeLabel=document.getElementById('aiModeLabel');if(modeLabel)modeLabel.textContent=mode==='openai'?'Connected · OpenAI AI responses':mode==='error'?'AI connection problem':'AI assistant · Powered by OpenAI';addMessage(reply,'bot');history.push({role:'assistant',content:reply})};
     const controller=new AbortController();
     const timeoutId=setTimeout(()=>controller.abort(),8000);
     try{
@@ -837,7 +837,12 @@ function renderPdfPagesAsImages(){
       if(!response.ok||typeof data.reply!=='string'||!data.reply.trim())throw new Error(data.error||'No valid response from chat service');
       showReply(data.reply.trim(),data.mode);
     }catch(err){
-      showReply(localHelpReply(text),'built-in');
+      const message = err && err.message === 'The operation was aborted.'
+        ? 'The AI service took too long to respond. Please try again.'
+        : (err && err.message && err.message !== 'Failed to fetch'
+          ? err.message
+          : 'Could not reach the AI server. Confirm the Vercel deployment includes /api/chat and that OPENAI_API_KEY is configured.');
+      showReply(message,'error');
     }finally{
       clearTimeout(timeoutId);
       send.disabled=false;
