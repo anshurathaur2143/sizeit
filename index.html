@@ -616,10 +616,10 @@ function clearSelectedFile(){outputFileName.value='';document.getElementById('pr
 drop.addEventListener('drop',e=>loadFile(e.dataTransfer.files[0]));
 function showUploadStatus(message,ok=false){uploadStatus.style.display='block';uploadStatus.style.background=ok?'#e9f9ef':'#fff0f0';uploadStatus.style.color=ok?'#17663a':'#9b2525';uploadStatus.textContent=message;}
 function getSafeBaseName(name){
- const raw=String(name||'').split(/[\\/]/).pop().replace(/\\.[^.]*$/,'').trim();
- return raw.replace(/[\\u0000-\\u001f<>:"|?*]/g,'').replace(/[. ]+$/,'').slice(0,120);
+ const raw=String(name||'').split(/[\\/]/).pop().replace(/\.[^.]*$/,'').trim();
+ return raw.replace(/[\u0000-\u001f<>:"|?*]/g,'').replace(/[. ]+$/,'').slice(0,120);
 }
-function isNumericFileName(name){return /^\\s*\\d[\\d _().-]*\\s*$/.test(getSafeBaseName(name));}
+function isNumericFileName(name){return /^\s*\d[\d _().-]*\s*$/.test(getSafeBaseName(name));}
 function loadFile(file){
  if(!file)return;
  if(!['image/jpeg','image/png','image/webp'].includes(file.type)){fileInput.value='';showUploadStatus('Unsupported file type. Please choose a JPG, PNG or WebP image.');return}
