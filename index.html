@@ -523,23 +523,10 @@ async function compress(){
  let best=null,canvas=document.createElement('canvas');
  if(useFrame){w=frameW;h=frameH;}
  if(format==='image/png'){
-   // PNG encoding is lossless, but its file size may still exceed the target.
-   // If needed, reduce pixel dimensions while keeping PNG output lossless at that size.
-   const baseW=w,baseH=h;
-   best=await encodeAt(baseW,baseH);
-   if(best&&best.size>maxBytes){
-     let lo=.015,hi=1,fit=null,fitScale=0;
-     const smallest=await encodeAt(Math.max(1,Math.round(baseW*lo)),Math.max(1,Math.round(baseH*lo)));
-     if(smallest&&smallest.size<=maxBytes){
-       fit=smallest;fitScale=lo;
-       for(let i=0;i<11;i++){
-         const mid=(lo+hi)/2;
-         const candidate=await encodeAt(Math.max(1,Math.round(baseW*mid)),Math.max(1,Math.round(baseH*mid)));
-         if(candidate&&candidate.size<=maxBytes){lo=mid;fitScale=mid;fit=candidate;}else hi=mid;
-       }
-       best=fit;w=Math.max(1,Math.round(baseW*fitScale));h=Math.max(1,Math.round(baseH*fitScale));
-     }else best=null;
-   }
+   // PNG uses lossless encoding; browser canvas has no PNG quality slider.
+   // Preserve the selected image's pixel dimensions instead of silently
+   // downscaling it to chase a small target size.
+   best=await encodeAt(w,h);
  }else if(useFrame){
    let lo=.45,hi=.96;
    for(let i=0;i<11;i++){
@@ -587,12 +574,17 @@ async function compress(){
  const result=document.getElementById('result');result.style.display='block';
  const dl=document.getElementById('download');
  if(best.size<=maxBytes){
-   result.textContent='Done — '+fmt(best.size)+' of '+wantedKB+' KB. '+(format==='image/png'?'PNG keeps lossless encoding at the output dimensions; dimensions were reduced only if needed.':'SizeItNow prioritised image quality, then reduced dimensions only as needed.');
+   result.textContent='Done — '+fmt(best.size)+' of '+wantedKB+' KB. '+(format==='image/png'?'PNG kept its original pixel dimensions with lossless encoding.':'SizeItNow prioritised image quality, then reduced dimensions only as needed.');
    result.style.background='#e9f9ef';result.style.color='#17663a';
    dl.href=resultUrl;dl.download='sizeitnow-compressed.'+({'image/jpeg':'jpg','image/png':'png','image/webp':'webp'}[format]);dl.style.display='block';
  }else{
-   result.textContent=format==='image/png'?'PNG is lossless and remains above your target. Choose JPG/WebP or increase the target size.':'Could not meet this target at the selected quality. Increase the target size to retain more detail.';
-   result.style.background='#fff4df';result.style.color='#805300';dl.style.display='none';
+   if(format==='image/png'){
+     result.textContent='Full-resolution PNG preserved ('+w+' × '+h+' px), but it is '+fmt(best.size)+'—above your '+wantedKB+' KB target. PNG is lossless, so SizeItNow did not shrink your image. Choose WebP/JPG for a smaller file, or increase the target size.';
+     result.style.background='#fff7e6';result.style.color='#854d0e';dl.href=resultUrl;dl.download='sizeitnow-compressed.png';dl.style.display='block';
+   }else{
+     result.textContent='Could not meet this target at the selected quality. Increase the target size to retain more detail.';
+     result.style.background='#fff4df';result.style.color='#805300';dl.style.display='none';
+   }
  }
 }
 
