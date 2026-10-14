@@ -827,13 +827,22 @@ function renderPdfPagesAsImages(){
     e.preventDefault();const text=input.value.trim();if(!text||send.disabled)return;
     addMessage(text,'user');history.push({role:'user',content:text});input.value='';send.disabled=true;
     const typing=addMessage('Thinking…','bot');typing.classList.add('ai-typing');typing.textContent='';for(let i=0;i<3;i++)typing.appendChild(document.createElement('i'));
+    let answered=false;
+    const showReply=(reply,mode)=>{if(answered)return;answered=true;typing.remove();const modeLabel=document.getElementById('aiModeLabel');if(modeLabel)modeLabel.textContent=mode==='openai'?'Powered by OpenAI · AI responses':'Built-in help · Always available';addMessage(reply,'bot');history.push({role:'assistant',content:reply})};
+    const controller=new AbortController();
+    const timeoutId=setTimeout(()=>controller.abort(),8000);
     try{
-      const response=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:history.slice(-12)})});
-      const data=await response.json();typing.remove();
-      if(!response.ok)throw new Error(data.error||'The assistant is temporarily unavailable.');
-      const reply=data.reply||'Sorry, I could not create a response. Please try again.';const modeLabel=document.getElementById('aiModeLabel');if(modeLabel)modeLabel.textContent=data.mode==='openai'?'Powered by OpenAI · AI responses':'Built-in help · Always available';addMessage(reply,'bot');history.push({role:'assistant',content:reply});
-    }catch(err){typing.remove();const reply=localHelpReply(text);const modeLabel=document.getElementById('aiModeLabel');if(modeLabel)modeLabel.textContent='Built-in help · Always available';addMessage(reply,'bot');history.push({role:'assistant',content:reply})}
-    finally{send.disabled=false;input.focus()}
+      const response=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:history.slice(-12)}),signal:controller.signal});
+      const data=await response.json().catch(()=>({}));
+      if(!response.ok||typeof data.reply!=='string'||!data.reply.trim())throw new Error(data.error||'No valid response from chat service');
+      showReply(data.reply.trim(),data.mode);
+    }catch(err){
+      showReply(localHelpReply(text),'built-in');
+    }finally{
+      clearTimeout(timeoutId);
+      send.disabled=false;
+      input.focus();
+    }
   });
 })();
 </script>
