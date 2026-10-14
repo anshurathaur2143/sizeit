@@ -499,6 +499,11 @@ main>*{position:relative}
         <small id="supportedTypes">Supports JPG, PNG and WebP · Maximum file size: 10 MB</small>
         <div id="uploadStatus" role="status" aria-live="polite" style="display:none;width:100%;max-width:100%;margin-top:12px;padding:10px 12px;border-radius:9px;background:#e9f9ef;color:#17663a;font-size:13px;line-height:1.5;overflow-wrap:anywhere;text-align:left"></div>
       </div>
+      <div class="field" id="outputNameField">
+        <label class="fieldlabel" for="outputFileName">▣ &nbsp; Filename for download</label>
+        <input class="custom" id="outputFileName" type="text" maxlength="120" placeholder="Your image name" autocomplete="off" style="width:100%;box-sizing:border-box" aria-describedby="outputFileNameHint">
+        <div class="hint" id="outputFileNameHint">We keep this name and add “-compressed” to the downloaded file. Some mobile photo pickers provide only a numeric filename; if so, enter the name you want here.</div>
+      </div>
       <div class="field">
         <div class="fieldlabel">▣ &nbsp; Target Size</div>
         <div class="sizes">
@@ -594,7 +599,7 @@ main>*{position:relative}
 <footer>Made with care by <strong>Anshu Rathaur</strong> · Thank you for visiting sizeitnow. Always free, with no ads.</footer>
 <script>
 const fileInput=document.getElementById('file'),drop=document.getElementById('drop'),compressBtn=document.getElementById('compress'),uploadStatus=document.getElementById('uploadStatus');
-const uploadedFileCard=document.getElementById('uploadedFileCard'),uploadedFileName=document.getElementById('uploadedFileName'),uploadedFileSize=document.getElementById('uploadedFileSize');
+const uploadedFileCard=document.getElementById('uploadedFileCard'),uploadedFileName=document.getElementById('uploadedFileName'),uploadedFileSize=document.getElementById('uploadedFileSize'),outputFileName=document.getElementById('outputFileName');
 const customInput=document.getElementById('custom'),previewImg=document.getElementById('previewImg'),pdfBtn=document.getElementById('convertPdf');
 const pdfInput=document.getElementById('pdfFiles'),pdfFileList=document.getElementById('pdfFileList'),pdfStatus=document.getElementById('pdfStatus');
 let sourceFile=null,sourceImage=null,targetKB=50,format='image/jpeg',qualityMode='medium',frameMode='original',resultBlob=null,resultUrl=null,pdfImages=[];
@@ -605,20 +610,27 @@ document.querySelectorAll('[data-quality]').forEach(btn=>btn.addEventListener('c
 document.querySelectorAll('[data-frame]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-frame]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');frameMode=btn.dataset.frame;document.getElementById('customFrameFields').style.display=frameMode==='custom'?'flex':'none';}));
 fileInput.addEventListener('change',e=>loadFile(e.target.files[0]));
 document.getElementById('removeFile').addEventListener('click',clearSelectedFile);
-function clearSelectedFile(){document.getElementById('previewStatus').innerHTML='<i></i> Ready';document.querySelector('.preview').classList.remove('has-image');sourceFile=null;sourceImage=null;fileInput.value='';compressBtn.disabled=true;drop.classList.remove('upload-complete');uploadedFileCard.style.display='none';uploadStatus.style.display='none';document.getElementById('originalSize').textContent='—';document.getElementById('compressedSize').textContent='—';document.getElementById('reduction').textContent='—';document.getElementById('previewText').textContent='Your compressed image will appear here.';document.getElementById('result').style.display='none';document.getElementById('download').style.display='none';previewImg.removeAttribute('src');previewImg.style.display='none';document.getElementById('placeholder').style.display='block';if(resultUrl){URL.revokeObjectURL(resultUrl);resultUrl=null;}}
+function clearSelectedFile(){outputFileName.value='';document.getElementById('previewStatus').innerHTML='<i></i> Ready';document.querySelector('.preview').classList.remove('has-image');sourceFile=null;sourceImage=null;fileInput.value='';compressBtn.disabled=true;drop.classList.remove('upload-complete');uploadedFileCard.style.display='none';uploadStatus.style.display='none';document.getElementById('originalSize').textContent='—';document.getElementById('compressedSize').textContent='—';document.getElementById('reduction').textContent='—';document.getElementById('previewText').textContent='Your compressed image will appear here.';document.getElementById('result').style.display='none';document.getElementById('download').style.display='none';previewImg.removeAttribute('src');previewImg.style.display='none';document.getElementById('placeholder').style.display='block';if(resultUrl){URL.revokeObjectURL(resultUrl);resultUrl=null;}}
 ['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('drag')}));
 ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('drag')}));
 drop.addEventListener('drop',e=>loadFile(e.dataTransfer.files[0]));
 function showUploadStatus(message,ok=false){uploadStatus.style.display='block';uploadStatus.style.background=ok?'#e9f9ef':'#fff0f0';uploadStatus.style.color=ok?'#17663a':'#9b2525';uploadStatus.textContent=message;}
+function getSafeBaseName(name){
+ const raw=String(name||'').split(/[\\/]/).pop().replace(/\\.[^.]*$/,'').trim();
+ return raw.replace(/[\\u0000-\\u001f<>:"|?*]/g,'').replace(/[. ]+$/,'').slice(0,120);
+}
+function isNumericFileName(name){return /^\\s*\\d[\\d _().-]*\\s*$/.test(getSafeBaseName(name));}
 function loadFile(file){
  if(!file)return;
  if(!['image/jpeg','image/png','image/webp'].includes(file.type)){fileInput.value='';showUploadStatus('Unsupported file type. Please choose a JPG, PNG or WebP image.');return}
- if(file.size>10*1024*1024){fileInput.value='';showUploadStatus('This image is larger than 10 MB. Please choose a smaller file.');return}
+ if(file.size>10*1024*1024){fileInput.value='';showUploadStatus('This image is larger than 10 MB. Please choose a smaller image.');return}
  sourceFile=file;sourceImage=null;document.getElementById('previewStatus').innerHTML='<i></i> Loading';document.querySelector('.preview').classList.remove('has-image');compressBtn.disabled=true;
- drop.classList.add('upload-complete');uploadedFileCard.style.display='flex';uploadedFileName.textContent=file.name;uploadedFileSize.textContent=fmt(file.size)+' · Ready to compress';
- showUploadStatus('✓ '+file.name+' is selected successfully. You can now choose a target size and click Compress Image.',true);
+ const originalBase=getSafeBaseName(file.name),numericName=isNumericFileName(file.name);
+ outputFileName.value=numericName?'image':(originalBase||'image');
+ drop.classList.add('upload-complete');uploadedFileCard.style.display='flex';uploadedFileName.textContent=numericName?'Photo selected (your phone did not provide its original filename)':file.name;uploadedFileSize.textContent=fmt(file.size)+' · Ready to compress';
+ showUploadStatus(numericName?'Your phone supplied a numeric filename instead of the photo name. Enter the original name in “Filename for download” below; the browser does not expose the gallery name to this page.':'✓ '+file.name+' is selected successfully. You can now choose a target size and click Compress Image.',true);
  const reader=new FileReader();
- reader.onload=()=>{sourceImage=new Image();sourceImage.onload=()=>{compressBtn.disabled=false;uploadedFileSize.textContent=fmt(file.size)+' · '+sourceImage.width+' × '+sourceImage.height+' px';document.getElementById('originalSize').textContent=fmt(file.size);document.getElementById('previewText').textContent=file.name+' · '+sourceImage.width+' × '+sourceImage.height+' px';document.getElementById('previewStatus').innerHTML='<i></i> Image ready';document.querySelector('.preview').classList.add('has-image');document.getElementById('result').style.display='none';document.getElementById('download').style.display='none';document.getElementById('compressedSize').textContent='—';document.getElementById('reduction').textContent='—';};sourceImage.onerror=()=>{sourceImage=null;showUploadStatus('Could not read this image. Please choose another file.');compressBtn.disabled=true;};sourceImage.src=reader.result;};
+ reader.onload=()=>{sourceImage=new Image();sourceImage.onload=()=>{compressBtn.disabled=false;uploadedFileSize.textContent=fmt(file.size)+' · '+sourceImage.width+' × '+sourceImage.height+' px';document.getElementById('originalSize').textContent=fmt(file.size);document.getElementById('previewText').textContent=(outputFileName.value||'image')+' · '+sourceImage.width+' × '+sourceImage.height+' px';document.getElementById('previewStatus').innerHTML='<i></i> Image ready';document.querySelector('.preview').classList.add('has-image');document.getElementById('result').style.display='none';document.getElementById('download').style.display='none';document.getElementById('compressedSize').textContent='—';document.getElementById('reduction').textContent='—';};sourceImage.onerror=()=>{sourceImage=null;showUploadStatus('Could not read this image. Please choose another file.');compressBtn.disabled=true;};sourceImage.src=reader.result;};
  reader.onerror=()=>{sourceImage=null;showUploadStatus('Could not load this file. Please try again.');compressBtn.disabled=true;};
  reader.readAsDataURL(file);
 }
@@ -713,11 +725,11 @@ async function compress(){
  if(best.size<=maxBytes){
    result.textContent='Done — '+fmt(best.size)+' of '+wantedKB+' KB. '+(format==='image/png'?'PNG kept its original pixel dimensions with lossless encoding.':'SizeItNow prioritised image quality, then reduced dimensions only as needed.');
    result.style.background='#e9f9ef';result.style.color='#17663a';
-   dl.href=resultUrl;dl.download=((sourceFile&&sourceFile.name)?sourceFile.name.replace(/\.[^.]*$/,''):'image')+'-compressed.'+({'image/jpeg':'jpg','image/png':'png','image/webp':'webp'}[format]);dl.style.display='block';
+   dl.href=resultUrl;dl.download=(getSafeBaseName(outputFileName.value)||'image')+'-compressed.'+({'image/jpeg':'jpg','image/png':'png','image/webp':'webp'}[format]);dl.style.display='block';
  }else{
    if(format==='image/png'){
      result.textContent='Full-resolution PNG preserved ('+w+' × '+h+' px), but it is '+fmt(best.size)+'—above your '+wantedKB+' KB target. PNG is lossless, so SizeItNow did not shrink your image. Choose WebP/JPG for a smaller file, or increase the target size.';
-     result.style.background='#fff7e6';result.style.color='#854d0e';dl.href=resultUrl;dl.download=((sourceFile&&sourceFile.name)?sourceFile.name.replace(/\.[^.]*$/,''):'image')+'-compressed.png';dl.style.display='block';
+     result.style.background='#fff7e6';result.style.color='#854d0e';dl.href=resultUrl;dl.download=(getSafeBaseName(outputFileName.value)||'image')+'-compressed.png';dl.style.display='block';
    }else{
      result.textContent='Could not meet this target at the selected quality. Increase the target size to retain more detail.';
      result.style.background='#fff4df';result.style.color='#805300';dl.style.display='none';
