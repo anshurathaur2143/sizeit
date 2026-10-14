@@ -771,9 +771,14 @@ function renderPdfPagesAsImages(){
   (function(){
   const brand=document.querySelector('.brand');
   if(brand){
-    const goTop=()=>window.scrollTo({top:0,behavior:'smooth'});
-    brand.addEventListener('click',goTop);
-    brand.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();goTop();}});
+    // One click on the brand must return to the true document top.
+    // Prevent the #top anchor's default jump from competing with scrolling.
+    brand.addEventListener('click',event=>{
+      event.preventDefault();
+      window.scrollTo({top:0,left:0,behavior:'auto'});
+      document.documentElement.scrollTop=0;
+      document.body.scrollTop=0;
+    },true);
   }
 })();
 // Gentle 3D reveal and parallax while scrolling, with reduced-motion support.
