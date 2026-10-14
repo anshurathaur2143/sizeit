@@ -10,7 +10,7 @@
 :root{--blue:#0878f9;--blue2:#0068e8;--ink:#13213a;--muted:#5c6e8b;--line:#d9e5f5;--panel:#fff;--bg:#f3f8ff;--soft:#edf5ff;--shadow:0 18px 55px rgba(30,75,130,.09)}
 *{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:#fff}
 header{height:76px;display:flex;align-items:center;justify-content:space-between;padding:0 max(24px,calc((100vw - 1220px)/2));border-bottom:1px solid #eef2f8;background:#fff}
-.brand{display:flex;align-items:center;gap:12px;font-size:27px;font-weight:800;letter-spacing:-1px}.logo{width:38px;height:38px;border-radius:10px;background:var(--blue);color:white;display:grid;place-items:center;font-size:23px}.brand span em{color:var(--blue);font-style:normal}.tagline{font-size:14px;color:var(--muted);font-weight:400;letter-spacing:0;margin-left:8px}
+.brand{display:flex;align-items:center;gap:12px;font-size:27px;font-weight:800;letter-spacing:-1px;text-decoration:none;color:inherit;cursor:pointer}.logo{width:38px;height:38px;border-radius:10px;background:var(--blue);color:white;display:grid;place-items:center;font-size:23px}.brand span em{color:var(--blue);font-style:normal}.tagline{font-size:14px;color:var(--muted);font-weight:400;letter-spacing:0;margin-left:8px}
 nav{display:flex;gap:26px;align-items:center}nav a{color:#435675;text-decoration:none;font-size:14px}nav a:hover{color:var(--blue)}
 main{background:linear-gradient(180deg,#f4f9ff 0%,#f7fbff 100%);padding:34px 20px 42px}
 .hero{text-align:center;max-width:850px;margin:0 auto 20px}.hero h1{font-size:clamp(34px,4.3vw,54px);line-height:1.1;letter-spacing:-2px;margin:0 0 14px;font-weight:850}.hero h1 span{color:var(--blue)}.hero p{color:#536582;line-height:1.7;margin:0 auto;max-width:650px;font-size:16px}
@@ -329,7 +329,7 @@ button:active,.primary:active,.secondary:active{transform:translateY(0) scale(.9
 </head>
 <body>
 <header id="top">
-  <div class="brand" role="link" tabindex="0" aria-label="SizeItNow — return to top" title="Back to top"><div class="logo" aria-label="sizeitnow AI logo"><svg viewBox="0 0 48 48" role="img" aria-hidden="true"><defs><linearGradient id="aiLogoGradient" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse"><stop stop-color="#8B5CF6"/><stop offset=".52" stop-color="#3B82F6"/><stop offset="1" stop-color="#22D3EE"/></linearGradient></defs><path d="M24 5.5 28.7 17l11.8 4.8-11.8 4.8L24 38l-4.8-11.4L7.5 21.8 19.2 17 24 5.5Z" fill="url(#aiLogoGradient)"/><path d="m36.5 5.5 1.8 4.2 4.2 1.8-4.2 1.7-1.8 4.3-1.7-4.3-4.3-1.7 4.3-1.8 1.7-4.2Z" fill="#fff"/><circle cx="12" cy="36" r="3" fill="#fff"/><circle cx="12" cy="36" r="1.4" fill="url(#aiLogoGradient)"/><path d="m13.5 15 2.2 2.2m15.8 12.3 3.4 3.4" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".9"/></svg></div><span>sizeit<em>now</em></span><span class="tagline">Compress Images to Any Size</span></div>
+  <a class="brand" href="#top" aria-label="SizeItNow — return to top" title="Back to top"><div class="logo" aria-label="sizeitnow AI logo"><svg viewBox="0 0 48 48" role="img" aria-hidden="true"><defs><linearGradient id="aiLogoGradient" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse"><stop stop-color="#8B5CF6"/><stop offset=".52" stop-color="#3B82F6"/><stop offset="1" stop-color="#22D3EE"/></linearGradient></defs><path d="M24 5.5 28.7 17l11.8 4.8-11.8 4.8L24 38l-4.8-11.4L7.5 21.8 19.2 17 24 5.5Z" fill="url(#aiLogoGradient)"/><path d="m36.5 5.5 1.8 4.2 4.2 1.8-4.2 1.7-1.8 4.3-1.7-4.3-4.3-1.7 4.3-1.8 1.7-4.2Z" fill="#fff"/><circle cx="12" cy="36" r="3" fill="#fff"/><circle cx="12" cy="36" r="1.4" fill="url(#aiLogoGradient)"/><path d="m13.5 15 2.2 2.2m15.8 12.3 3.4 3.4" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".9"/></svg></div><span>sizeit<em>now</em></span><span class="tagline">Compress Images to Any Size</span></a>
   <nav class="site-nav"><a href="index.html">Home</a><a class="pdf-nav" href="pdf.html" aria-label="Open PDF tools">PDF</a><a href="#how">How It Works</a><a href="#faq">FAQ</a><a href="#about">About &amp; Support</a></nav>
 </header>
 <main id="home">
@@ -745,11 +745,11 @@ function renderPdfPagesAsImages(){
 <section class="ai-window" id="aiWindow" role="dialog" aria-label="SizeItNow AI assistant" aria-modal="false">
   <div class="ai-head">
     <div class="ai-avatar" aria-hidden="true">✦</div>
-    <div class="ai-head-title"><strong>SizeItNow AI</strong><span id="aiModeLabel">AI assistant · Powered by OpenAI</span></div>
+    <div class="ai-head-title"><strong>SizeItNow Helper</strong><span id="aiModeLabel">Built-in helper · No API required</span></div>
     <button class="ai-close" id="aiClose" type="button" aria-label="Close assistant">×</button>
   </div>
   <div class="ai-messages" id="aiMessages" aria-live="polite">
-    <div class="ai-msg bot">Hey there! 👋 I can help you choose image settings, explain file formats, troubleshoot a conversion, or guide you through SizeItNow.</div>
+    <div class="ai-msg bot">Hi! 👋 I’m the SizeItNow helper. Ask me how to reduce photo size, resize an image, make a PDF, or learn who built this website.</div>
   </div>
   <div class="ai-quick" id="aiQuick">
     <button type="button" data-prompt="How do I compress an image to 50 KB without losing too much quality?">Compress to 50 KB</button>
@@ -805,49 +805,76 @@ function renderPdfPagesAsImages(){
 (function(){
   const launcher=document.getElementById('aiLauncher'),windowEl=document.getElementById('aiWindow'),close=document.getElementById('aiClose');
   const form=document.getElementById('aiForm'),input=document.getElementById('aiInput'),messages=document.getElementById('aiMessages'),send=document.getElementById('aiSend'),quick=document.getElementById('aiQuick');
-  const history=[];
-
   function localHelpReply(message){
-    const q=String(message||'').toLowerCase();
-    if(/\b(hello|hi|hey|who are you|what can you do|help)\b/.test(q))return 'Hi! I’m SizeItNow Helper. I can guide you through image compression, choosing JPG/PNG/WebP, image quality, and PDF conversion. What are you trying to do?';
-    if(/\b(50\s?kb|20\s?kb|100\s?kb|200\s?kb|compress|compression|target size|reduce size)\b/.test(q))return 'To compress an image: select it, choose a target such as 50 KB, select JPG or WebP for smaller files (PNG is lossless and may remain larger), choose a quality setting, then click Compress Image. Very small targets can affect clarity.';
-    if(/\b(jpg|jpeg|png|webp|format|file type)\b/.test(q))return 'JPG is usually good for photos, PNG is best for transparency and sharp graphics, and WebP often gives a smaller file with good visual quality. Use the format required by the website or form you are uploading to.';
-    if(/\b(pdf|convert|page|pages)\b/.test(q))return 'To convert PDF pages to images, open the PDF tools, select your PDF, choose PNG or JPG, and convert. Download each page separately. To create a PDF, select multiple images in the image-to-PDF tool and click Create PDF.';
-    if(/\b(quality|blurry|clear|resolution|pixel|dimension|resize|crop)\b/.test(q))return 'For clearer results, choose High quality and keep the Original frame unless you need specific dimensions. If the target size is very small, increase the target KB or use WebP/JPG to retain more detail.';
-    if(/\b(upload|uploaded|file name|not showing|not working|error|problem|issue|failed|stuck|download)\b/.test(q))return 'Try refreshing the page and selecting a JPG, PNG, or WebP image again. Wait for the uploaded filename/status before compressing. If download fails, check browser download permissions or try another browser. The image tools process files in your browser.';
-    return 'I can help with image compression, target KB sizes, JPG/PNG/WebP, image quality and dimensions, creating PDFs, and converting PDF pages into images. Ask a specific question about one of these tools and I’ll guide you step by step.';
-  }
-  function toggle(open){windowEl.classList.toggle('open',open);launcher.setAttribute('aria-expanded',String(open));if(open)setTimeout(()=>input.focus(),80)}
-  function addMessage(text,role){const el=document.createElement('div');el.className='ai-msg '+role;el.textContent=text;messages.appendChild(el);messages.scrollTop=messages.scrollHeight;return el}
-  launcher.addEventListener('click',()=>toggle(!windowEl.classList.contains('open')));close.addEventListener('click',()=>toggle(false));
-  document.addEventListener('keydown',e=>{if(e.key==='Escape')toggle(false)});
-  quick.addEventListener('click',e=>{const b=e.target.closest('[data-prompt]');if(b){input.value=b.dataset.prompt;form.requestSubmit()}});
-  input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();form.requestSubmit()}});
-  form.addEventListener('submit',async e=>{
-    e.preventDefault();const text=input.value.trim();if(!text||send.disabled)return;
-    addMessage(text,'user');history.push({role:'user',content:text});input.value='';send.disabled=true;
-    const typing=addMessage('Thinking…','bot');typing.classList.add('ai-typing');typing.textContent='';for(let i=0;i<3;i++)typing.appendChild(document.createElement('i'));
-    let answered=false;
-    const showReply=(reply,mode)=>{if(answered)return;answered=true;typing.remove();const modeLabel=document.getElementById('aiModeLabel');if(modeLabel)modeLabel.textContent=mode==='openai'?'Connected · OpenAI AI responses':mode==='error'?'AI connection problem':'AI assistant · Powered by OpenAI';addMessage(reply,'bot');history.push({role:'assistant',content:reply})};
-    const controller=new AbortController();
-    const timeoutId=setTimeout(()=>controller.abort(),8000);
-    try{
-      const response=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:history.slice(-12)}),signal:controller.signal});
-      const data=await response.json().catch(()=>({}));
-      if(!response.ok||typeof data.reply!=='string'||!data.reply.trim())throw new Error(data.error||'No valid response from chat service');
-      showReply(data.reply.trim(),data.mode);
-    }catch(err){
-      const message = err && (err.name === 'AbortError' || err.message === 'The operation was aborted.')
-        ? 'The AI service took too long to respond. Please try again.'
-        : (err && err.message && err.message !== 'Failed to fetch'
-          ? err.message
-          : 'Could not reach the AI server. Confirm the Vercel deployment includes /api/chat and that OPENAI_API_KEY is configured.');
-      showReply(message,'error');
-    }finally{
-      clearTimeout(timeoutId);
-      send.disabled=false;
-      input.focus();
+    const q=String(message||'').toLowerCase().trim();
+    if(/\\b(who built|who created|creator|developer|made this|built this|who made|owner)\\b/.test(q)){
+      return 'SizeItNow was built by Anshu Rathaur. It is designed to make everyday image tasks simple: compress photos, resize images, and convert images and PDF pages. I’m the built-in website helper, not a live human support agent.';
     }
+    if(/\\b(who am i|my name|do you know me)\\b/.test(q)){
+      return 'I can’t identify visitors or see personal account details. If you mean who built SizeItNow, it was created by Anshu Rathaur.';
+    }
+    if(/\\b(hello|hi|hey|good morning|good evening)\\b/.test(q)){
+      return 'Hello! 👋 I can guide you through reducing photo size, resizing images, creating PDFs, converting PDF pages to images, and choosing image formats. What would you like to do?';
+    }
+    if(/\\b(make|create|combine|convert|turn).{0,35}\\b(pdf)\\b|\\b(image to pdf|photos to pdf|pictures to pdf)\\b/.test(q)){
+      return 'To make a PDF from images: open the “Combine images into one PDF” tool, select the pictures you want, arrange them in the order you need, then choose Create PDF and download the result. If you meant converting a PDF into images, open the PDF-to-images tool, select the PDF, choose JPG or PNG, and convert.';
+    }
+    if(/\\b(pdf to image|pdf pages|convert pdf|extract pages)\\b/.test(q)){
+      return 'To convert a PDF into images: open the PDF-to-images tool, choose your PDF file, select JPG or PNG and the quality you want, then click Convert. Each page can be downloaded as its own image.';
+    }
+    if(/\\b(resize|dimensions|pixel|width|height|crop|square|portrait)\\b/.test(q)){
+      return 'To resize an image: select your photo in the image tool, find the frame or dimensions settings, and choose Original, Square, Portrait, or Custom if available. For Custom, enter the required width and height in pixels. Preview the result before downloading.';
+    }
+    if(/\\b(20\\s?kb|50\\s?kb|100\\s?kb|200\\s?kb|compress|compression|reduce|smaller|file size|photo size|image size)\\b/.test(q)){
+      return 'To reduce a photo’s file size: select your image, choose a target such as 50 KB or enter a custom KB size, pick JPG or WebP for photos when suitable, set quality, then click Compress Image. If the result looks blurry, raise the target size or quality. PNG files can remain larger, especially for photographs.';
+    }
+    if(/\\b(jpg|jpeg|png|webp|format|file type|transparent)\\b/.test(q)){
+      return 'JPG is usually best for photographs and smaller files. PNG is useful for sharp graphics and transparency but can be larger. WebP often gives a good balance of quality and file size. If a website asks for a specific format, use that format.';
+    }
+    if(/\\b(private|privacy|secure|stored|upload to server)\\b/.test(q)){
+      return 'SizeItNow’s image processing tools are designed to process your files in your browser. I can’t inspect your files, and you should never share passwords or sensitive personal information in this chat.';
+    }
+    if(/\\b(contact|support|email|report a problem|bug)\\b/.test(q)){
+      return 'If you need help with a problem the on-page guidance can’t solve, contact iamanshuthakur@gmail.com and describe what you were doing and what happened. Don’t include passwords or sensitive information.';
+    }
+    if(/\\b(what is sizeitnow|about sizeitnow|what does this website do|purpose)\\b/.test(q)){
+      return 'SizeItNow is a simple online toolkit for compressing photos to a target file size, resizing images, choosing common image formats, combining images into a PDF, and converting PDF pages into images.';
+    }
+    return 'I can help with these SizeItNow features: reducing a photo to a target KB size, resizing dimensions, choosing JPG/PNG/WebP, making a PDF from images, converting PDF pages into images, and basic troubleshooting. Try asking “How do I reduce a photo to 50 KB?” or “How do I make a PDF?”';
+  }
+  function toggle(open){
+    windowEl.classList.toggle('open',open);
+    launcher.setAttribute('aria-expanded',String(open));
+    if(open) setTimeout(()=>input.focus(),80);
+  }
+  function addMessage(text,role){
+    const el=document.createElement('div');
+    el.className='ai-msg '+role;
+    el.textContent=text;
+    messages.appendChild(el);
+    messages.scrollTop=messages.scrollHeight;
+    return el;
+  }
+  launcher.addEventListener('click',()=>toggle(!windowEl.classList.contains('open')));
+  close.addEventListener('click',()=>toggle(false));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')toggle(false)});
+  quick.addEventListener('click',e=>{
+    const b=e.target.closest('[data-prompt]');
+    if(b){input.value=b.dataset.prompt;form.requestSubmit();}
+  });
+  input.addEventListener('keydown',e=>{
+    if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();form.requestSubmit();}
+  });
+  form.addEventListener('submit',e=>{
+    e.preventDefault();
+    const text=input.value.trim();
+    if(!text||send.disabled)return;
+    addMessage(text,'user');
+    input.value='';
+    send.disabled=true;
+    addMessage(localHelpReply(text),'bot');
+    send.disabled=false;
+    input.focus();
   });
 })();
 </script>
