@@ -837,7 +837,7 @@ function renderPdfPagesAsImages(){
       if(!response.ok||typeof data.reply!=='string'||!data.reply.trim())throw new Error(data.error||'No valid response from chat service');
       showReply(data.reply.trim(),data.mode);
     }catch(err){
-      const message = err && err.message === 'The operation was aborted.'
+      const message = err && (err.name === 'AbortError' || err.message === 'The operation was aborted.')
         ? 'The AI service took too long to respond. Please try again.'
         : (err && err.message && err.message !== 'Failed to fetch'
           ? err.message
