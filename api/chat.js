@@ -51,7 +51,9 @@ module.exports = async function handler(req, res) {
 
     const key = process.env.OPENAI_API_KEY;
     if (!key) {
-      return res.status(200).json({ reply: builtInReply(lastUser.content), mode: 'built-in' });
+      return res.status(503).json({
+        error: 'The AI backend is not configured yet. Add OPENAI_API_KEY in Vercel → Project Settings → Environment Variables, then redeploy.'
+      });
     }
 
     const upstream = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -61,17 +63,23 @@ module.exports = async function handler(req, res) {
     });
     const data = await upstream.json().catch(() => ({}));
     if (!upstream.ok) {
-      console.error('OpenAI request failed:', upstream.status);
-      // Fall back to helpful product support if the API key or API account isn't ready.
-      return res.status(200).json({ reply: builtInReply(lastUser.content), mode: 'built-in' });
+      console.error('OpenAI request failed:', upstream.status, data && data.error && data.error.code);
+      const code = data && data.error && data.error.code;
+      let message = 'The AI service could not complete the request. Please try again in a moment.';
+      if (upstream.status === 401 || upstream.status === 403) {
+        message = 'The AI backend key is invalid or does not have permission. Check OPENAI_API_KEY in Vercel and redeploy.';
+      } else if (upstream.status === 429 || code === 'insufficient_quota') {
+        message = 'The AI backend is connected, but the OpenAI API account has reached its usage limit or needs billing enabled.';
+      }
+      return res.status(502).json({ error: message });
     }
     const reply = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
     if (typeof reply !== 'string' || !reply.trim()) {
-      return res.status(200).json({ reply: builtInReply(lastUser.content), mode: 'built-in' });
+      return res.status(502).json({ error: 'The AI service returned an empty response. Please try again.' });
     }
     return res.status(200).json({ reply: reply.trim(), mode: 'openai' });
   } catch (error) {
     console.error('SizeItNow chat handler error:', error && error.message);
-    return res.status(400).json({ error: 'I could not read that message. Please try again.' });
+    return res.status(500).json({ error: 'The chat service encountered a server error. Please try again.' });
   }
 };
