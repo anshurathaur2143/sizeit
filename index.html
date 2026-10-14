@@ -353,7 +353,7 @@ main>*{position:relative}
 @media(max-width:620px){.hero-visual.hero-3d-art{height:285px;min-height:250px;width:100%;max-width:420px}.hero-3d-svg{width:110%;max-width:none;margin-left:-5%}}
 @media(prefers-reduced-motion:reduce){.hero-3d-svg{animation:none!important}}
 
-</style>
+.quick-tools{max-width:1120px;margin:0 auto 28px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.quick-tool{display:flex;flex-direction:column;align-items:flex-start;gap:10px;min-height:190px;padding:20px;text-decoration:none;color:#101828;background:#fff;border:1px solid #e2e8f0;border-radius:18px;box-shadow:0 10px 30px #1018280a;transition:.2s}.quick-tool:hover{transform:translateY(-5px);box-shadow:0 18px 38px #2563eb1c;border-color:#a9c5ff}.quick-tool-icon{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font-size:25px;color:white;background:linear-gradient(135deg,#4f46e5,#2563eb)}.resize-icon{background:linear-gradient(135deg,#06b6d4,#2563eb)}.pdf-icon{background:linear-gradient(135deg,#8b5cf6,#ec4899)}.pdf-image-icon{background:linear-gradient(135deg,#fb7185,#e11d48)}.quick-tool strong{font-size:16px}.quick-tool>span:not(.quick-tool-icon){font-size:13px;line-height:1.5;color:#667085;flex:1}.quick-tool b{font-size:12px;color:#2456d8}.resize-tool{max-width:940px;margin:0 auto 38px;padding:24px;background:#fff;border:1px solid #e2e8f0;border-radius:20px;box-shadow:0 18px 50px #1018280f;scroll-margin-top:24px}.resize-tool h2{font-size:27px;margin:0 0 8px}.resize-tool>p{color:#667085;font-size:14px;line-height:1.6}.resize-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}.resize-upload{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:120px;border:2px dashed #b8cdf7;background:#f8fbff;border-radius:14px;cursor:pointer;text-align:center;padding:18px}.resize-upload small{color:#667085}.resize-tool input[type=file]{display:none}.resize-dimensions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:17px}.resize-dimensions label,.resize-label{display:flex;flex-direction:column;gap:7px;font-size:12px;font-weight:750;color:#344054}.resize-dimensions input,.resize-label select{width:100%;padding:11px;border:1px solid #d0d5dd;border-radius:9px;background:white;color:#101828;font:inherit}.resize-check{display:flex;align-items:center;gap:8px;margin:14px 0;font-size:13px}.resize-label select{margin-top:8px}.resize-tool .primary{margin-top:14px}.resize-preview{min-height:280px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px;border-radius:14px;background:#f4f8ff;border:1px solid #e5edfa;color:#667085;font-size:13px;text-align:center;overflow:hidden}.resize-preview img{display:none;max-width:100%;max-height:320px;object-fit:contain}.resize-preview #resizePreviewMeta{font-size:12px}@media(max-width:850px){.quick-tools{grid-template-columns:repeat(2,minmax(0,1fr));max-width:650px}.resize-grid{grid-template-columns:1fr}}@media(max-width:480px){.quick-tools{gap:9px;padding:0 10px}.quick-tool{padding:14px;min-height:175px}.quick-tool strong{font-size:14px}.resize-tool{padding:16px;margin:0 12px 30px}.resize-tool h2{font-size:23px}}</style>
 </head>
 <body>
 <header id="top">
@@ -446,7 +446,13 @@ main>*{position:relative}
       </svg>
     </div>
   </section>
-  <section class="workspace" aria-label="Image compressor">
+  <section class="quick-tools" aria-label="Choose an image tool">
+<a class="quick-tool" href="#workspace"><span class="quick-tool-icon">⇣</span><strong>Compress Image</strong><span>Reduce photo size to your target KB.</span><b>Open tool →</b></a>
+<a class="quick-tool" href="#resizeTool"><span class="quick-tool-icon resize-icon">↗</span><strong>Resize Image</strong><span>Set exact width and height in pixels.</span><b>Open tool →</b></a>
+<a class="quick-tool" href="pdf.html#multiPdfPanel"><span class="quick-tool-icon pdf-icon">▤</span><strong>Image to PDF</strong><span>Combine photos into one PDF file.</span><b>Open tool →</b></a>
+<a class="quick-tool" href="pdf.html#pdfToImagesPanel"><span class="quick-tool-icon pdf-image-icon">▧</span><strong>PDF to Image</strong><span>Convert PDF pages to PNG, JPG or WebP.</span><b>Open tool →</b></a>
+</section>
+<section class="workspace" id="workspace" aria-label="Image compressor">
     <div class="left">
       <div class="drop" id="drop">
         <div class="uploadicon" id="dropIcon">⇧</div>
@@ -532,6 +538,13 @@ main>*{position:relative}
     </aside>
   </section>
 </main>
+<section class="resize-tool" id="resizeTool">
+<h2>Resize an image</h2><p>Choose a photo, set exact dimensions, preview and download. Your image is processed in your browser.</p>
+<div class="resize-grid"><div><label class="resize-upload" for="resizeFile"><strong id="resizeFileName">＋ Choose an image</strong><small>JPG, PNG or WebP</small></label><input id="resizeFile" type="file" accept="image/jpeg,image/png,image/webp">
+<div class="resize-dimensions"><label>Width (px)<input id="resizeWidth" type="number" min="1" max="12000" value="800"></label><label>Height (px)<input id="resizeHeight" type="number" min="1" max="12000" value="600"></label></div>
+<label class="resize-check"><input id="resizeKeepRatio" type="checkbox" checked> Keep aspect ratio</label><label class="resize-label">Output format<select id="resizeFormat"><option value="image/jpeg">JPG</option><option value="image/png">PNG</option><option value="image/webp">WebP</option></select></label>
+<button class="primary" id="resizeDownload" type="button" disabled>Resize &amp; Download</button><p id="resizeStatus" role="status">Choose an image to begin.</p></div>
+<div class="resize-preview"><div id="resizePreviewEmpty">Your image preview will appear here</div><img id="resizePreview" alt="Selected image preview"><div id="resizePreviewMeta"></div></div></div></section>
 <section class="features" id="how">
   <div class="feature"><div class="icon">ϟ</div><div><strong>Fast &amp; Easy</strong><p>Simple steps, get your image compressed in seconds.</p></div></div>
   <div class="feature"><div class="icon">◇</div><div><strong>Quality Aware</strong><p>Choose your target size and preview the result before downloading.</p></div></div>
@@ -1049,5 +1062,5 @@ function renderPdfPagesAsImages(){
 })();
 </script>
 
-</body>
+<script>(function(){const fi=document.getElementById('resizeFile'),nm=document.getElementById('resizeFileName'),w=document.getElementById('resizeWidth'),h=document.getElementById('resizeHeight'),keep=document.getElementById('resizeKeepRatio'),fmt=document.getElementById('resizeFormat'),btn=document.getElementById('resizeDownload'),status=document.getElementById('resizeStatus'),prev=document.getElementById('resizePreview'),empty=document.getElementById('resizePreviewEmpty'),meta=document.getElementById('resizePreviewMeta');let img=null,url=null,ar=4/3,base='image';fi.addEventListener('change',()=>{const f=fi.files&&fi.files[0];if(!f)return;if(!f.type.startsWith('image/')){status.textContent='Choose a valid image file.';return;}if(url)URL.revokeObjectURL(url);url=URL.createObjectURL(f);base=f.name.replace(/\.[^.]+$/,'')||'image';img=new Image();img.onload=()=>{ar=img.naturalWidth/img.naturalHeight;w.value=img.naturalWidth;h.value=img.naturalHeight;nm.textContent=f.name;prev.src=url;prev.style.display='block';empty.style.display='none';meta.textContent=img.naturalWidth+' × '+img.naturalHeight+' px';btn.disabled=false;status.textContent='Image ready. Set your required dimensions.';};img.onerror=()=>{status.textContent='Unable to read this image.';};img.src=url;});w.addEventListener('input',()=>{if(keep.checked&&img&&+w.value>0)h.value=Math.max(1,Math.round(+w.value/ar));});h.addEventListener('input',()=>{if(keep.checked&&img&&+h.value>0)w.value=Math.max(1,Math.round(+h.value*ar));});btn.addEventListener('click',()=>{if(!img)return;const W=Math.round(+w.value),H=Math.round(+h.value);if(!W||!H||W>12000||H>12000){status.textContent='Enter width and height between 1 and 12,000 pixels.';return;}btn.disabled=true;const c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');if(fmt.value==='image/jpeg'){x.fillStyle='#fff';x.fillRect(0,0,W,H);}x.drawImage(img,0,0,W,H);c.toBlob(b=>{if(!b){status.textContent='Export failed. Try JPG or PNG.';btn.disabled=false;return;}const ext=fmt.value==='image/jpeg'?'jpg':fmt.value==='image/webp'?'webp':'png',u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=base+'-'+W+'x'+H+'.'+ext;a.click();setTimeout(()=>URL.revokeObjectURL(u),10000);status.textContent='✓ Downloaded '+W+' × '+H+' px · '+(b.size/1024).toFixed(1)+' KB';btn.disabled=false;},fmt.value,.92);});})();</script></body>
 </html>
