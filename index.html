@@ -356,15 +356,18 @@ main>*{position:relative}
 .quick-tools{max-width:1120px;margin:0 auto 28px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.quick-tool{display:flex;flex-direction:column;align-items:flex-start;gap:10px;min-height:190px;padding:20px;text-decoration:none;color:#101828;background:#fff;border:1px solid #e2e8f0;border-radius:18px;box-shadow:0 10px 30px #1018280a;transition:.2s}.quick-tool:hover{transform:translateY(-5px);box-shadow:0 18px 38px #2563eb1c;border-color:#a9c5ff}.quick-tool-icon{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font-size:25px;color:white;background:linear-gradient(135deg,#4f46e5,#2563eb)}.resize-icon{background:linear-gradient(135deg,#06b6d4,#2563eb)}.pdf-icon{background:linear-gradient(135deg,#8b5cf6,#ec4899)}.pdf-image-icon{background:linear-gradient(135deg,#fb7185,#e11d48)}.quick-tool strong{font-size:16px}.quick-tool>span:not(.quick-tool-icon){font-size:13px;line-height:1.5;color:#667085;flex:1}.quick-tool b{font-size:12px;color:#2456d8}.resize-tool{max-width:940px;margin:0 auto 38px;padding:24px;background:#fff;border:1px solid #e2e8f0;border-radius:20px;box-shadow:0 18px 50px #1018280f;scroll-margin-top:24px}.resize-tool h2{font-size:27px;margin:0 0 8px}.resize-tool>p{color:#667085;font-size:14px;line-height:1.6}.resize-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}.resize-upload{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:120px;border:2px dashed #b8cdf7;background:#f8fbff;border-radius:14px;cursor:pointer;text-align:center;padding:18px}.resize-upload small{color:#667085}.resize-tool input[type=file]{display:none}.resize-dimensions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:17px}.resize-dimensions label,.resize-label{display:flex;flex-direction:column;gap:7px;font-size:12px;font-weight:750;color:#344054}.resize-dimensions input,.resize-label select{width:100%;padding:11px;border:1px solid #d0d5dd;border-radius:9px;background:white;color:#101828;font:inherit}.resize-check{display:flex;align-items:center;gap:8px;margin:14px 0;font-size:13px}.resize-label select{margin-top:8px}.resize-tool .primary{margin-top:14px}.resize-preview{min-height:280px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px;border-radius:14px;background:#f4f8ff;border:1px solid #e5edfa;color:#667085;font-size:13px;text-align:center;overflow:hidden}.resize-preview img{display:none;max-width:100%;max-height:320px;object-fit:contain}.resize-preview #resizePreviewMeta{font-size:12px}@media(max-width:850px){.quick-tools{grid-template-columns:repeat(2,minmax(0,1fr));max-width:650px}.resize-grid{grid-template-columns:1fr}}@media(max-width:480px){.quick-tools{gap:9px;padding:0 10px}.quick-tool{padding:14px;min-height:175px}.quick-tool strong{font-size:14px}.resize-tool{padding:16px;margin:0 12px 30px}.resize-tool h2{font-size:23px}}</style>
 
 <style id="sizeit-smoothness">
+/* Keep feedback responsive without animating the entire document on every navigation. */
 :root{scroll-behavior:smooth}
 @media (prefers-reduced-motion:no-preference){
-  body{animation:sizeitPageEnter .28s cubic-bezier(.22,.61,.36,1) both;transition:opacity .18s ease,transform .18s ease}
-  body.sizeit-page-leaving{opacity:0;transform:translateY(4px);pointer-events:none}
-  a,button,[role="button"],input,select,textarea,.feature,.tool-card,.pdf-tool{transition:color .18s ease,background-color .18s ease,border-color .18s ease,box-shadow .18s ease,opacity .18s ease,transform .18s ease}
-  button:active,[role="button"]:active{transform:scale(.985)}
+  a,button,[role="button"],input,select,textarea,.feature,.tool-card,.pdf-tool{
+    transition:color .16s ease,background-color .16s ease,border-color .16s ease,box-shadow .16s ease,opacity .16s ease,transform .16s ease
+  }
+  button:active,[role="button"]:active{transform:scale(.99)}
 }
-@keyframes sizeitPageEnter{from{opacity:.0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-@media (prefers-reduced-motion:reduce){:root{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+@media (prefers-reduced-motion:reduce){
+  :root{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
+}
 </style>
 </head>
 <body>
@@ -1075,22 +1078,6 @@ function renderPdfPagesAsImages(){
 </script>
 
 <script>(function(){const fi=document.getElementById('resizeFile'),nm=document.getElementById('resizeFileName'),w=document.getElementById('resizeWidth'),h=document.getElementById('resizeHeight'),keep=document.getElementById('resizeKeepRatio'),fmt=document.getElementById('resizeFormat'),btn=document.getElementById('resizeDownload'),status=document.getElementById('resizeStatus'),prev=document.getElementById('resizePreview'),empty=document.getElementById('resizePreviewEmpty'),meta=document.getElementById('resizePreviewMeta');let img=null,url=null,ar=4/3,base='image';fi.addEventListener('change',()=>{const f=fi.files&&fi.files[0];if(!f)return;if(!f.type.startsWith('image/')){status.textContent='Choose a valid image file.';return;}if(url)URL.revokeObjectURL(url);url=URL.createObjectURL(f);base=f.name.replace(/\.[^.]+$/,'')||'image';img=new Image();img.onload=()=>{ar=img.naturalWidth/img.naturalHeight;w.value=img.naturalWidth;h.value=img.naturalHeight;nm.textContent=f.name;prev.src=url;prev.style.display='block';empty.style.display='none';meta.textContent=img.naturalWidth+' × '+img.naturalHeight+' px';btn.disabled=false;status.textContent='Image ready. Set your required dimensions.';};img.onerror=()=>{status.textContent='Unable to read this image.';};img.src=url;});w.addEventListener('input',()=>{if(keep.checked&&img&&+w.value>0)h.value=Math.max(1,Math.round(+w.value/ar));});h.addEventListener('input',()=>{if(keep.checked&&img&&+h.value>0)w.value=Math.max(1,Math.round(+h.value*ar));});btn.addEventListener('click',()=>{if(!img)return;const W=Math.round(+w.value),H=Math.round(+h.value);if(!W||!H||W>12000||H>12000){status.textContent='Enter width and height between 1 and 12,000 pixels.';return;}btn.disabled=true;const c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');if(fmt.value==='image/jpeg'){x.fillStyle='#fff';x.fillRect(0,0,W,H);}x.drawImage(img,0,0,W,H);c.toBlob(b=>{if(!b){status.textContent='Export failed. Try JPG or PNG.';btn.disabled=false;return;}const ext=fmt.value==='image/jpeg'?'jpg':fmt.value==='image/webp'?'webp':'png',u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=base+'-'+W+'x'+H+'.'+ext;a.click();setTimeout(()=>URL.revokeObjectURL(u),10000);status.textContent='✓ Downloaded '+W+' × '+H+' px · '+(b.size/1024).toFixed(1)+' KB';btn.disabled=false;},fmt.value,.92);});})();</script>
-<script id="sizeit-smooth-navigation">
-(function(){
-  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(reduced)return;
-  document.addEventListener('click',function(event){
-    if(event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
-    const link=event.target.closest('a[href]');
-    if(!link||link.target==='_blank'||link.hasAttribute('download')||link.dataset.noTransition!==undefined)return;
-    let target;
-    try{target=new URL(link.href,window.location.href)}catch(_){return}
-    if(target.origin!==window.location.origin||target.pathname===window.location.pathname&&target.search===window.location.search)return;
-    event.preventDefault();
-    document.body.classList.add('sizeit-page-leaving');
-    window.setTimeout(function(){window.location.href=target.href},180);
-  });
-})();
-</script>
+<!-- Native browser navigation avoids artificial delays and full-page fade jitter. -->
 </body>
 </html>
