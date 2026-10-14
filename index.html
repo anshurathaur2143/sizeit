@@ -325,6 +325,24 @@ button:active,.primary:active,.secondary:active{transform:translateY(0) scale(.9
 @media(max-width:420px){.preview-head{align-items:flex-start}.preview-status{padding:6px 8px}.imagebox{height:190px}.stats{grid-template-columns:1fr}.stat-reduction{grid-column:auto}.preview-foot{font-size:8px}}
 @media(prefers-reduced-motion:reduce){.stat,.download{transition:none!important}}
 
+
+/* Product launch motion layer: visible depth, scroll progress, and gentle reveals */
+#sizeitScrollProgress{position:fixed;inset:0 auto auto 0;height:3px;width:0;z-index:9999;background:linear-gradient(90deg,#22d3ee,#635bff 48%,#ec4899);box-shadow:0 0 14px rgba(99,91,255,.45);pointer-events:none;transform-origin:left center}
+body{isolation:isolate}
+main{isolation:isolate}
+main:after{content:"";position:absolute;z-index:0;pointer-events:none;inset:0;background:radial-gradient(ellipse at calc(12% + var(--depth-x,0px)) calc(20% + var(--depth-y,0px)),rgba(139,92,246,.13),transparent 34%),radial-gradient(ellipse at calc(90% - var(--depth-x,0px)) calc(34% - var(--depth-y,0px)),rgba(34,211,238,.12),transparent 32%);opacity:.8}
+main>*{position:relative}
+.hero-visual.studio-visual{transform-style:preserve-3d;will-change:transform}
+.studio-card{will-change:translate,box-shadow;transition:translate .22s ease,box-shadow .22s ease}
+.studio-visual:has(.studio-card):hover .card-front{box-shadow:0 34px 85px rgba(70,52,165,.26)}
+.studio-chip{transition:translate .22s ease,box-shadow .22s ease}
+.feature{transform-style:preserve-3d;transition:transform .28s ease,box-shadow .28s ease,border-color .28s ease}
+.feature:hover{border-color:rgba(139,92,246,.38)}
+[data-depth-reveal]{opacity:0;transform:translateY(26px) rotateX(3deg);transform-origin:50% 0;transition:opacity .65s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+[data-depth-reveal].depth-visible{opacity:1;transform:translateY(0) rotateX(0)}
+@media(max-width:620px){[data-depth-reveal]{transform:translateY(16px)}}
+@media(prefers-reduced-motion:reduce){[data-depth-reveal]{opacity:1;transform:none;transition:none}#sizeitScrollProgress{display:none}.studio-card,.studio-chip,.feature{transition:none!important}}
+
 </style>
 </head>
 <body>
@@ -884,5 +902,76 @@ function renderPdfPagesAsImages(){
 })();
 })();
 </script>
+
+<script>
+(function(){
+  const progress=document.createElement('div');
+  progress.id='sizeitScrollProgress';
+  progress.setAttribute('aria-hidden','true');
+  document.body.prepend(progress);
+  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let framePending=false;
+  function updateScroll(){
+    const doc=document.documentElement;
+    const max=Math.max(1,doc.scrollHeight-window.innerHeight);
+    progress.style.width=Math.min(100,Math.max(0,(window.scrollY/max)*100))+'%';
+    if(!reduced){
+      doc.style.setProperty('--depth-y',Math.round((window.scrollY%700)*.045)+'px');
+      doc.style.setProperty('--depth-x',Math.round(Math.sin(window.scrollY*.0015)*18)+'px');
+    }
+    framePending=false;
+  }
+  window.addEventListener('scroll',function(){
+    if(!framePending){framePending=true;requestAnimationFrame(updateScroll);}
+  },{passive:true});
+  window.addEventListener('resize',updateScroll,{passive:true});
+  updateScroll();
+
+  const revealSelector='main section, main .feature, main .multi-pdf, #faq, #about, .pdf-tool, .tool-card, .tool-panel';
+  const targets=Array.from(document.querySelectorAll(revealSelector)).filter(el=>!el.closest('.hero'));
+  if(reduced||!('IntersectionObserver' in window)){
+    targets.forEach(el=>el.classList.add('depth-visible'));
+  }else{
+    targets.forEach(el=>el.setAttribute('data-depth-reveal',''));
+    const observer=new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.classList.add('depth-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    },{threshold:.08,rootMargin:'0px 0px -24px 0px'});
+    targets.forEach(el=>observer.observe(el));
+  }
+
+  if(!reduced&&window.matchMedia('(hover: hover) and (pointer: fine)').matches){
+    document.querySelectorAll('.studio-visual').forEach(visual=>{
+      const cards=visual.querySelectorAll('.studio-card');
+      visual.addEventListener('pointermove',event=>{
+        const rect=visual.getBoundingClientRect();
+        const x=(event.clientX-rect.left)/rect.width-.5;
+        const y=(event.clientY-rect.top)/rect.height-.5;
+        cards.forEach((card,index)=>{
+          const strength=index===0?10:15;
+          card.style.translate=(x*strength)+'px '+(y*strength)+'px';
+        });
+      });
+      visual.addEventListener('pointerleave',()=>{
+        cards.forEach(card=>{card.style.translate='0px 0px';});
+      });
+    });
+    document.querySelectorAll('.feature').forEach(card=>{
+      card.addEventListener('pointermove',event=>{
+        const rect=card.getBoundingClientRect();
+        const x=(event.clientX-rect.left)/rect.width-.5;
+        const y=(event.clientY-rect.top)/rect.height-.5;
+        card.style.transform='perspective(700px) rotateX('+(-y*3)+'deg) rotateY('+(x*3)+'deg) translateY(-3px)';
+      });
+      card.addEventListener('pointerleave',()=>{card.style.transform='';});
+    });
+  }
+})();
+</script>
+
 </body>
 </html>
