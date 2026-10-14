@@ -806,6 +806,17 @@ function renderPdfPagesAsImages(){
   const launcher=document.getElementById('aiLauncher'),windowEl=document.getElementById('aiWindow'),close=document.getElementById('aiClose');
   const form=document.getElementById('aiForm'),input=document.getElementById('aiInput'),messages=document.getElementById('aiMessages'),send=document.getElementById('aiSend'),quick=document.getElementById('aiQuick');
   const history=[];
+
+  function localHelpReply(message){
+    const q=String(message||'').toLowerCase();
+    if(/\b(hello|hi|hey|who are you|what can you do|help)\b/.test(q))return 'Hi! I’m SizeItNow Helper. I can guide you through image compression, choosing JPG/PNG/WebP, image quality, and PDF conversion. What are you trying to do?';
+    if(/\b(50\s?kb|20\s?kb|100\s?kb|200\s?kb|compress|compression|target size|reduce size)\b/.test(q))return 'To compress an image: select it, choose a target such as 50 KB, select JPG or WebP for smaller files (PNG is lossless and may remain larger), choose a quality setting, then click Compress Image. Very small targets can affect clarity.';
+    if(/\b(jpg|jpeg|png|webp|format|file type)\b/.test(q))return 'JPG is usually good for photos, PNG is best for transparency and sharp graphics, and WebP often gives a smaller file with good visual quality. Use the format required by the website or form you are uploading to.';
+    if(/\b(pdf|convert|page|pages)\b/.test(q))return 'To convert PDF pages to images, open the PDF tools, select your PDF, choose PNG or JPG, and convert. Download each page separately. To create a PDF, select multiple images in the image-to-PDF tool and click Create PDF.';
+    if(/\b(quality|blurry|clear|resolution|pixel|dimension|resize|crop)\b/.test(q))return 'For clearer results, choose High quality and keep the Original frame unless you need specific dimensions. If the target size is very small, increase the target KB or use WebP/JPG to retain more detail.';
+    if(/\b(upload|uploaded|file name|not showing|not working|error|problem|issue|failed|stuck|download)\b/.test(q))return 'Try refreshing the page and selecting a JPG, PNG, or WebP image again. Wait for the uploaded filename/status before compressing. If download fails, check browser download permissions or try another browser. The image tools process files in your browser.';
+    return 'I can help with image compression, target KB sizes, JPG/PNG/WebP, image quality and dimensions, creating PDFs, and converting PDF pages into images. Ask a specific question about one of these tools and I’ll guide you step by step.';
+  }
   function toggle(open){windowEl.classList.toggle('open',open);launcher.setAttribute('aria-expanded',String(open));if(open)setTimeout(()=>input.focus(),80)}
   function addMessage(text,role){const el=document.createElement('div');el.className='ai-msg '+role;el.textContent=text;messages.appendChild(el);messages.scrollTop=messages.scrollHeight;return el}
   launcher.addEventListener('click',()=>toggle(!windowEl.classList.contains('open')));close.addEventListener('click',()=>toggle(false));
@@ -821,7 +832,7 @@ function renderPdfPagesAsImages(){
       const data=await response.json();typing.remove();
       if(!response.ok)throw new Error(data.error||'The assistant is temporarily unavailable.');
       const reply=data.reply||'Sorry, I could not create a response. Please try again.';const modeLabel=document.getElementById('aiModeLabel');if(modeLabel)modeLabel.textContent=data.mode==='openai'?'Powered by OpenAI · AI responses':'Built-in help · Always available';addMessage(reply,'bot');history.push({role:'assistant',content:reply});
-    }catch(err){typing.remove();addMessage(err.message||'I could not connect right now. Please try again in a moment.','bot');history.pop()}
+    }catch(err){typing.remove();const reply=localHelpReply(text);const modeLabel=document.getElementById('aiModeLabel');if(modeLabel)modeLabel.textContent='Built-in help · Always available';addMessage(reply,'bot');history.push({role:'assistant',content:reply})}
     finally{send.disabled=false;input.focus()}
   });
 })();
