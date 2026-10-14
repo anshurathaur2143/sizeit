@@ -807,37 +807,37 @@ function renderPdfPagesAsImages(){
   const form=document.getElementById('aiForm'),input=document.getElementById('aiInput'),messages=document.getElementById('aiMessages'),send=document.getElementById('aiSend'),quick=document.getElementById('aiQuick');
   function localHelpReply(message){
     const q=String(message||'').toLowerCase().trim();
-    if(/\\b(who built|who created|creator|developer|made this|built this|who made|owner)\\b/.test(q)){
+    if(/\b(who built|who created|creator|developer|made this|built this|who made|owner)\b/.test(q)){
       return 'SizeItNow was built by Anshu Rathaur. It is designed to make everyday image tasks simple: compress photos, resize images, and convert images and PDF pages. I’m the built-in website helper, not a live human support agent.';
     }
-    if(/\\b(who am i|my name|do you know me)\\b/.test(q)){
+    if(/\b(who am i|my name|do you know me)\b/.test(q)){
       return 'I can’t identify visitors or see personal account details. If you mean who built SizeItNow, it was created by Anshu Rathaur.';
     }
-    if(/\\b(hello|hi|hey|good morning|good evening)\\b/.test(q)){
+    if(/\b(hello|hi|hey|good morning|good evening)\b/.test(q)){
       return 'Hello! 👋 I can guide you through reducing photo size, resizing images, creating PDFs, converting PDF pages to images, and choosing image formats. What would you like to do?';
     }
-    if(/\\b(make|create|combine|convert|turn).{0,35}\\b(pdf)\\b|\\b(image to pdf|photos to pdf|pictures to pdf)\\b/.test(q)){
+    if(/\b(make|create|combine|convert|turn).{0,35}\b(pdf)\b|\b(image to pdf|photos to pdf|pictures to pdf)\b/.test(q)){
       return 'To make a PDF from images: open the “Combine images into one PDF” tool, select the pictures you want, arrange them in the order you need, then choose Create PDF and download the result. If you meant converting a PDF into images, open the PDF-to-images tool, select the PDF, choose JPG or PNG, and convert.';
     }
-    if(/\\b(pdf to image|pdf pages|convert pdf|extract pages)\\b/.test(q)){
+    if(/\b(pdf to image|pdf pages|convert pdf|extract pages)\b/.test(q)){
       return 'To convert a PDF into images: open the PDF-to-images tool, choose your PDF file, select JPG or PNG and the quality you want, then click Convert. Each page can be downloaded as its own image.';
     }
-    if(/\\b(resize|dimensions|pixel|width|height|crop|square|portrait)\\b/.test(q)){
+    if(/\b(resize|dimensions|pixel|width|height|crop|square|portrait)\b/.test(q)){
       return 'To resize an image: select your photo in the image tool, find the frame or dimensions settings, and choose Original, Square, Portrait, or Custom if available. For Custom, enter the required width and height in pixels. Preview the result before downloading.';
     }
-    if(/\\b(20\\s?kb|50\\s?kb|100\\s?kb|200\\s?kb|compress|compression|reduce|smaller|file size|photo size|image size)\\b/.test(q)){
+    if(/\b(20\s?kb|50\s?kb|100\s?kb|200\s?kb|compress|compression|reduce|smaller|file size|photo size|image size)\b/.test(q)){
       return 'To reduce a photo’s file size: select your image, choose a target such as 50 KB or enter a custom KB size, pick JPG or WebP for photos when suitable, set quality, then click Compress Image. If the result looks blurry, raise the target size or quality. PNG files can remain larger, especially for photographs.';
     }
-    if(/\\b(jpg|jpeg|png|webp|format|file type|transparent)\\b/.test(q)){
+    if(/\b(jpg|jpeg|png|webp|format|file type|transparent)\b/.test(q)){
       return 'JPG is usually best for photographs and smaller files. PNG is useful for sharp graphics and transparency but can be larger. WebP often gives a good balance of quality and file size. If a website asks for a specific format, use that format.';
     }
-    if(/\\b(private|privacy|secure|stored|upload to server)\\b/.test(q)){
+    if(/\b(private|privacy|secure|stored|upload to server)\b/.test(q)){
       return 'SizeItNow’s image processing tools are designed to process your files in your browser. I can’t inspect your files, and you should never share passwords or sensitive personal information in this chat.';
     }
-    if(/\\b(contact|support|email|report a problem|bug)\\b/.test(q)){
+    if(/\b(contact|support|email|report a problem|bug)\b/.test(q)){
       return 'If you need help with a problem the on-page guidance can’t solve, contact iamanshuthakur@gmail.com and describe what you were doing and what happened. Don’t include passwords or sensitive information.';
     }
-    if(/\\b(what is sizeitnow|about sizeitnow|what does this website do|purpose)\\b/.test(q)){
+    if(/\b(what is sizeitnow|about sizeitnow|what does this website do|purpose)\b/.test(q)){
       return 'SizeItNow is a simple online toolkit for compressing photos to a target file size, resizing images, choosing common image formats, combining images into a PDF, and converting PDF pages into images.';
     }
     return 'I can help with these SizeItNow features: reducing a photo to a target KB size, resizing dimensions, choosing JPG/PNG/WebP, making a PDF from images, converting PDF pages into images, and basic troubleshooting. Try asking “How do I reduce a photo to 50 KB?” or “How do I make a PDF?”';
