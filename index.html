@@ -384,6 +384,26 @@ main>*{position:relative}
 }
 </style>
 
+
+<style id="sizeit-functional-home">
+/* Put the real tool first; remove decorative hero art and excess empty space. */
+.hero.hero-compact{display:block;min-height:0;max-width:1120px;margin:0 auto 22px;text-align:left}
+.hero.hero-compact .hero-copy{padding:0;max-width:780px}
+.hero.hero-compact .eyebrow{margin-bottom:12px}
+.hero.hero-compact h1{font-size:clamp(30px,4vw,48px);line-height:1.08;letter-spacing:-1.8px;margin-bottom:10px}
+.hero.hero-compact p{max-width:720px;font-size:15px;line-height:1.6}
+.hero-visual,.studio-visual,.hero-3d-art,.hero-3d-svg,.hero-orb-fallback,.studio-glow,.studio-card,.studio-chip,.studio-orbit,.studio-spark{display:none!important}
+main{padding-top:28px!important;padding-bottom:30px!important}
+.workspace{margin-top:0!important}
+.quick-tools{margin-top:26px!important}
+@media(max-width:760px){
+ main{padding:20px 12px 26px!important}
+ .hero.hero-compact{margin-bottom:16px}
+ .hero.hero-compact h1{font-size:clamp(29px,8vw,38px);letter-spacing:-1.2px}
+ .hero.hero-compact p{font-size:14px}
+ .workspace{grid-template-columns:minmax(0,1fr)!important}
+}
+</style>
 </head>
 <body>
 <header id="top">
@@ -391,98 +411,14 @@ main>*{position:relative}
   <nav class="site-nav"><a href="index.html">Home</a><a class="pdf-nav" href="pdf.html" aria-label="Open PDF tools">PDF</a><a href="#how">How It Works</a><a href="#faq">FAQ</a><a href="#about">About &amp; Support</a></nav>
 </header>
 <main id="home">
-  <section class="hero">
+  <section class="hero hero-compact">
     <div class="hero-copy">
-      <div class="eyebrow">Your all-in-one image studio</div>
-      <h1>Make every image<br><span>fit perfectly.</span></h1>
-      <p>Compress to your target KB, resize for any platform, or turn images and PDFs into the format you need — all in one colorful, privacy-first workspace.</p>
-    </div>
-    <div class="hero-visual studio-visual hero-3d-art" role="img" aria-label="3D illustration of an image being compressed into a smaller file, with floating JPG, PNG, WebP and PDF tiles">
-      <svg class="hero-3d-svg" viewBox="0 0 680 470" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <defs>
-          <linearGradient id="stageTop" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#72f4ff"/><stop offset=".48" stop-color="#746bff"/><stop offset="1" stop-color="#fa78ed"/></linearGradient>
-          <linearGradient id="stageSide" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#8a75ff"/><stop offset="1" stop-color="#3729bd"/></linearGradient>
-          <linearGradient id="imageBlue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9deaff"/><stop offset=".55" stop-color="#43a6ff"/><stop offset="1" stop-color="#5b5bfa"/></linearGradient>
-          <linearGradient id="imageBlueSmall" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a7f6ff"/><stop offset="1" stop-color="#388cff"/></linearGradient>
-          <linearGradient id="purpleTile" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d15cff"/><stop offset="1" stop-color="#6335f5"/></linearGradient>
-          <linearGradient id="cyanTile" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#27e9f4"/><stop offset="1" stop-color="#087be9"/></linearGradient>
-          <linearGradient id="greenTile" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#55f5d3"/><stop offset="1" stop-color="#00a88e"/></linearGradient>
-          <linearGradient id="pdfTile" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff6eaa"/><stop offset="1" stop-color="#f02961"/></linearGradient>
-          <linearGradient id="arrowGrad" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#8c5bff"/><stop offset="1" stop-color="#15c9ff"/></linearGradient>
-          <filter id="shadow" x="-40%" y="-40%" width="180%" height="190%"><feDropShadow dx="0" dy="16" stdDeviation="13" flood-color="#5144c9" flood-opacity=".24"/></filter>
-          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="19"/></filter>
-        </defs>
-        <ellipse cx="350" cy="400" rx="250" ry="35" fill="#8c67ff" opacity=".18" filter="url(#glow)"/>
-        <ellipse cx="355" cy="389" rx="250" ry="29" fill="none" stroke="#7cecff" stroke-width="2" opacity=".65"/>
-        <ellipse cx="355" cy="395" rx="208" ry="22" fill="none" stroke="#d6a4ff" stroke-width="2" opacity=".85"/>
-        <!-- Floating original image card -->
-        <g filter="url(#shadow)" transform="translate(112 85) rotate(-11 125 130)">
-          <rect x="13" y="15" width="245" height="270" rx="25" fill="#6559ec" opacity=".45"/>
-          <rect x="0" y="0" width="245" height="270" rx="25" fill="#fff" stroke="#fff" stroke-width="3"/>
-          <rect x="13" y="13" width="219" height="196" rx="17" fill="url(#imageBlue)"/>
-          <circle cx="184" cy="49" r="18" fill="#ffe27a" stroke="#fff1b8" stroke-width="4"/>
-          <path d="M20 169 76 94Q85 82 96 94L148 151 175 122Q185 111 196 126L232 170V196H13V179Z" fill="#2879f5"/>
-          <path d="M82 196 143 121Q151 111 161 121L232 177V196Z" fill="#06b6d4" opacity=".95"/>
-          <rect x="16" y="222" width="213" height="34" rx="10" fill="#f3f4ff"/>
-          <circle cx="33" cy="239" r="5" fill="#6d5dfc"/><text x="47" y="244" font-size="13" font-family="Arial,sans-serif" font-weight="700" fill="#27325b">ORIGINAL IMAGE</text>
-          <rect x="168" y="216" width="55" height="27" rx="8" fill="#3d4e86"/><text x="195" y="234" text-anchor="middle" font-size="12" font-family="Arial,sans-serif" font-weight="700" fill="#fff">2.4 MB</text>
-        </g>
-        <!-- Transformation arrow -->
-        <path d="M365 152 C407 123 446 138 460 169" fill="none" stroke="url(#arrowGrad)" stroke-width="17" stroke-linecap="round"/>
-        <path d="M446 148 468 176 432 178" fill="none" stroke="#23bdf7" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
-        <circle cx="407" cy="130" r="5" fill="#fff" opacity=".9"/>
-        <!-- Compressed image card -->
-        <g filter="url(#shadow)" transform="translate(380 165) rotate(10 96 105)">
-          <rect x="8" y="10" width="194" height="220" rx="22" fill="#6c5ff4" opacity=".45"/>
-          <rect width="194" height="220" rx="22" fill="#fff" stroke="#fff" stroke-width="3"/>
-          <rect x="12" y="12" width="170" height="144" rx="14" fill="url(#imageBlueSmall)"/>
-          <circle cx="145" cy="39" r="12" fill="#ffe27a"/>
-          <path d="M16 122 59 73Q66 65 74 73L111 112 131 90Q139 82 147 92L182 128V156H12V130Z" fill="#2f84f5"/>
-          <path d="M75 156 119 106Q126 98 134 106L182 137V156Z" fill="#05bfd7"/>
-          <rect x="16" y="170" width="162" height="35" rx="10" fill="url(#greenTile)"/>
-          <path d="m31 187 5 5 10-12" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-          <text x="104" y="185" text-anchor="middle" font-size="11" font-family="Arial,sans-serif" font-weight="700" fill="#fff">COMPRESSED</text>
-          <text x="104" y="198" text-anchor="middle" font-size="13" font-family="Arial,sans-serif" font-weight="800" fill="#fff">120 KB</text>
-        </g>
-        <!-- Floating format tiles -->
-        <g filter="url(#shadow)" transform="translate(52 108) rotate(-12 34 29)">
-          <rect width="72" height="53" rx="13" fill="url(#purpleTile)"/><text x="36" y="33" text-anchor="middle" font-size="17" font-family="Arial,sans-serif" font-weight="800" fill="#fff">JPG</text>
-        </g>
-        <g filter="url(#shadow)" transform="translate(41 296) rotate(-13 36 28)">
-          <rect width="75" height="55" rx="13" fill="url(#cyanTile)"/><text x="37.5" y="34" text-anchor="middle" font-size="17" font-family="Arial,sans-serif" font-weight="800" fill="#fff">PNG</text>
-        </g>
-        <g filter="url(#shadow)" transform="translate(526 106) rotate(11 39 28)">
-          <rect width="80" height="55" rx="13" fill="url(#purpleTile)"/><text x="40" y="34" text-anchor="middle" font-size="15" font-family="Arial,sans-serif" font-weight="800" fill="#fff">WEBP</text>
-        </g>
-        <g filter="url(#shadow)" transform="translate(548 248) rotate(12 37 41)">
-          <rect width="74" height="83" rx="14" fill="url(#pdfTile)"/>
-          <path d="M22 18h24l9 9v36H22Z" fill="none" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>
-          <path d="M46 18v10h9M27 47h22M27 54h18" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
-          <text x="37" y="73" text-anchor="middle" font-size="13" font-family="Arial,sans-serif" font-weight="800" fill="#fff">PDF</text>
-        </g>
-        <circle cx="511" cy="62" r="20" fill="url(#purpleTile)" opacity=".85"/>
-        <circle cx="512" cy="58" r="7" fill="#fff" opacity=".25"/>
-        <path d="m128 60 4 11 11 4-11 4-4 11-4-11-11-4 11-4Z" fill="#fff" opacity=".95"/>
-        <path d="m591 184 3 8 8 3-8 3-3 8-3-8-8-3 8-3Z" fill="#fff" opacity=".8"/>
-        <!-- 3D platform -->
-        <g filter="url(#shadow)">
-          <ellipse cx="350" cy="373" rx="229" ry="36" fill="url(#stageSide)"/>
-          <path d="M121 357Q350 405 579 357V376Q350 423 121 376Z" fill="url(#stageSide)"/>
-          <ellipse cx="350" cy="357" rx="229" ry="35" fill="url(#stageTop)" stroke="#fff" stroke-opacity=".75" stroke-width="3"/>
-          <ellipse cx="350" cy="353" rx="177" ry="22" fill="#352ac6" opacity=".72"/>
-          <ellipse cx="350" cy="348" rx="176" ry="20" fill="none" stroke="#6df8ff" stroke-width="3"/>
-          <ellipse cx="350" cy="345" rx="145" ry="13" fill="#7169ff" opacity=".42"/>
-        </g>
-      </svg>
+      <div class="eyebrow">Free · Fast · Private</div>
+      <h1>Compress your image<br><span>to the size you need.</span></h1>
+      <p>Upload a photo, choose your target KB, and download a smaller image. Your files stay in your browser.</p>
     </div>
   </section>
-  <section class="quick-tools" aria-label="Choose an image tool">
-<a class="quick-tool" href="#workspace"><span class="quick-tool-icon">⇣</span><strong>Compress Image</strong><span>Reduce photo size to your target KB.</span><b>Open tool →</b></a>
-<a class="quick-tool" href="#resizeTool"><span class="quick-tool-icon resize-icon">↗</span><strong>Resize Image</strong><span>Set exact width and height in pixels.</span><b>Open tool →</b></a>
-<a class="quick-tool" href="pdf.html#multiPdfPanel"><span class="quick-tool-icon pdf-icon">▤</span><strong>Image to PDF</strong><span>Combine photos into one PDF file.</span><b>Open tool →</b></a>
-<a class="quick-tool" href="pdf.html#pdfToImagesPanel"><span class="quick-tool-icon pdf-image-icon">▧</span><strong>PDF to Image</strong><span>Convert PDF pages to PNG, JPG or WebP.</span><b>Open tool →</b></a>
-</section>
-<section class="workspace" id="workspace" aria-label="Image compressor">
+  <section class="workspace" id="workspace" aria-label="Image compressor">
     <div class="left">
       <div class="drop" id="drop">
         <div class="uploadicon" id="dropIcon">⇧</div>
@@ -572,6 +508,13 @@ main>*{position:relative}
       <a class="download" id="download" download="sizeitnow-compressed.jpg">↓ &nbsp; Download Image</a>
     </aside>
   </section>
+<section class="quick-tools" aria-label="Choose an image tool">
+<a class="quick-tool" href="#workspace"><span class="quick-tool-icon">⇣</span><strong>Compress Image</strong><span>Reduce photo size to your target KB.</span><b>Open tool →</b></a>
+<a class="quick-tool" href="#resizeTool"><span class="quick-tool-icon resize-icon">↗</span><strong>Resize Image</strong><span>Set exact width and height in pixels.</span><b>Open tool →</b></a>
+<a class="quick-tool" href="pdf.html#multiPdfPanel"><span class="quick-tool-icon pdf-icon">▤</span><strong>Image to PDF</strong><span>Combine photos into one PDF file.</span><b>Open tool →</b></a>
+<a class="quick-tool" href="pdf.html#pdfToImagesPanel"><span class="quick-tool-icon pdf-image-icon">▧</span><strong>PDF to Image</strong><span>Convert PDF pages to PNG, JPG or WebP.</span><b>Open tool →</b></a>
+</section>
+
 </main>
 <section class="resize-tool" id="resizeTool">
 <h2>Resize an image</h2><p>Choose a photo, set exact dimensions, preview and download. Your image is processed in your browser.</p>
